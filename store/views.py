@@ -4,7 +4,7 @@ from cart.cart import Cart
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, UpdateProfileForm
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress
 from django import forms
@@ -71,14 +71,17 @@ def update_password(request):
 
 def update_user(request):
     if request.user.is_authenticated:
-        current_user = User.objects.get(id=request.user.id)
+        current_user = request.user
+        profile = current_user.profile
         user_form = UpdateUserForm(request.POST or None, instance=current_user)
-        if user_form.is_valid():
+        profile_form = UpdateProfileForm(request.POST or None, request.FILES or None, instance=profile)
+        if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
+            profile_form.save()
             login(request, current_user)
             messages.success(request, "User Has Been Updated")
             return redirect('index')
-        return render(request,"update_user.html", {'user_form':user_form})
+        return render(request,"update_user.html", {'user_form':user_form, 'profile_form': profile_form,})
     else:
         messages.success(request, "You must be logged in to access that page")
         return redirect('index')

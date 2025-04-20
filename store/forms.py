@@ -59,7 +59,20 @@ class UpdateUserForm(UserChangeForm):
 		self.fields['username'].label = ''
 		self.fields['username'].help_text = '<span class="form-text text-muted"><small>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small></span>'
 
-		
+class UpdateProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['image']
+        widgets = {
+            'image': forms.FileInput(attrs={
+                'class': 'form-control shadow-sm p-3 rounded-3 border-1',
+                'style': 'max-width: 100%; height: auto;',
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['image'].label = "Foto de perfil"
 
 
 class SignUpForm(UserCreationForm):
