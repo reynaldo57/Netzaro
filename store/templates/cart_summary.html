@@ -14,7 +14,7 @@
         <div class="container">
         {% if cart_products %}
             {% for product in cart_products %}
-            <div style="border-color: #000000 !important;" class="card mb-3">
+            <div style="justify-content: space-between; background-color: #fff0f0; border: 1px solid #ff0000; border-radius: 5px;" class="card mb-3">
                 <div class="row g-0">
                   <div class="col-md-4">
                     <img style="height: 300px;" src="{{ product.image.url }}" class="img-fluid rounded-start" alt="...">
@@ -22,7 +22,7 @@
                   <div class="col-md-8">
                     <div class="card-body">
                       <center>  
-                        <h5 class="card-title">{{product.name}}</h5>
+                        <h5 style="color: #500000 !important;" class="card-title">{{product.name}}</h5>
                         <br/>
                         <p class="card-text justified">{{product.description}}</p>
         

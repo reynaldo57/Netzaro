@@ -13,56 +13,84 @@
 </header>
 
 <div class="container">
-    <br/><br/>
-    <div class="card mb-3">
-        <div class="row g-0">
-          <div class="col-md-4">
-            <img style="height: 330px !important;" src="{{ product.image.url }}" class="img-fluid rounded-start" alt="...">
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <center>  
-                <h5 style="color: #500000 !important;">{{product.name}}</h5>
-                <br/>
-                <p class="card-text justified">{{product.description}}</p>
+  <br/><br/>
+  <div class="card mb-3">
+    <div style="justify-content: space-between; background-color: #fff0f0; border: 1px solid #ff0000; border-radius: 5px;" class="row g-0">
 
-                {% if product.is_sale %}
-                <div class="d-flex justify-content-center small text-warning mb-2">
-                    <div class="bi-star-fill"></div>
-                    &nbsp;&nbsp;Sale&nbsp;&nbsp;
-                    <div class="bi-star-fill"></div>
-                </div>
-                <!-- Product price-->
-                <strike>{{ product.price }}</strike>
-                &nbsp;
-                {{ product.sale_price }}
+      <!-- Columna de imagen y video centrados -->
+      <div class="col-md-7 d-flex justify-content-center align-items-center">
+        <div  class="row g-3 p-3 w-100 align-items-center">
 
-                {% else %}
-                    ${{ product.price }}
-                {% endif %}
-                <br/><br/>
-                <div class="row justify-content-center">
-                  <div class="col-md-2">Quantity: </div>
-                    <div class="col-md-2">
-                      <select class="form-select form-select-sm" id="qty-cart">
-                        <option value="1">1 select</option>
-                        <option value="2">2 select</option>
-                        <option value="3">3 select</option>
-                      </select>
-                    </div>
-                  </div>
-                
-                <br/><br/>
-                
-                <a style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" href="{% url 'index' %}" class="btn btn-secondary">Home</a>
-                <button style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" type="button" value="{{product.id}}" class="btn btn-secondary" id="add-cart">Add to Cart</button>
-                <p style="color: #920a0a !important;" class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-              </center>
-            </div>
+          <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
+            <img src="{{ product.image.url }}" class="img-fluid rounded shadow" alt="Product image"
+                 style="height: 300px; width: 100%; object-fit: cover;">
           </div>
+
+          {% if product.video %}
+          <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
+            <video controls class="img-fluid rounded shadow"
+                   style="height: 300px; width: 100%; object-fit: cover;">
+              <source src="{{ product.video.url }}">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          {% endif %}
+
         </div>
       </div>
+
+      <!-- Columna de detalles del producto -->
+      <div class="col-md-5">
+        <div class="card-body">
+          <center>  
+            <h5 style="color: #500000 !important;">{{ product.name }}</h5>
+            <br/>
+            <p class="card-text justified">{{ product.description }}</p>
+
+            {% if product.is_sale %}
+            <div class="d-flex justify-content-center small text-warning mb-2">
+              <div class="bi-star-fill"></div>
+              &nbsp;&nbsp;Sale&nbsp;&nbsp;
+              <div class="bi-star-fill"></div>
+            </div>
+            <strike>{{ product.price }}</strike>
+            &nbsp;
+            {{ product.sale_price }}
+            {% else %}
+              ${{ product.price }}
+            {% endif %}
+
+            <br/><br/>
+
+            <div class="row justify-content-center">
+              <div class="col-md-3">Quantity:</div>
+              <div class="col-md-3">
+                <select class="form-select form-select-sm" id="qty-cart">
+                  <option value="1">1 select</option>
+                  <option value="2">2 select</option>
+                  <option value="3">3 select</option>
+                </select>
+              </div>
+            </div>
+
+            <br/><br/>
+
+            <a style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" href="{% url 'index' %}" class="btn btn-secondary">Home</a>
+            <button style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" type="button" value="{{ product.id }}" class="btn btn-secondary" id="add-cart">Add to Cart</button>
+
+            <p style="color: #b10303 !important;" class="card-text">
+              <small class="text-body-secondary">Last updated 3 mins ago</small>
+            </p>
+          </center>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
+
+
+
 <br/><br/><br/><br/><br/><br/><br/><br/>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 

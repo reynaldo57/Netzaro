@@ -3,7 +3,7 @@
 {% block content %}
 
 <!-- Header-->
-<header style="background: url('/static/assets/perfil.jpg') center/cover no-repeat;" class="bg-dark py-5">
+<header style="background: url('/static/assets/tienda.jpg') center/cover no-repeat;" class="bg-dark py-5">
     <div style="height: 150px !important;" class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
             <h1 class="display-4 fw-bolder">Update Profile</h1>
@@ -13,11 +13,9 @@
 </header>
 
 <div class="container">
+    <br/><br/>
     <div class="row">
-            <br/><br/>
-            <br/><br/>
-            <br/><br/>
-            <div class="col-md-6 offset-md-3">
+            <div style="background-color: #fff0f0; border: 1px solid #ff0000; border-radius: 5px;"  class="col-md-6 offset-md-3">
                 <form method="POST" action="{% url 'update_user' %}" enctype="multipart/form-data">
                     <br/><br/>
                     {% csrf_token %}
@@ -29,24 +27,24 @@
                         {% endif %}
                     </div>
                     <br/><br/>
-                    <br/><br/>
-                    <br/><br/>
                     <!-- Formulario de usuario -->
                     {{ user_form.as_p }}
                     <!-- Formulario de imagen -->
                     {{ profile_form.as_p }}
                     <br/><br/>
-                    <button type="submit" class="btn btn-secondary">Update Profile</button>
+                    <div style="text-align: center;">
+                        <button style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" type="submit" class="btn btn-secondary">Update Profile</button>
+                    </div>
                   </form>
                 <br/><br/>
-                <a href="{% url 'update_password' %} " class="btn btn-secondary">Update Password</a>
+                <div style="text-align: center;">
+                    <a style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" href="{% url 'update_password' %} " class="btn btn-secondary">Update Password</a>
+                </div>
                 <br/><br/>
-                <br/><br/>
-                <br/><br/>
-                
-
             </div>
+            
     </div>
+    <br/><br/>
 </div>
 
 {% endblock %}
