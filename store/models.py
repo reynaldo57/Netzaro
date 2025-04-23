@@ -71,3 +71,39 @@ class Order(models.Model):
 
     def __str__(self):
         return self.product
+    
+
+class Comment(models.Model):
+    user = models.ForeignKey(
+        User,
+        related_name='user_comment',
+        on_delete=models.CASCADE, null=True
+    )
+    product = models.ForeignKey(
+        Product,
+        related_name='product_comment',
+        on_delete=models.CASCADE
+    )
+    name = models.CharField(max_length=100, null=True)
+    email = models.EmailField(null=True)  # Nuevo campo 'email'
+    text = models.TextField(null=True)
+    time_begin = models.DateTimeField(null=True)  # Nuevo campo 'time_begin'
+    time_final = models.DateTimeField(null=True)  # Nuevo campo 'time_final'
+    topic = models.CharField(max_length=200, null=True)  # Nuevo campo 'topic'
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_date']  # 🔥 Esto asegura el orden DESC en toda la app
+
+    def __str__(self) -> str:
+        return self.text
+    
+
+class CommentResponse(models.Model):
+    comment = models.ForeignKey(Comment, related_name='responses', on_delete=models.CASCADE)
+    responder_name = models.CharField(max_length=100)
+    response_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.responder_name} respondió a {self.comment.name}"

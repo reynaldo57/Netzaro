@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
-from .models import Product, Category, Profile
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product, Category, Profile, Comment, CommentResponse
 from cart.cart import Cart
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, UpdateProfileForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, UpdateProfileForm, CommentForm, CommentResponseForm
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress
 from django import forms
@@ -104,9 +104,45 @@ def category(request,foo):
         messages.success(request, ("That category Doest exist"))
         return redirect('index')
 
-def product(request,pk):
-    product = Product.objects.get(id=pk)
-    return render(request, 'product.html', {'product':product})
+
+
+def product(request, pk):
+    product = get_object_or_404(Product, id=pk)
+    comments = Comment.objects.filter(product=product)
+
+    # Matrícula (crear)
+    if request.method == 'POST' and 'comment_form' in request.POST:
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.product = product
+            if request.user.is_authenticated:
+                comment.user = request.user
+            comment.save()
+            return redirect('product', pk=pk)
+    else:
+        form = CommentForm()
+
+    # Respuesta a matrícula
+    if request.method == 'POST' and 'respuesta_form' in request.POST:
+        comment_id = request.POST.get('comment_id')
+        comment_obj = get_object_or_404(Comment, id=comment_id)
+        response_form = CommentResponseForm(request.POST)
+        if response_form.is_valid():
+            response = response_form.save(commit=False)
+            response.comment = comment_obj
+            response.save()
+            return redirect('product', pk=pk)
+    else:
+        response_form = CommentResponseForm()
+
+    return render(request, 'product.html', {
+        'product': product,
+        'form': form,
+        'comments': comments,
+        'response_form': response_form,
+    })
+
 
 def index(request):
     products = Product.objects.all()

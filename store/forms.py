@@ -101,3 +101,26 @@ class SignUpForm(UserCreationForm):
 		self.fields['password2'].widget.attrs['placeholder'] = 'Confirm Password'
 		self.fields['password2'].label = ''
 		self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
+
+
+from django import forms
+from .models import Comment, CommentResponse
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['name', 'email', 'text']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tu nombre'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Tu correo'}),
+            'text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': '¿Por qué te interesa esta clase?', 'rows': 3}),
+        }
+
+class CommentResponseForm(forms.ModelForm):
+    class Meta:
+        model = CommentResponse
+        fields = ['responder_name', 'response_text']
+        widgets = {
+            'responder_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tu nombre'}),
+            'response_text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': '¿Qué te motivó a matricularte?', 'rows': 2}),
+        }

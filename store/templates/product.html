@@ -91,6 +91,64 @@
 
 
 
+<div class="container mt-5">
+  <h2>{{ product.name }}</h2>
+  <p>{{ product.description }}</p>
+
+  <!-- Formulario de matrícula -->
+  <div style="background-color: #e7ffe4; border: 1px solid #00b809; border-radius: 5px;" class="card mb-4">
+    <div class="card-body">
+      <h5>Escribe tu comentario</h5>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button style="background-color: #008b07 !important; border-color: #008b07; color: #ffffff;" type="submit" name="comment_form" class="btn btn-success w-100">Enviar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Listado de personas matriculadas -->
+  <h5>Comentarios</h5>
+  {% for comment in comments %}
+    <div style="background-color: #eefffc; border: 1px solid #00a8a5; border-radius: 5px;" class="card mb-3">
+      <div class="card-body">
+        <strong>{{ comment.name }}</strong> <small class="text-muted">{{ comment.created_date|timesince }} atrás</small>
+        <p>{{ comment.text }}</p>
+
+        <!-- Botón para responder -->
+        <button class="btn btn-sm btn-link" data-bs-toggle="collapse" data-bs-target="#reply{{ comment.id }}">
+          ¿Qué te motivó a matricularte?
+        </button>
+
+        <!-- Formulario de respuesta -->
+        <div class="collapse mt-2" id="reply{{ comment.id }}">
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+            {{ response_form.as_p }}
+            <button type="submit" name="respuesta_form" class="btn btn-outline-primary btn-sm">Enviar respuesta</button>
+          </form>
+        </div>
+
+        <!-- Respuestas -->
+        {% for response in comment.responses.all %}
+          <div class="mt-3 ms-4 border-start ps-3">
+            <strong>{{ response.responder_name }}</strong>
+            <small class="text-muted">{{ response.created_at|timesince }} atrás</small>
+            <p class="mb-1">{{ response.response_text }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-muted">Aún no hay personas matriculadas.</p>
+  {% endfor %}
+</div>
+
+
+
+
+
 <br/><br/><br/><br/><br/><br/><br/><br/>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
