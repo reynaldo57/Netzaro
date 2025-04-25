@@ -18,6 +18,12 @@ class ShippingAddress(models.Model):
     shipping_zipcode = models.CharField(max_length=255, null=True, blank=True)
     shipping_country = models.CharField(max_length=255)
 
+    shipping_tiempo_inicio = models.DateTimeField(blank=True, null=True)  # sin editable=False
+    shipping_tiempo_fin = models.DateTimeField(blank=True, null=True)
+    shipping_tema_estudio = models.CharField(max_length=255, blank=True, null=True)
+
+
+
     #Don't pluralize address
     class Meta:
         verbose_name_plural ="Shipping Address"
@@ -51,6 +57,11 @@ class Order(models.Model):
     #Payment Invoice and Paid T/F
     invoice = models.CharField(max_length=250, null=True, blank=True)
     paid = models.BooleanField(default=False)
+
+    # Nuevos campos
+    tiempo_inicio = models.DateTimeField(null=True, blank=True)
+    tiempo_fin = models.DateTimeField(null=True, blank=True)
+    tema_estudio = models.CharField(max_length=255, null=True, blank=True)
 
     
     def __str__(self):

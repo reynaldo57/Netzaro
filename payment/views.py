@@ -12,6 +12,10 @@ from paypal.standard.forms import PayPalPaymentsForm
 from django.conf import settings
 import uuid #unique user id for duplicated orders
 
+from django.utils import timezone
+
+from django.utils.dateparse import parse_datetime
+from django.utils.timezone import make_aware
 # Create your views here.
 
 
@@ -30,7 +34,7 @@ def orders(request, pk):
                 #Get the order
                 order = Order.objects.filter(id=pk)
                 #Update the status
-                now = datetime.datetime.now()
+                now = timezone.now()
                 order.update(shipped=True, date_shipped = now)
             else:
                 #Get the order
@@ -56,7 +60,7 @@ def not_shipped_dash(request):
             order = Order.objects.filter(id=num)
             
             #Grab Date and time
-            now = datetime.datetime.now()
+            now = timezone.now()
             #Update order
             order.update(shipped=True, date_shipped = now)
             #redirect
@@ -78,7 +82,7 @@ def shipped_dash(request):
             order = Order.objects.filter(id=num)
             
             #Grab Date and time
-            now = datetime.datetime.now()
+            now = timezone.now()
             #Update order
             order.update(shipped=False)
             #redirect
@@ -207,6 +211,22 @@ def billing_info(request):
         #Gather Order Info
         full_name = my_shipping['shipping_full_name']
         email = my_shipping['shipping_email']
+
+        # Recoger nuevos campos
+        tiempo_inicio = my_shipping.get('shipping_tiempo_inicio')
+        tiempo_fin = my_shipping.get('shipping_tiempo_fin')
+        tema_estudio = my_shipping.get('shipping_tema_estudio')
+        
+        try:
+            tiempo_inicio = make_aware(parse_datetime(tiempo_inicio)) if tiempo_inicio else None
+        except Exception:
+            tiempo_inicio = None
+
+        try:
+            tiempo_fin = make_aware(parse_datetime(tiempo_fin)) if tiempo_fin else None
+        except Exception:
+            tiempo_fin = None
+
         #Create Shipping Address from session info
         shipping_address = f"{my_shipping['shipping_address1']}\n{my_shipping['shipping_address2']}\n{my_shipping['shipping_city']}\n{my_shipping['shipping_state']}\n{my_shipping['shipping_zipcode']}\n{my_shipping['shipping_country']}"
         amount_paid = totals
@@ -247,7 +267,7 @@ def billing_info(request):
             #logged in
             user = request.user
             #Create Order
-            create_order = Order(user=user, full_name=full_name, email=email, shipping_address=shipping_address, amount_paid=amount_paid, invoice=my_Invoice)
+            create_order = Order(user=user, full_name=full_name, email=email, shipping_address=shipping_address, amount_paid=amount_paid, invoice=my_Invoice, tiempo_inicio=tiempo_inicio, tiempo_fin=tiempo_fin, tema_estudio=tema_estudio)
             create_order.save()
 
             #Add order items
@@ -287,7 +307,7 @@ def billing_info(request):
         else:
             #not logged in
             #Create Order
-            create_order = Order(full_name=full_name, email=email, shipping_address=shipping_address, amount_paid=amount_paid, invoice=my_Invoice)
+            create_order = Order(full_name=full_name, email=email, shipping_address=shipping_address, amount_paid=amount_paid, invoice=my_Invoice, tiempo_inicio=tiempo_inicio, tiempo_fin=tiempo_fin, tema_estudio=tema_estudio)
             create_order.save()
 
             #Add order items
@@ -360,3 +380,5 @@ def payment_success(request):
 
 def payment_failed(request):
     return render(request, "payment/payment_failed.html")
+
+
