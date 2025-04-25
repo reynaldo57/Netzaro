@@ -62,6 +62,13 @@
                         State: {{ shipping_info.shipping_state}}<br/><br/>
                         CipCode: {{ shipping_info.shipping_cipcode}}<br/><br/>
                         Country: {{ shipping_info.shipping_country}}<br/><br/>
+                        
+                        Tiempo de Inicio: {{ shipping_info.shipping_tiempo_inicio|stringformat:"s"|cut:"T"|slice:":10" }} {{ shipping_info.shipping_tiempo_inicio|stringformat:"s"|slice:"11:16" }}
+                        <br/><br/>
+                        Tiempo de fin: {{ shipping_info.shipping_tiempo_fin|stringformat:"s"|cut:"T"|slice:":10" }} {{ shipping_info.shipping_tiempo_fin|stringformat:"s"|slice:"11:16" }}
+                        <br/><br/>
+                        Tema de estudio: {{ shipping_info.shipping_tema_estudio}}<br/><br/> 
+                        
                         <br/>
                         <a href="{% url 'checkout' %}" class="btn btn-outline-secondary">Update Shipping</a>
                     

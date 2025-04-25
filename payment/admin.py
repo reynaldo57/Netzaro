@@ -1,27 +1,32 @@
 from django.contrib import admin
 from .models import ShippingAddress, Order, OrderItem
-from django.contrib.auth.models import User
 
-# Register your models here.
-
+# Registro de modelos que no personalizamos
 admin.site.register(ShippingAddress)
-admin.site.register(Order)
 admin.site.register(OrderItem)
 
-
-class OrderItemInline(admin.StackedInline):
-    model = OrderItem
-    extra = 0
-
-#Extend our Order Model
+# Personalización de la vista del modelo Order
+@admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    model = Order
-    readonly_fields = ["date_ordered"]
-    fields = ["user", "full_name", "email", "shipping_address", "amount_paid", "date_ordered", "shipped", "date_shipped"]
-    inlines = [OrderItemInline]
+    list_display = (
+        'id', 'user', 'full_name', 'email', 'amount_paid', 'paid',
+        'shipped', 'date_ordered', 'tiempo_inicio', 'tiempo_fin', 'tema_estudio'
+    )
+    list_filter = ('paid', 'shipped', 'date_ordered')
+    search_fields = ('full_name', 'email', 'tema_estudio', 'invoice')
+    ordering = ('-date_ordered',)
 
-#Unregister Order Model
-admin.site.unregister(Order)
+    readonly_fields = ('date_ordered',)  # 👈 ¡Aquí la solución!
 
-#Re-register our Order AND OrderAdmin
-admin.site.register(Order, OrderAdmin)
+    fieldsets = (
+        ('Información del Cliente', {
+            'fields': ('user', 'full_name', 'email', 'shipping_address')
+        }),
+        ('Detalle del Pedido', {
+            'fields': ('amount_paid', 'paid', 'invoice', 'date_ordered', 'shipped', 'date_shipped')
+        }),
+        ('Estudio', {
+            'fields': ('tiempo_inicio', 'tiempo_fin', 'tema_estudio')
+        }),
+    )
+

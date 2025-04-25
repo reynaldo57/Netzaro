@@ -1,6 +1,8 @@
 from django import forms
 from .models import ShippingAddress
 
+
+
 class ShippingForm(forms.ModelForm):
     shipping_full_name = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Full Name'}), required=True)
     shipping_email = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Email'}), required=True)
@@ -11,10 +13,37 @@ class ShippingForm(forms.ModelForm):
     shipping_zipcode = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'zipCode'}), required=False)
     shipping_country = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Country'}), required=True)
 
+    shipping_tiempo_inicio = forms.DateTimeField(
+        widget=forms.DateTimeInput(
+            attrs={
+                'type': 'datetime-local',
+                'class': 'form-control',
+                'style': 'border-radius: 12px; padding: 10px; font-size: 16px;',
+            }
+        ),
+        label="⏰ Tiempo de Inicio"
+    )
+
+    shipping_tiempo_fin = forms.DateTimeField(
+        widget=forms.DateTimeInput(
+            attrs={
+                'type': 'datetime-local',
+                'class': 'form-control',
+                'style': 'border-radius: 12px; padding: 10px; font-size: 16px;',
+            }
+        ),
+        label="⏳ Tiempo de Fin"
+    )
+    shipping_tema_estudio = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Elige un tenma'}), required=True)
+
 
     class Meta:
         model = ShippingAddress
-        fields = ['shipping_full_name', 'shipping_email', 'shipping_address1', 'shipping_address2', 'shipping_city', 'shipping_state', 'shipping_zipcode', 'shipping_country',]
+        fields = ['shipping_full_name', 'shipping_email', 'shipping_address1', 'shipping_address2', 'shipping_city', 'shipping_state', 'shipping_zipcode', 'shipping_country', 
+                  'shipping_tiempo_inicio', 
+                  'shipping_tiempo_fin', 
+                  'shipping_tema_estudio'
+                  ]
 
         exclude = ['user', ]
 
