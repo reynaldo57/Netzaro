@@ -2,23 +2,26 @@
 {% block content %}
 
         <!-- Header-->
-        <header style="background: url('/static/assets/tienda.jpg') center/cover no-repeat;" class="bg-dark py-5">
-            <div style="height: 150px !important;" class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Shop in style</h1>
-                    <p class="lead fw-normal text-white-150 mb-0">With this shop hompeage template</p>
-                </div>
+        <header style="background: url('/static/assets/fondo1.jpg') center/cover no-repeat; min-height: 200px;" class="bg-dark d-flex justify-content-center align-items-center">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Shop in style</h1>
+                <p class="lead fw-normal text-white-150 mb-0">With this shop homepage template</p>
             </div>
         </header>
+        
+        
         <!-- Section-->
-        <section class="py-5">
-            <div class="container px-4 px-lg-5 mt-5">
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        <section style="position: relative; overflow: hidden;" class="py-5">
+            <div style="background: null"></div>
+            
+            <div style="position: relative; z-index: 1;">
+                <div class="container-fluid px-4 px-lg-5 mt-5" >
+                    <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-5 justify-content-center">
 
-                    {% for product in products %}
-                        {% if product.is_sale %}
-                            
-                            <div class="col mb-5">
+                        {% for product in products %}
+                            {% if product.is_sale %}
+
+                                <div class="col mb-5">
                                 <div class="card h-100">
                                     <div class="badge bg-light text-black position-absolute" style="top: 0.5rem; right: 1rem;">
                                         sale
@@ -48,9 +51,9 @@
                                         <div class="text-center"><a style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" class="btn btn-outline-dark mt-auto" href="{% url 'product' product.id %}">View Product</a></div>
                                     </div>
                                 </div>
-                            </div>
-                        {% else %}
-                        <div class="col mb-5">
+                                </div>
+                            {% else %}
+                            <div class="col mb-5">
                             <div class="card h-100">
                                 <!-- Product image-->
                                 <img style="height: 200px !important;" class="card-img-top" src="{{ product.image.url }}" alt="..." />
@@ -72,9 +75,10 @@
                                     <div class="text-center"><a style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" class="btn btn-outline-dark mt-auto" href="{% url 'product' product.id %}">View Product</a></div>
                                 </div>
                             </div>
-                        </div>
-                        {% endif %}
-                    {% endfor %}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </section>

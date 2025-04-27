@@ -3,155 +3,133 @@
 {% block content %}
 
 <!-- Header-->
-<header style="background: url('/static/assets/tienda.jpg') center/cover no-repeat;" class="bg-dark py-5">
-    <div style="height: 150px !important;" class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Product</h1>
-            <p class="lead fw-normal text-white-100 mb-0">Description of the product...</p>
-        </div>
-    </div>
+<header style="background: url('/static/assets/fondo1.jpg') center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+  <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder"><i class="bi bi-shop"></i>  Shop in style</h1>
+      <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
+  </div>
 </header>
 
-<div class="container">
-  <br/><br/>
-  <div class="card mb-3">
-    <div style="justify-content: space-between; background-color: #fff0f0; border: 1px solid #ff0000; border-radius: 5px;" class="row g-0">
+<section style="background: #ffffff;"   class="py-5">
+  <div class="container px-4 px-lg-5">
+    <!-- Producto -->
+    <div class="card shadow-lg border-0 mb-5">
+      <div class="row g-0">
 
-      <!-- Columna de imagen y video centrados -->
-      <div class="col-md-7 d-flex justify-content-center align-items-center">
-        <div  class="row g-3 p-3 w-100 align-items-center">
-
-          <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
-            <img src="{{ product.image.url }}" class="img-fluid rounded shadow" alt="Product image"
-                 style="height: 300px; width: 100%; object-fit: cover;">
-          </div>
-
-          {% if product.video %}
-          <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
-            <video controls class="img-fluid rounded shadow"
-                   style="height: 300px; width: 100%; object-fit: cover;">
-              <source src="{{ product.video.url }}">
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          {% endif %}
-
-        </div>
-      </div>
-
-      <!-- Columna de detalles del producto -->
-      <div class="col-md-5">
-        <div class="card-body">
-          <center>  
-            <h5 style="color: #500000 !important;">{{ product.name }}</h5>
-            <br/>
-            <p class="card-text justified">{{ product.description }}</p>
-
-            {% if product.is_sale %}
-            <div class="d-flex justify-content-center small text-warning mb-2">
-              <div class="bi-star-fill"></div>
-              &nbsp;&nbsp;Sale&nbsp;&nbsp;
-              <div class="bi-star-fill"></div>
+        <!-- Imagen y Video -->
+        <div class="col-md-7 d-flex align-items-center justify-content-center bg-light">
+          <div class="row g-3 p-4 w-100">
+            <div class="col-12 col-md-6 d-flex justify-content-center">
+              <img src="{{ product.image.url }}" class="img-fluid rounded shadow-sm" alt="Product image"style="height: 300px; width: 100%; object-fit: cover;">
             </div>
-            <strike>{{ product.price }}</strike>
-            &nbsp;
-            {{ product.sale_price }}
-            {% else %}
-              ${{ product.price }}
+            
+            {% if product.video %}
+            <div class="col-12 col-md-6 d-flex justify-content-center">
+              <video controls class="img-fluid rounded shadow-sm" style="height: 300px; width: 100%; object-fit: cover;">
+                <source src="{{ product.video.url }}">
+                  Your browser does not support the video tag.
+              </video>
+            </div>
             {% endif %}
-
-            <br/><br/>
-
-            <div class="row justify-content-center">
-              <div class="col-md-3">Quantity:</div>
-              <div class="col-md-3">
-                <select class="form-select form-select-sm" id="qty-cart">
-                  <option value="1">1 select</option>
-                  <option value="2">2 select</option>
-                  <option value="3">3 select</option>
+            
+          </div>
+        </div>
+        
+        <!-- Columna de detalles del producto -->
+        <div class="col-md-5 bg-white">
+          <div class="card-body text-center">
+              <h3 class="fw-bold text-danger">{{ product.name }}</h3>
+              <p class="card-text text-muted">{{ product.description }}</p>
+            
+              {% if product.is_sale %}
+              <div class="d-flex justify-content-center small text-warning mb-2">
+                <i class="bi bi-star-fill"></i>&nbsp;<strong>Sale</strong>&nbsp;<i class="bi bi-star-fill"></i>
+              </div>
+              <h5><strike class="text-muted">${{ product.price }}</strike> <span class="text-success">${{ product.sale_price }}</span></h5>
+              {% else %}
+              <h4 class="text-danger">${{ product.price }}</h4>
+              {% endif %}
+                          
+              <div class="my-3">
+                <label class="form-label fw-semibold">Quantity:</label>
+                <select class="form-select form-select-sm w-50 mx-auto"  id="qty-cart">
+                  <option value="1">1 unidad</option>
+                  <option value="2">2 unidades</option>
+                  <option value="3">3 unidades</option>
                 </select>
               </div>
-            </div>
-
-            <br/><br/>
-
-            <a style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" href="{% url 'index' %}" class="btn btn-secondary">Home</a>
-            <button style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" type="button" value="{{ product.id }}" class="btn btn-secondary" id="add-cart">Add to Cart</button>
-
-            <p style="color: #b10303 !important;" class="card-text">
-              <small class="text-body-secondary">Last updated 3 mins ago</small>
-            </p>
-          </center>
+              <div class="d-grid gap-2">              
+                <a href="{% url 'index' %}" class="btn btn-light border-danger text-danger"><i class="bi bi-house-door-fill"></i> Home</a>
+                <button type="button" value="{{ product.id }}" class="btn btn-danger" id="add-cart"> <i class="bi bi-cart-plus"></i>Add to Cart</button>
+              </div>
+            
+              <p class="card-text mt-3">
+                <small class="text-muted"><i class="bi bi-clock-history"></i> Última actualización: hace 3 minutos</small>
+              </p>
+          </div>
         </div>
       </div>
-
     </div>
-  </div>
-</div>
+      
+    <!-- Comentarios -->
+    <div class="container">
+      <h2 class="text-danger mb-4"><i class="bi bi-chat-dots-fill"></i> Comentarios</h2>
 
-
-
-<div class="container mt-5">
-  <h2>{{ product.name }}</h2>
-  <p>{{ product.description }}</p>
-
-  <!-- Formulario de matrícula -->
-  <div style="background-color: #e7ffe4; border: 1px solid #00b809; border-radius: 5px;" class="card mb-4">
-    <div class="card-body">
-      <h5>Escribe tu comentario</h5>
-      <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button style="background-color: #008b07 !important; border-color: #008b07; color: #ffffff;" type="submit" name="comment_form" class="btn btn-success w-100">Enviar</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Listado de personas matriculadas -->
-  <h5>Comentarios</h5>
-  {% for comment in comments %}
-    <div style="background-color: #eefffc; border: 1px solid #00a8a5; border-radius: 5px;" class="card mb-3">
-      <div class="card-body">
-        <strong>{{ comment.name }}</strong> <small class="text-muted">{{ comment.created_date|timesince }} atrás</small>
-        <p>{{ comment.text }}</p>
-
-        <!-- Botón para responder -->
-        <button class="btn btn-sm btn-link" data-bs-toggle="collapse" data-bs-target="#reply{{ comment.id }}">
-          ¿Qué te motivó a matricularte?
-        </button>
-
-        <!-- Formulario de respuesta -->
-        <div class="collapse mt-2" id="reply{{ comment.id }}">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h5 class="text-success"><i class="bi bi-pencil-square"></i> Escribe tu comentario</h5>
           <form method="post">
             {% csrf_token %}
-            <input type="hidden" name="comment_id" value="{{ comment.id }}">
-            {{ response_form.as_p }}
-            <button type="submit" name="respuesta_form" class="btn btn-outline-primary btn-sm">Enviar respuesta</button>
+            {{ form.as_p }}
+            <button type="submit" name="comment_form" class="btn btn-success w-100 mt-2"><i class="bi bi-send-fill"></i>Enviar</button>
           </form>
         </div>
-
-        <!-- Respuestas -->
-        {% for response in comment.responses.all %}
-          <div class="mt-3 ms-4 border-start ps-3">
-            <strong>{{ response.responder_name }}</strong>
-            <small class="text-muted">{{ response.created_at|timesince }} atrás</small>
-            <p class="mb-1">{{ response.response_text }}</p>
-          </div>
-        {% endfor %}
       </div>
+    
+      <!-- Listado de personas matriculadas -->
+      <h5 style="color: white;">Comentarios</h5>
+      {% for comment in comments %}
+      <div class="card mb-3 border-start border-4 border-danger">
+        <div class="card-body">
+          <h6 class="fw-bold text-danger">{{ comment.name }}<small class="text-muted">• {{ comment.created_date|timesince }} atrás</small></h6>
+          <p>{{ comment.text }}</p>
+          
+          <!-- Botón para responder -->
+          <button class="btn btn-sm btn-outline-danger" data-bs-toggle="collapse" data-bs-target="#reply{{ comment.id }}">
+            <i class="bi bi-reply-fill"></i> ¿Qué te motivó a matricularte?
+          </button>
+        
+          <!-- Formulario de respuesta -->
+          <div class="collapse mt-3" id="reply{{ comment.id }}">
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="comment_id" value="{{ comment.id }}">
+              {{ response_form.as_p }}
+              <button type="submit" name="respuesta_form" class="btn btn-outline-success btn-sm w-100 mt-2">
+                <i class="bi bi-send"></i> Enviar respuesta
+              </button>
+            </form>
+          </div>
+        
+          <!-- Respuestas -->
+          {% for response in comment.responses.all %}
+          <div class="mt-3 ms-4 ps-3 border-start border-2 border-success">
+            <h6 class="text-success">{{ response.responder_name }}<small class="text-muted">• {{ response.created_at|timesince }} atrás</small></h6>
+            <p>{{ response.response_text }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-muted">Aún no hay comentarios. ¡Sé el primero en comentar!</p>
+      {% endfor %}
     </div>
-  {% empty %}
-    <p class="text-muted">Aún no hay personas matriculadas.</p>
-  {% endfor %}
-</div>
+  </div>
+</section>
 
 
-
-
-
-<br/><br/><br/><br/><br/><br/><br/><br/>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
   $(document).on('click', '#add-cart', function(e){
     e.preventDefault();
@@ -165,17 +143,16 @@
         action: 'post'
       },
       success: function(json){
-        //console.log(json)
-        document.getElementById("cart_quantity").textContent = json.qty 
+        document.getElementById("cart_quantity").textContent = json.qty;
         location.reload();
       },
       error: function(xhr, errmsg, err){
-
+        console.log(xhr.status + ": " + xhr.responseText);
       }
     });
-  
-  })
+  });
 </script>
+
 
 
 {% endblock %}
