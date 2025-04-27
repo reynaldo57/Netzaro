@@ -5,6 +5,9 @@ from django.dispatch import receiver
 import datetime
 from store.models import Product
 
+from django.utils import timezone
+
+
 # Create your models here.
 
 class ShippingAddress(models.Model):
@@ -62,6 +65,7 @@ class Order(models.Model):
     tiempo_inicio = models.DateTimeField(null=True, blank=True)
     tiempo_fin = models.DateTimeField(null=True, blank=True)
     tema_estudio = models.CharField(max_length=255, null=True, blank=True)
+    
 
     
     def __str__(self):
@@ -71,7 +75,7 @@ class Order(models.Model):
 @receiver(pre_save, sender=Order)
 def set_shipped_date_on_update(sender,instance, **kawargs):
     if instance.pk:
-        now = datetime.datetime.now()
+        now = timezone.now()
         obj = sender._default_manager.get(pk=instance.pk)
         if instance.shipped and not  obj.shipped:
             instance.date_shipped = now

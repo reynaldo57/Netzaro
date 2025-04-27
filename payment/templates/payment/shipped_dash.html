@@ -2,20 +2,36 @@
 
 {% block content %}
 
+<header style="background: url('/static/assets/fondo1.jpg') center/cover no-repeat; min-height: 200px;" class="bg-dark d-flex justify-content-center align-items-center">
+  <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">Shop in style</h1>
+      <p class="lead fw-normal text-white-150 mb-0">With this shop homepage template</p>
+  </div>
+</header>
+<br><br>
 
 
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <center>
-            <div class="col-8">
+            <div class="col-12">
                 <h3>Shipped Items</h3>
-                <table class="table table-striped table-hover table-bordered">
+                <br><br>
+                <table style="width: 95%;"  class="table table-striped table-hover table-bordered">
                     <thead class="table-dark">
                       <tr>
                         <th scope="col">Order</th>
+
+                        <th scope="col">Curso</th>
+
                         <th scope="col">Price</th>
                         <th scope="col">Customer Email</th>
                         <th scope="col">Date Shipped</th>
+
+                        <th scope="col">Clase Inicio</th>
+                        <th scope="col">Clase Fin</th>
+                        <th scope="col">Tema</th>
+
                         <th scope="col">Shipped</th>
                       </tr>
                     </thead>
@@ -23,9 +39,22 @@
                     {% for item in orders %}
                       <tr>
                         <td><a href="{% url 'orders' item.id %}">{{ item.id }}</a></td>
+
+                        <td>
+                          {% for p in item.orderitem_set.all %}
+                            {{ p.product }}{% if not forloop.last %}, {% endif %}
+                          {% endfor %}
+                        </td>
+
                         <td>${{ item.amount_paid }}</td>
                         <td>{{ item.email }}</td>
                         <td>{{ item.date_shipped }}</td>
+
+                        <td>{{ item.tiempo_inicio }}</td>
+                        <td>{{ item.tiempo_fin }}</td>
+                        <td>{{ item.tema_estudio }}</td>
+
+
                         <td>
                           <form method="POST">
                             {% csrf_token %}
@@ -43,5 +72,5 @@
         </center>
     </div>
 </div>
-
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock %}
