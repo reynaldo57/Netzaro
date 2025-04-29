@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django import forms
-from .models import Profile
+from .models import Profile, Product
 from django.db import models
 
 
@@ -124,3 +124,19 @@ class CommentResponseForm(forms.ModelForm):
             'responder_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tu nombre'}),
             'response_text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': '¿Qué te motivó a matricularte?', 'rows': 2}),
         }
+
+
+
+class AddProductForm(forms.ModelForm):
+    
+    class Meta:
+        model = Product
+        fields = (
+            "name",
+            "category",
+            "image",
+            "description",
+            "pay_method",
+            "price",
+            "video",
+        )
