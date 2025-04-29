@@ -38,8 +38,11 @@
         <!-- Columna de detalles del producto -->
         <div class="col-md-5 bg-white">
           <div class="card-body text-center">
-              <h3 class="fw-bold text-danger">{{ product.name }}</h3>
+              <h3 style="text-transform: capitalize; color: green !important;" class="fw-bold text-danger">{{ product.name }}</h3>
+              <h3 style="text-transform: capitalize; color: green !important;" class="fw-bold text-danger">{{ product.user.username }}</h3>
               <p class="card-text text-muted">{{ product.description }}</p>
+              <p class="card-text text-muted">{{ product.pay_method }}</p>
+              <p class="card-text text-muted">${{ product.price }} per 1H</p>
             
               {% if product.is_sale %}
               <div class="d-flex justify-content-center small text-warning mb-2">

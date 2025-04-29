@@ -16,6 +16,9 @@ from django.utils import timezone
 
 from django.utils.dateparse import parse_datetime
 from django.utils.timezone import make_aware
+
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 
@@ -49,49 +52,55 @@ def orders(request, pk):
         messages.success(request, "Order Placed")
         return redirect('index')
 
-
+@login_required
 def not_shipped_dash(request):
-    if request.user.is_authenticated and request.user.is_superuser:
-        orders = Order.objects.filter(shipped=False)
-        if request.POST:
-            status = request.POST['shipping_status']
-            num = request.POST['num']
-            #Get the Order
-            order = Order.objects.filter(id=num)
-            
-            #Grab Date and time
-            now = timezone.now()
-            #Update order
-            order.update(shipped=True, date_shipped = now)
-            #redirect
-            messages.success(request, "Shipping Status Updated")
-            return redirect('index')
-        
-        return render(request, "payment/not_shipped_dash.html", {"orders":orders})
-    else:
-        messages.success(request, "Order Placed")
-        return redirect('index')
+    orders = Order.objects.filter(user=request.user, shipped=False)
+    if request.method == "POST":
+        status = request.POST.get('shipping_status')
+        num = request.POST.get('num')
 
-def shipped_dash(request):
-    if request.user.is_authenticated and request.user.is_superuser:
-        orders = Order.objects.filter(shipped=True)
-        if request.POST:
-            status = request.POST['shipping_status']
-            num = request.POST['num']
-            #Get the Order
-            order = Order.objects.filter(id=num)
-            
+        try:
+            # Buscar sólo entre las órdenes del usuario
+            order = Order.objects.get(id=num, user=request.user)
             #Grab Date and time
             now = timezone.now()
-            #Update order
-            order.update(shipped=False)
+
+            order.shipped = True
+
+            order.date_shipped = now
+            order.save()
+
             #redirect
             messages.success(request, "Shipping Status Updated")
-            return redirect('index')
-        return render(request, "payment/shipped_dash.html", {"orders":orders})
-    else:
-        messages.success(request, "Order Placed")
-        return redirect('index')
+        except Order.DoesNotExist:
+            messages.error(request, "Order not found or you do not have permission.")
+        return redirect('not_shipped_dash')  # Puedes redirigir de nuevo a este dashboard
+
+    return render(request, "payment/not_shipped_dash.html", {"orders": orders})
+
+@login_required
+def shipped_dash(request):
+    # Mostrar sólo las órdenes YA enviadas del usuario autenticado
+    orders = Order.objects.filter(user=request.user, shipped=True)
+
+    if request.method == "POST":
+        status = request.POST.get('shipping_status')
+        num = request.POST.get('num')
+
+        try:
+            # Buscar sólo entre las órdenes del usuario
+            order = Order.objects.get(id=num, user=request.user)
+
+            order.shipped = False
+            order.save()
+
+            messages.success(request, "Shipping Status Updated")
+        except Order.DoesNotExist:
+            messages.error(request, "Order not found or you do not have permission.")
+
+        return redirect('shipped_dash')  # Puedes redirigir de nuevo a este dashboard
+
+    return render(request, "payment/shipped_dash.html", {"orders": orders})
 
 def proccess_order(request):
     if request.POST:

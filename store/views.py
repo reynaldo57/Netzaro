@@ -4,12 +4,14 @@ from cart.cart import Cart
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, UpdateProfileForm, CommentForm, CommentResponseForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, UpdateProfileForm, CommentForm, CommentResponseForm, AddProductForm
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress
 from django import forms
 from django.db.models import Q
 import json
+from django.contrib.auth.decorators import login_required
+
 
 
 # Create your views here.
@@ -106,8 +108,8 @@ def category(request,foo):
 
 
 
-def product(request, pk):
-    product = get_object_or_404(Product, id=pk)
+def product(request, id):
+    product = get_object_or_404(Product, id=id)
     comments = Comment.objects.filter(product=product)
 
     # Matrícula (crear)
@@ -119,7 +121,7 @@ def product(request, pk):
             if request.user.is_authenticated:
                 comment.user = request.user
             comment.save()
-            return redirect('product', pk=pk)
+            return redirect('product',id=id)
     else:
         form = CommentForm()
 
@@ -132,7 +134,7 @@ def product(request, pk):
             response = response_form.save(commit=False)
             response.comment = comment_obj
             response.save()
-            return redirect('product', pk=pk)
+            return redirect('product',id=id)
     else:
         response_form = CommentResponseForm()
 
@@ -142,6 +144,37 @@ def product(request, pk):
         'comments': comments,
         'response_form': response_form,
     })
+
+
+
+
+@login_required(login_url='login')
+def add_product(request):
+    form = AddProductForm()
+    categories = Category.objects.all()
+
+    if request.method == "POST":
+        form = AddProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = get_object_or_404(User, id=request.user.id)
+            category = get_object_or_404(Category, pk=request.POST['category'])
+            product = form.save(commit=False)
+            product.user = user
+            product.category = category
+            product.user = request.user
+            product.save()
+
+            messages.success(request, "Product added successfully")
+            return redirect('product', id=product.id)
+        else:
+            print(form.errors)
+
+    context = {
+        "form": form,
+        "categories": categories,
+    }
+    return render(request, 'add_product.html', context)
+
 
 
 def index(request):
