@@ -177,6 +177,63 @@ def add_product(request):
 
 
 
+@login_required(login_url='login')
+def my_products(request):
+    queryset = Product.objects.filter(user=request.user).order_by('-created_day')
+    delete = request.GET.get('delete', None)
+    if delete:
+        product = get_object_or_404(Product, id=delete)
+        
+        if request.user.id != product.user.id:
+            return redirect('index')
+
+        product.delete()
+        messages.success(request, "Your blog has been deleted!")
+        return redirect('my_products')
+
+    context = {
+        
+        "queryset": queryset,
+    }
+    
+    return render(request, 'my_products.html', context)
+
+
+@login_required(login_url='login')
+def update_product(request, id):
+    product = get_object_or_404(Product, id=id)
+    form = AddProductForm(instance=product)
+    if request.method == "POST":
+        form = AddProductForm(request.POST, request.FILES, instance=product)
+        
+        if form.is_valid():
+            
+            if request.user.id != product.user.id:
+                return redirect('index')
+
+            user = get_object_or_404(User, id=request.user.id)
+            category = get_object_or_404(Category, pk=request.POST['category'])
+            product = form.save(commit=False)
+            product.user = user
+            product.category = category
+            product.save()
+
+            messages.success(request, "Curso actualizado correctamente")
+            return redirect('product', id=product.id)
+        else:
+            print(form.errors)
+
+
+    context = {
+        "form": form,
+        "product": product,
+        "categories": Category.objects.all()
+    }
+    return render(request, 'update_product.html', context)
+
+
+
+
 def index(request):
     products = Product.objects.all()
     return render(request, 'index.html', {'products':products})
@@ -236,3 +293,5 @@ def register_user(request):
             return redirect('register')
     else:
         return render(request, 'register.html', {'form': form})
+    
+

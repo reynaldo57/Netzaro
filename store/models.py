@@ -3,6 +3,7 @@ import datetime
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.utils.text import slugify
+from django.utils import timezone
 # Create your models here.
 
 class Profile(models.Model):
@@ -59,6 +60,8 @@ class Product(models.Model):
     sale_price = models.DecimalField(default=0, decimal_places=2, max_digits=6)
     pay_method = models.CharField(max_length=250, null=True)
     video = models.FileField(upload_to="video", null=True)
+    created_day = models.DateTimeField(default=timezone.now)
+
 
     def __str__(self):
         return self.name

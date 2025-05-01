@@ -1,44 +1,83 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <!-- Header-->
+<header style="background: url('/static/assets/fondo1.jpg') center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+    <div class="text-center text-white">
+        <h1 class="display-4 fw-bolder"><i class="bi bi-shop"></i>  Shop in style</h1>
+        <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
+    </div>
+</header>
 
-<section style="background: url('/static/assets/rojo.jpg') center/cover no-repeat;"   class="py-5">
+<section  class="py-5"  style="background-color: #ffffff;">
     <div class="container">
-    <br/><br/>
-        <div class="row">
-            <div style="background-color: #fff0f0; border: 1px solid #ff0000; border-radius: 5px;"  class="col-md-6 offset-md-3">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 shadow-lg rounded p-4" style="background-color: #ffffff; border-left: 5px solid #d70000;">
+
+                <!-- Imagen de Perfil -->
+                <div class="text-center mb-4">
+                    {% if request.user.profile.image %}
+                        <img src="{{ request.user.profile.image.url }}" alt="Profile Image" class="img-thumbnail rounded-circle border border-danger shadow-sm mb-3" width="180">
+                    {% else %}
+                    <div class="text-secondary">
+                        <i class="fas fa-user-circle fa-5x mb-2"></i>
+                        <p class="fw-bold">Sin imagen de perfil</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Formulario -->
                 <form method="POST" action="{% url 'update_user' %}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div style="text-align: center;">
-                        {% if request.user.profile.image %}
-                            <img src="{{ request.user.profile.image.url }}" alt="Profile Image" class="img-thumbnail" width="300px">
-                        {% else %}
-                            <p><strong>Elige tu imagen de perfil</strong></p>
-                        {% endif %}
+
+                    <!-- Datos de Usuario -->
+                    <div class="mb-4">
+                        <h5 class="text-dark">
+                            <i style="color: #28a745 !important;" class="fas fa-user-edit text-danger me-2"></i>Datos de Usuario
+                        </h5>
+                        <div class="bg-light p-3 rounded border">
+                            {{ user_form.as_p }}
+                        </div>
                     </div>
-                    <br/><br/>
-                    <!-- Formulario de usuario -->
-                    {{ user_form.as_p }}
-                    <!-- Formulario de imagen -->
-                    {{ profile_form.as_p }}
-                    <br/><br/>
-                    <div style="text-align: center;">
-                        <button style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" type="submit" class="btn btn-secondary">Update Profile</button>
+                    {{ profile_form.as_p }}xxx
+                    <!-- Imagen de Perfil -->
+                    <div class="mb-4">
+                        <h5 class="text-dark">
+                            <i style="color: #28a745 !important;" class="fas fa-camera text-danger me-2"></i>Subir Nueva Imagen
+                        </h5>
+                        <label for="id_image" class="btn btn-outline-danger w-100">
+                            <i class="fas fa-upload me-2" style="color: #28a745;"></i>Seleccionar Imagen
+                        </label>
+                        {{ profile_form.image }}sss
+                        <style>
+                            input[type="file"] {
+                                display: none;
+                            }
+                        </style>
                     </div>
-                  </form>
-                <br/><br/>
-                <div style="text-align: center;">
-                    <a style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" href="{% url 'update_password' %} " class="btn btn-secondary">Update Password</a>
-                    <a style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" href="{% url 'add_product' %} " class="btn btn-secondary">Add Product</a>
+
+
+                    <!-- Botón de Guardar -->
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn px-4 py-2" style="background-color: #d70000; color: white;">
+                            <i class="fas fa-save me-2"></i>Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Acciones Extras -->
+                <hr class="my-4" style="border-top: 2px dashed #d70000;">
+
+                <div class="text-center">
+                    <a href="{% url 'my_products' %} " class="btn btn-outline-dark me-2 mb-2"><i class="fas fa-key me-1 text-danger"></i>Mis Cursos</a>
+                    <a href="{% url 'update_password' %} " class="btn btn-outline-dark me-2 mb-2"><i class="fas fa-key me-1 text-danger"></i>Actualizar Contraseña</a>
+                    <a href="{% url 'add_product' %} " class="btn btn-outline-danger mb-2"><i class="fas fa-box-open me-1"></i>Agregar Producto</a>
                 </div>
-                <br/><br/>
             </div>
-            
         </div>
+    </div>
 </section>
-    <br/><br/>
-</div>
 
 {% endblock %}
