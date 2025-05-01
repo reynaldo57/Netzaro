@@ -16,4 +16,7 @@ urlpatterns = [
     path('category_summary/', views.category_summary, name='category_summary'),
     path('search/', views.search, name='search'),
     path('add_product/', views.add_product, name='add_product'),
+
+    path('my_products/', views.my_products, name='my_products'),
+    path('update_product/<int:id>/', views.update_product, name='update_product'),
 ]
