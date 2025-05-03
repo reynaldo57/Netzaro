@@ -92,7 +92,6 @@ def category_summary(request):
     categories = Category.objects.all()
     return render(request, 'category_summary.html', {"categories":categories})
 
-
 def category(request,foo):
     #replace hypens whit spaces
     foo = foo.replace('-', '')
@@ -293,5 +292,24 @@ def register_user(request):
             return redirect('register')
     else:
         return render(request, 'register.html', {'form': form})
-    
 
+# Create your views here.
+def view_user_information(request, username):
+    account = get_object_or_404(User, username=username)
+    product_user = Product.objects.filter(user=account).order_by('-id')
+    profile = account.profile
+
+
+    if request.user.is_authenticated:
+        
+        if request.user.id == account.id:
+            return redirect("update_user")
+
+        
+
+    context = {
+        "account": account,
+        "product_user": product_user,
+        "profile": profile 
+    }
+    return render(request, "user_information.html", context)

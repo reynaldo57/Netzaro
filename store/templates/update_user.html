@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
 <!-- Header-->
 <header style="background: url('/static/assets/fondo1.jpg') center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
     <div class="text-center text-white">
@@ -10,74 +8,139 @@
         <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
     </div>
 </header>
+<section class="py-5" style="background-color: #f8f9fa;">
+    <style>
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #d70000;
+        }
 
-<section  class="py-5"  style="background-color: #ffffff;">
+        .form-section h5 {
+            color: #d70000;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #d70000;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-section {
+            background: #f1f1f1;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .profile-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .profile-preview img {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #d70000;
+            margin-bottom: 1rem;
+        }
+
+        .form-buttons {
+            grid-column: span 2;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .form-buttons button {
+            background-color: #d70000;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .form-buttons button:hover {
+            background-color: #a80000;
+        }
+
+        .form-buttons a {
+            margin: 0 0.5rem;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label[for="id_image"] {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        label[for="id_image"]:hover {
+            background-color: #218838;
+        }
+    </style>
+
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6 shadow-lg rounded p-4" style="background-color: #ffffff; border-left: 5px solid #d70000;">
+        <form method="POST" action="{% url 'update_user' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-grid">
 
-                <!-- Imagen de Perfil -->
-                <div class="text-center mb-4">
+                <!-- Imagen de perfil -->
+                <div class="profile-preview">
                     {% if request.user.profile.image %}
-                        <img src="{{ request.user.profile.image.url }}" alt="Profile Image" class="img-thumbnail rounded-circle border border-danger shadow-sm mb-3" width="180">
+                        <img src="{{ request.user.profile.image.url }}" alt="Imagen de perfil">
                     {% else %}
-                    <div class="text-secondary">
-                        <i class="fas fa-user-circle fa-5x mb-2"></i>
-                        <p class="fw-bold">Sin imagen de perfil</p>
-                    </div>
+                        <img src="static/assets/usuario.png" alt="Imagen de perfil">
+                        <i class="fas fa-user-circle fa-5x text-secondary mb-2"></i>
+                        <p class="fw-bold text-muted">Sin imagen de perfil</p>
                     {% endif %}
+                    <label for="id_image"><i class="fas fa-upload me-2"></i>Seleccionar Imagen</label>
+                    {{ profile_form.image }}
                 </div>
 
-                <!-- Formulario -->
-                <form method="POST" action="{% url 'update_user' %}" enctype="multipart/form-data">
-                    {% csrf_token %}
+                <!-- Datos de usuario -->
+                <div class="form-section">
+                    <h5><i class="fas fa-user me-2"></i>Información de Usuario</h5>
+                    {{ user_form.as_p }}
+                </div>
 
-                    <!-- Datos de Usuario -->
-                    <div class="mb-4">
-                        <h5 class="text-dark">
-                            <i style="color: #28a745 !important;" class="fas fa-user-edit text-danger me-2"></i>Datos de Usuario
-                        </h5>
-                        <div class="bg-light p-3 rounded border">
-                            {{ user_form.as_p }}
-                        </div>
+                <!-- Perfil adicional -->
+                <div class="form-section">
+                    <h5><i class="fas fa-address-card me-2"></i>Perfil Adicional</h5>
+                    {{ profile_form.as_p }}
+                </div>
+
+                <!-- Botón -->
+                <div class="form-buttons">
+                    <button type="submit"><i class="fas fa-save me-2"></i>Guardar Cambios</button>
+
+                    <div class="mt-4">
+                        <a href="{% url 'my_products' %}" class="btn btn-outline-dark mb-2"><i class="fas fa-box me-1"></i> Mis Cursos</a>
+                        <a href="{% url 'update_password' %}" class="btn btn-outline-dark mb-2"><i class="fas fa-key me-1"></i> Actualizar Contraseña</a>
+                        <a href="{% url 'add_product' %}" class="btn btn-outline-danger mb-2"><i class="fas fa-plus me-1"></i> Agregar Producto</a>
                     </div>
-                    {{ profile_form.as_p }}xxx
-                    <!-- Imagen de Perfil -->
-                    <div class="mb-4">
-                        <h5 class="text-dark">
-                            <i style="color: #28a745 !important;" class="fas fa-camera text-danger me-2"></i>Subir Nueva Imagen
-                        </h5>
-                        <label for="id_image" class="btn btn-outline-danger w-100">
-                            <i class="fas fa-upload me-2" style="color: #28a745;"></i>Seleccionar Imagen
-                        </label>
-                        {{ profile_form.image }}sss
-                        <style>
-                            input[type="file"] {
-                                display: none;
-                            }
-                        </style>
-                    </div>
-
-
-                    <!-- Botón de Guardar -->
-                    <div class="text-center mt-4">
-                        <button type="submit" class="btn px-4 py-2" style="background-color: #d70000; color: white;">
-                            <i class="fas fa-save me-2"></i>Guardar Cambios
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Acciones Extras -->
-                <hr class="my-4" style="border-top: 2px dashed #d70000;">
-
-                <div class="text-center">
-                    <a href="{% url 'my_products' %} " class="btn btn-outline-dark me-2 mb-2"><i class="fas fa-key me-1 text-danger"></i>Mis Cursos</a>
-                    <a href="{% url 'update_password' %} " class="btn btn-outline-dark me-2 mb-2"><i class="fas fa-key me-1 text-danger"></i>Actualizar Contraseña</a>
-                    <a href="{% url 'add_product' %} " class="btn btn-outline-danger mb-2"><i class="fas fa-box-open me-1"></i>Agregar Producto</a>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </section>
+
+
 
 {% endblock %}
