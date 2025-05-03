@@ -46,6 +46,7 @@ class UpdateUserForm(UserChangeForm):
 	email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Address'}), required=False)
 	first_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'First Name'}), required=False)
 	last_name = forms.CharField(label="", max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}), required=False)
+	
 
 	class Meta:
 		model = User
@@ -60,19 +61,31 @@ class UpdateUserForm(UserChangeForm):
 		self.fields['username'].help_text = '<span class="form-text style="color: white;"><small>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small></span>'
 
 class UpdateProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['image']
-        widgets = {
+	about_me = forms.CharField(
+        label="Sobre ti",
+        max_length=350,
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'placeholder': 'Cuéntanos algo sobre ti',
+            'rows': 3,  # Controla la altura
+            'style': 'resize:none;'  # Opcional: evita que el usuario lo estire
+        })
+    )
+	class Meta:
+		
+		model = Profile
+		fields = ['about_me','image',]
+		widgets = {
             'image': forms.FileInput(attrs={
                 'class': 'form-control shadow-sm p-3 rounded-3 border-1',
                 'style': 'max-width: 100%; height: auto;',
             }),
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['image'].label = "Foto de perfil"
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.fields['image'].label = "Foto de perfil"
 
 
 class SignUpForm(UserCreationForm):

@@ -63,7 +63,7 @@
                                     <div class="text-center">
                                         <!-- Product name-->
                                         <h5 class="fw-bolder">{{ product.name }}</h5>
-                                        <h6 class="text-success fw-semibold mb-1"><i class="bi bi-person-circle"></i> {{ product.user.username }}</h6>
+                                        <a class="username-blog" href="{% url 'user_information' product.user.username %}">{{product.user.username}}</a><br><br>
                                         <!-- Product price-->
                                         <strike>{{ product.price }}</strike>
                                         &nbsp;

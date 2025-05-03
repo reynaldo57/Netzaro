@@ -8,6 +8,7 @@ from django.utils import timezone
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    about_me = models.CharField(max_length=200, blank=True)
     image = models.ImageField(upload_to='uploads/product', default='profile_images/default.jpg')
     date_modified = models.DateTimeField(User, auto_now=True)
     phone = models.CharField(max_length=200, blank=True)
@@ -20,8 +21,17 @@ class Profile(models.Model):
     old_cart = models.CharField(max_length=5000, blank=True, null=True)
 
 
+    def get_profile_picture(self):
+        try:
+            return self.image.url
+        except:
+            return ""
+
+
     def __str__(self):
         return self.user.username
+    
+    
 #Create a user Profile by default when user singup
 def create_profile(sender, instance, created, **kwargs):
     if created:

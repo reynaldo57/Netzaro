@@ -19,4 +19,6 @@ urlpatterns = [
 
     path('my_products/', views.my_products, name='my_products'),
     path('update_product/<int:id>/', views.update_product, name='update_product'),
+    path('user_information/<str:username>/', views.view_user_information, name='user_information'),
+
 ]
