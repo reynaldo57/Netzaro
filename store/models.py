@@ -8,6 +8,7 @@ from django.utils import timezone
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    paypal_email = models.EmailField(max_length=255, null=True, blank=True)
     about_me = models.CharField(max_length=200, blank=True)
     image = models.ImageField(upload_to='uploads/product', default='profile_images/default.jpg')
     date_modified = models.DateTimeField(User, auto_now=True)
