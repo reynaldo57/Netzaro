@@ -249,9 +249,32 @@ def billing_info(request):
 
 
 
+
+        # Validar que todos los productos sean del mismo dueño
+        product_list = cart_products()
+        owners = set(p.user for p in product_list)
+        if len(owners) > 1:
+            messages.error(request, "No puedes pagar productos de diferentes vendedores en un solo pago.")
+            return redirect('cart_summary')
+
+        # Obtener correo PayPal del dueño del producto
+        first_product = product_list[0]
+        user = first_product.user
+        try:
+            profile = Profile.objects.get(user=user)
+            paypal_email = profile.paypal_email
+        except Profile.DoesNotExist:
+            paypal_email = None
+
+        if not paypal_email:
+            paypal_email = settings.PAYPAL_RECEIVER_EMAIL  # fallback
+
+
+
+
         #Create Paypal Form Dictionary
         paypal_dict = {
-            'business': settings.PAYPAL_RECEIVER_EMAIL,
+            'business': paypal_email,
             'amount': totals,
             'item_name': 'Book Order',
             'no_shipping': '2',

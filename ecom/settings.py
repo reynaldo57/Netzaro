@@ -26,8 +26,8 @@ SECRET_KEY = '9%^t2q1!z&7b%a1flg#^s5@x$w)8=lu+fdml9+v#%f1ew8w0p('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['86f8-38-25-26-155.ngrok-free.app', '127.0.0.1']
-CSRF_TRUSTED_ORIGINS = ['https://86f8-38-25-26-155.ngrok-free.app']
+ALLOWED_HOSTS = ['ca19-38-25-26-155.ngrok-free.app', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://ca19-38-25-26-155.ngrok-free.app']
 
 
 # Application definition

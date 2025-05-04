@@ -61,6 +61,7 @@ class UpdateUserForm(UserChangeForm):
 		self.fields['username'].help_text = '<span class="form-text style="color: white;"><small>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small></span>'
 
 class UpdateProfileForm(forms.ModelForm):
+	paypal_email = forms.CharField(label="PayPal Email", max_length=100, required=True, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}))
 	about_me = forms.CharField(
         label="Sobre ti",
         max_length=350,
@@ -75,7 +76,7 @@ class UpdateProfileForm(forms.ModelForm):
 	class Meta:
 		
 		model = Profile
-		fields = ['about_me','image',]
+		fields = ['paypal_email', 'about_me','image',]
 		widgets = {
             'image': forms.FileInput(attrs={
                 'class': 'form-control shadow-sm p-3 rounded-3 border-1',

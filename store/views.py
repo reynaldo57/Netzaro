@@ -107,8 +107,8 @@ def category(request,foo):
 
 
 
-def product(request, id):
-    product = get_object_or_404(Product, id=id)
+def product(request, pk):
+    product = get_object_or_404(Product, id=pk)
     comments = Comment.objects.filter(product=product)
 
     # Matrícula (crear)
