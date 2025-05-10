@@ -1,22 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
         <!-- Header-->
-        <header class="bg-dark py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">{{ category }}</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Category Page</p>
-                </div>
+        <header style="background: url('/static/assets/rojo.jpg') center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder"><i class="bi bi-shop"></i>  {{ category }}</h1>
+                <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
             </div>
-        </header>
+          </header>
+        
         <!-- Section-->
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-
+                    
                     {% for product in products %}
                         {% if product.is_sale %}
-                            
                             <div class="col mb-5">
                                 <div class="card h-100">
                                     <div class="badge bg-light text-black position-absolute" style="top: 0.5rem; right: 1rem;">

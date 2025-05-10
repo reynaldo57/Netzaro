@@ -124,3 +124,33 @@ class CommentResponse(models.Model):
 
     def __str__(self):
         return f"{self.responder_name} respondió a {self.comment.name}"
+
+
+class Clase(models.Model):
+    user = models.ForeignKey(
+        User, related_name='user_clase', on_delete=models.CASCADE
+    )
+    productClase = models.ForeignKey(  # 🔥 Relación con Blog
+        Product, related_name='clases', on_delete=models.CASCADE, default=1  
+    )
+    titleClase = models.CharField(max_length=250)
+    slugClase = models.SlugField(null=True, blank=True)
+    fileClase = models.FileField(upload_to='files', verbose_name="Archivo")
+    bannerClase = models.ImageField(upload_to='clase_banners')
+    descriptionClase = models.CharField(max_length=450)
+    
+    nivel = models.CharField(  # 🔥 Campo para Nivel
+        max_length=20,
+        choices=[("Basico", "Básico"), ("Intermedio", "Intermedio"), ("Avanzado", "Avanzado")],
+        default="Basico"
+    )
+
+    class_date = models.DateField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.titleClase} - {self.nivel}"
+
+    def save(self, *args, **kwargs):
+        if not self.slugClase:
+            self.slugClase = slugify(self.titleClase)
+        super().save(*args, **kwargs)

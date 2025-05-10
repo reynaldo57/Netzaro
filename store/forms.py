@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django import forms
-from .models import Profile, Product
+from .models import Profile, Product, Clase
 from django.db import models
 
 
@@ -154,3 +154,10 @@ class AddProductForm(forms.ModelForm):
             "price",
             "video",
         )
+
+class AddClaseForm(forms.ModelForm):
+    
+    class Meta:
+        model = Clase
+        fields = ['titleClase','fileClase', 'productClase', 'bannerClase', 'descriptionClase', 'nivel', "productClase"]
+

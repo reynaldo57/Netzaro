@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block content %}
+<header style="background: url('/static/assets/rojo.jpg') center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+    <div class="text-center text-white">
+        <h1 class="display-4 fw-bolder"><i class="bi bi-shop"></i>  Clases del curso: {{ product.name }}</h1>
+        <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
+    </div>
+  </header>
+<style>
+    body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: #f0f2f5;
+}
+
+.full-wrapper {
+    width: 100%;
+    padding: 2rem;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #1c1c1e;
+    margin-bottom: 2rem;
+}
+
+.levels-wrapper {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.level-column {
+    flex: 1;
+    min-width: 300px;
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.level-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+    border-left: 5px solid #8e44ad;
+}
+
+.level-title.basic {
+    border-color: #2980b9;
+}
+
+.level-title.intermediate {
+    border-color: #f39c12;
+}
+
+.level-title.advanced {
+    border-color: #27ae60;
+}
+
+.class-card {
+    background-color: #f9f9fb;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+}
+
+.class-card:hover {
+    transform: translateY(-4px);
+}
+
+.class-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+}
+
+.class-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.class-description {
+    flex-grow: 1;
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 0.8rem;
+}
+
+.download-button {
+    align-self: flex-start;
+    padding: 0.5rem 1rem;
+    background-color: #8e44ad;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.download-button:hover {
+    background-color: #732d91;
+}
+
+.no-classes {
+    font-style: italic;
+    color: #888;
+}
+
+</style>
+<div class="full-wrapper">
+    
+
+    <div class="levels-wrapper">
+        <!-- Básico -->
+        <div class="level-column">
+            <h3 class="level-title basic">Nivel Básico</h3>
+            {% if clases_basico %}
+                {% for clase in clases_basico %}
+                    <div class="class-card">
+                        <img src="{{ clase.bannerClase.url }}" alt="Banner básico" class="class-image">
+                        <h4 class="class-title">{{ clase.titleClase }}</h4>
+                        <p class="class-description">{{ clase.descriptionClase }}</p>
+                        <a href="{{ clase.fileClase.url }}" class="download-button" download>Descargar</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-classes">No hay clases básicas aún.</p>
+            {% endif %}
+        </div>
+
+        <!-- Intermedio -->
+        <div class="level-column">
+            <h3 class="level-title intermediate">Nivel Intermedio</h3>
+            {% if clases_intermedio %}
+                {% for clase in clases_intermedio %}
+                    <div class="class-card">
+                        <img src="{{ clase.bannerClase.url }}" alt="Banner intermedio" class="class-image">
+                        <h4 class="class-title">{{ clase.titleClase }}</h4>
+                        <p class="class-description">{{ clase.descriptionClase }}</p>
+                        <a href="{{ clase.fileClase.url }}" class="download-button" download>Descargar</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-classes">No hay clases intermedias aún.</p>
+            {% endif %}
+        </div>
+
+        <!-- Avanzado -->
+        <div class="level-column">
+            <h3 class="level-title advanced">Nivel Avanzado</h3>
+            {% if clases_avanzado %}
+                {% for clase in clases_avanzado %}
+                    <div class="class-card">
+                        <img src="{{ clase.bannerClase.url }}" alt="Banner avanzado" class="class-image">
+                        <h4 class="class-title">{{ clase.titleClase }}</h4>
+                        <p class="class-description">{{ clase.descriptionClase }}</p>
+                        <a href="{{ clase.fileClase.url }}" class="download-button" download>Descargar</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-classes">No hay clases avanzadas aún.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
