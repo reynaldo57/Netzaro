@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Customer, Product, Order, Profile, Comment, CommentResponse
+from .models import Category, Customer, Product, Order, Profile, Comment, CommentResponse, Clase
 from django.contrib.auth.models import User
 
 # Register your models here.
@@ -10,6 +10,7 @@ admin.site.register(Order)
 admin.site.register(Profile)
 admin.site.register(Comment)
 admin.site.register(CommentResponse)
+admin.site.register(Clase)
 
 
 class UserAdmin(admin.ModelAdmin):

@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Category, Profile, Comment, CommentResponse
+from .models import Product, Category, Profile, Comment, CommentResponse, Clase
 from cart.cart import Cart
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, UpdateProfileForm, CommentForm, CommentResponseForm, AddProductForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, UpdateProfileForm, CommentForm, CommentResponseForm, AddProductForm, AddClaseForm
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress
 from django import forms
@@ -120,7 +120,7 @@ def product(request, pk):
             if request.user.is_authenticated:
                 comment.user = request.user
             comment.save()
-            return redirect('product',id=id)
+            return redirect('product',pk=pk)
     else:
         form = CommentForm()
 
@@ -133,7 +133,7 @@ def product(request, pk):
             response = response_form.save(commit=False)
             response.comment = comment_obj
             response.save()
-            return redirect('product',id=id)
+            return redirect('product',pk=pk)
     else:
         response_form = CommentResponseForm()
 
@@ -313,3 +313,61 @@ def view_user_information(request, username):
         "profile": profile 
     }
     return render(request, "user_information.html", context)
+
+
+@login_required(login_url='login')
+def add_clase(request):
+    productClase_id = request.GET.get('productClase')  # Obtener blog de la URL
+    products = Product.objects.all()
+    if not productClase_id:
+        messages.error(request, "No productclase ID provided.")
+        return redirect('index')
+
+    productClase = get_object_or_404(Product, id=productClase_id)  # Obtener el Product
+
+     # 🚫 Verificación de permiso: solo el creador puede agregar clases
+    if productClase.user != request.user:
+        messages.error(request, "No tienes permiso para agregar clases a este producto.")
+        return redirect('index')
+
+    # Asegúrate de pasar el `productClase` al formulario en la inicialización
+    formClase = AddClaseForm(initial={'productClase': productClase})
+
+    if request.method == "POST":
+        formClase = AddClaseForm(request.POST, request.FILES)
+        if formClase.is_valid():
+            clase = formClase.save(commit=False)
+            clase.user = request.user  # Asignar usuario
+            clase.productClase = productClase  # Asegurar que la clase esté relacionada con el blog
+            clase.save()
+
+            messages.success(request, "Clase added successfully")
+            return redirect('index',)
+        else:
+            print(formClase.errors)  # Para ver qué está fallando
+
+    context = {
+        "formClase": formClase,
+        "productClase": productClase,
+        "products": products,
+    }
+    return render(request, 'add_clase.html', context)
+
+
+
+
+def product_detail_view(request, id):
+    product = get_object_or_404(Product, id=id)
+
+    clases_basico = Clase.objects.filter(productClase=product, nivel="Basico")
+    clases_intermedio = Clase.objects.filter(productClase=product, nivel="Intermedio")
+    clases_avanzado = Clase.objects.filter(productClase=product, nivel="Avanzado")
+
+    context = {
+        "product": product,
+        "clases_basico": clases_basico,
+        "clases_intermedio": clases_intermedio,
+        "clases_avanzado": clases_avanzado,
+    }
+    return render(request, 'product_detail.html', context)
+
