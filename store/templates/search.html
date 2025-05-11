@@ -1,106 +1,223 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<!-- Header-->
-<header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Search Products</h1>
-            <p class="lead fw-normal text-white-50 mb-0">Fins what you are looking for</p>
-        </div>
-    </div>
+<header style="background: url('/static/assets/header.jpg') center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+  <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder"><i class="bi bi-shop"></i>  Shop in style</h1>
+      <p class="lead fw-normal text-white-100 mb-0">With this shop homepage template</p>
+  </div>
 </header>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<div class="container">
-    <div class="row">
-        <center>
-            <div class="col-10">
-                <br/><br/>
-                <div class="card">
-                    <div class="card-header">
-                      Search Products
-                    </div>
-                    <div class="card-body">
-                      <form method="POST" action="{% url 'search' %}">
-                        {% csrf_token %}
-                            <div class="mb-3">
-                              <input type="text" class="form-control"  placeholder="Search for Products" name="searched">
-                            </div>
-                      <button type="submit" class="btn btn-secondary">Search Products</button>                    
-                      </form>
-                    </div>
-                  </div>
-                  <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                  <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    
-                  {% if searched %}
+<style>
+/* Base */
+body {
+  background-color: #f5f5f5;
+  color: #333;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+}
 
-                    {% for product in searched %}
-                    {% if product.is_sale %}
-                    
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <div class="badge bg-light text-black position-absolute" style="top: 0.5rem; right: 1rem;">
-                                sale
-                            </div>
-                            <!-- Product image-->
-                            <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">{{ product.name }}</h5>
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        &nbsp;&nbsp;Sale&nbsp;&nbsp;
-                                        <div class="bi-star-fill"></div>
-                                    </div>
-                                    <!-- Product price-->
-                                    <strike>{{ product.price }}</strike>
-                                    &nbsp;
-                                    {{ product.sale_price }}
-                                    <br/>
-                                    {{ product.description }}
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.id %}">View Product</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
-                            <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">{{ product.name }}</h5>
-                                    <!-- Product price-->
-                                    <strike>{{ product.price }}</strike>
-                                    &nbsp;
-                                    {{ product.sale_price }}
-                                    <br/>
-                                    {{ product.description }}
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.id %}">View Product</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% endfor %}
-                  {% endif %}
-                </div>
-            </div>
-        </center>
-    </div>
+/* Sección de búsqueda */
+.search-section {
+  background-color: #1d3557;
+  color: white;
+  padding: 2rem 1rem;
+  text-align: center;
+  border-bottom: 4px solid #e63946;
+}
+
+.search-section h2 {
+  color: #ffea00;
+  margin-bottom: 1rem;
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.search-form input {
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 10px;
+  width: 320px;
+  max-width: 90%;
+}
+
+.search-form button {
+  background-color: #e63946;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-weight: bold;
+}
+
+.search-form button:hover {
+  background-color: #ffea00;
+  color: #1d3557;
+}
+
+/* Contenedor responsivo de las tarjetas */
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 3rem 2rem;
+}
+
+/* Responsivo: si hay pocos elementos */
+@media (max-width: 600px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    padding: 2rem 1rem;
+  }
+}
+
+/* Tarjetas adaptables */
+.product-card {
+  background-color: white;
+  color: #333;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+  position: relative;
+  width: 100%;
+  max-width: 300px; /* 👈 Tamaño máximo para evitar que se vean gigantes */
+  flex: 1 1 250px;   /* 👈 Se ajustan al tamaño mínimo sin crecer demasiado */
+  margin: 0 auto;
+}
+
+.product-card:hover {
+  transform: scale(1.02);
+}
+
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 1.2rem;
+}
+
+.product-info h3 {
+  color: #e63946;
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.description {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+.price {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #999;
+  margin-right: 0.5rem;
+}
+
+.sale-price {
+  color: #1d3557;
+  font-weight: bold;
+}
+
+.btn-view {
+  display: inline-block;
+  background-color: #e63946;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.btn-view:hover {
+  background-color: #ffea00;
+  color: #1d3557;
+}
+
+/* Cinta de oferta */
+.ribbon {
+  background: #ffea00;
+  color: #1d3557;
+  padding: 0.5rem 1rem;
+  position: absolute;
+  top: 10px;
+  left: -20px;
+  transform: rotate(-15deg);
+  font-weight: bold;
+  font-size: 0.75rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Iconos decorativos */
+.product-card::before {
+  content: "🎓";
+  font-size: 2rem;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
+
+.on-sale::before {
+  content: "🔥";
+}
+</style>
+
+
+
+<!-- Buscador -->
+<div class="search-section">
+  <h2><i class="fas fa-search"></i> Encuentra tu curso ideal</h2>
+  <form method="POST" action="{% url 'search' %}" class="search-form">
+    {% csrf_token %}
+    <input type="text" name="searched" placeholder="¿Qué quieres aprender hoy?" required>
+    <button type="submit"><i class="fas fa-magic"></i> Buscar</button>
+  </form>
 </div>
 
+<!-- Resultados -->
+{% if searched %}
+<div class="product-grid">
+  {% for product in searched %}
+  <div class="product-card {% if product.is_sale %}on-sale{% endif %}">
+    {% if product.is_sale %}
+    <div class="ribbon"><i class="fas fa-fire"></i> ¡Oferta!</div>
+    {% endif %}
+    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    <div class="product-info">
+      <h3><i class="fas fa-book-open"></i> {{ product.name }}</h3>
+      <p class="description">{{ product.description|truncatechars:100 }}</p>
+      <div class="price">
+        {% if product.is_sale %}
+        <span class="original-price">${{ product.price }}</span>
+        <span class="sale-price">${{ product.sale_price }}</span>
+        {% else %}
+        <span class="sale-price">${{ product.price }}</span>
+        {% endif %}
+      </div>
+      <a href="{% url 'product' product.id %}" class="btn-view"><i class="fas fa-eye"></i> Ver Curso</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+<br><br><br><br>
 {% endblock %}

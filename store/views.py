@@ -164,7 +164,7 @@ def add_product(request):
             product.save()
 
             messages.success(request, "Product added successfully")
-            return redirect('product', id=product.id)
+            return redirect('product', pk=product.id)
         else:
             print(form.errors)
 
