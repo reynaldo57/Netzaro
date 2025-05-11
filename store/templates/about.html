@@ -1,37 +1,250 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<header style="background: url('/static/assets/header.jpg') center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+  <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder"><i class="bi bi-shop"></i>  Shop in style</h1>
+      <p class="lead fw-normal text-white-100 mb-0">With this shop homepage template</p>
+  </div>
+</header>
+<style>
+    /* Sección de Introducción */
+.intro-section {
+  padding: 5rem 0;
+  background-color: #f5f5f5;
+  text-align: center;
+  border-bottom: 3px solid #d32f2f;
+}
+.intro-section h2 {
+  font-size: 2.5rem;
+  color: #333;
+}
+.intro-section p {
+  font-size: 1.2rem;
+  color: #777;
+  margin-bottom: 2rem;
+}
+.intro-section .btn {
+  background-color: #d32f2f;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.intro-section img {
+  border-radius: 15px;
+  box-shadow: 0px 15px 30px rgba(0,0,0,0.1);
+}
 
-<!-- Header-->
-<header style="background: url('/static/assets/tienda.jpg') center/cover no-repeat;" class="bg-dark py-5">
-    <div style="height: 150px !important;" class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">About Us...</h1>
-            <p class="lead fw-normal text-white-100 mb-0">Welcome to Prisma Ecommerce</p>
+/* Estilo para la sección de testimonios */
+.testimonios {
+  background-color: #f9f9f9;
+  padding: 4rem 0;
+}
+
+.testimonios .section-title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #d32f2f; /* Rojo para el título */
+}
+
+/* Estilo para cada tarjeta de testimonio */
+.testimonial-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+  margin-bottom: 2rem; /* Espaciado entre tarjetas */
+}
+
+/* Imagen del testimonio */
+.testimonial-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  /* Eliminar borde rojo alrededor de la imagen */
+}
+
+/* Estilo para el texto de los testimonios */
+.testimonial-card p {
+  font-size: 1.2rem;
+  color: #333;
+  margin: 15px 0;
+}
+
+/* Nombre del estudiante */
+.testimonial-card span {
+  font-weight: bold;
+  color: #d32f2f; /* Rojo para el nombre */
+}
+
+/* Hover para las tarjetas */
+.testimonial-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .testimonios .row {
+    flex-direction: column; /* En pantallas pequeñas, las tarjetas se apilan */
+  }
+  .testimonial-card {
+    width: 100%; /* Las tarjetas ocupan el 100% del ancho en pantallas pequeñas */
+  }
+}
+
+
+
+/* Misión, Visión, Valores */
+.mission-vision-values {
+  padding: 4rem 0;
+  background-color: #f5f5f5;
+}
+.mission-vision-values .card {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+  margin: 1rem;
+}
+.mission-vision-values .card i {
+  font-size: 3rem;
+  color: #d32f2f;
+  margin-bottom: 1rem;
+}
+.mission-vision-values .card h3 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+.mission-vision-values .card p {
+  font-size: 1.1rem;
+  color: #777;
+}
+.mission-vision-values .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  transition: 0.3s ease;
+}
+
+/* Botones adicionales */
+.btn-primary {
+  background-color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+</style>
+<!-- Sección de Introducción -->
+<section class="intro-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <h2>Welcome to Prisma</h2>
+                <p>
+                    At Prisma Ecommerce, we strive to offer the best educational courses online, with expert instructors and a unique learning experience. Our mission is to empower individuals by providing access to quality education.
+                </p>
+                <a href="#learn-more" class="btn btn-primary">Learn More</a>
+            </div>
+            <div class="col-lg-6">
+                <img src="/static/assets/about.png" alt="Education" class="img-fluid rounded shadow-lg">
+            </div>
         </div>
     </div>
-</header>
+</section>
 
-<div class="container">
-    <div class="row">
-        <center>
-            <div class="col-8">
-                <p align="justify">
-                    <br>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam mattis nibh at lectus laoreet, sit amet ullamcorper neque accumsan. Donec euismod porta erat, in blandit orci. In eget nibh et neque accumsan consectetur. Proin dignissim dictum tellus et scelerisque. Vivamus elementum venenatis nunc, in finibus dui cursus ut. Donec ex nibh, pulvinar quis ipsum et, sollicitudin accumsan nisl. Maecenas rhoncus sit amet lectus nec lacinia. Aenean justo mi, accumsan quis lorem id, mollis malesuada nulla. Maecenas fermentum leo a semper vulputate. Etiam ut tellus iaculis, interdum nulla vel, aliquam odio. Morbi ut odio molestie, interdum magna a, gravida arcu.
-                    <br>
-                    Nunc sed dictum mi, ac ultrices orci. Aliquam vitae nisi quis ipsum lobortis tristique. Nam odio tortor, tempor eu libero at, luctus ullamcorper neque. Mauris nec placerat sapien, sed vulputate libero. Vestibulum sed dapibus turpis, a consequat purus. Aliquam gravida lorem est, eget consequat odio pharetra cursus. Morbi venenatis nunc justo, non gravida enim molestie in. Curabitur in nibh in quam ullamcorper tempor eu et velit.
-                    <br>
-                    Proin imperdiet id massa vitae consectetur. In ut arcu vehicula, mollis magna id, elementum nisi. Nulla condimentum posuere maximus. Aliquam dignissim semper nisi. Nulla quis nulla convallis, congue neque finibus, vehicula ex. Phasellus ultricies neque bibendum libero egestas, eget pellentesque felis elementum. Maecenas aliquet neque odio, in vulputate purus pulvinar quis. Praesent laoreet pretium justo, ac dignissim urna. Proin volutpat, justo sit amet hendrerit porttitor, tellus mi iaculis turpis, a sollicitudin sapien urna vitae elit. Maecenas eget ligula sollicitudin libero finibus hendrerit id id ligula. Quisque vel ex in mauris dapibus consequat. Sed faucibus leo augue, quis pulvinar nisi sodales eget. Integer id libero lorem. Aliquam erat volutpat. Fusce est metus, rutrum a enim lacinia, pretium hendrerit augue.
-                    <br>
-                    Integer fringilla vehicula felis sed porta. Sed lectus nunc, eleifend sed fermentum vel, efficitur ac velit. Integer ut neque metus. Donec velit leo, facilisis a euismod ac, ullamcorper ac nisi. Praesent non placerat justo. Mauris mattis, felis non dapibus gravida, sapien nulla placerat turpis, sed imperdiet lacus elit ac urna. Vestibulum eu tortor eget massa interdum egestas. Ut scelerisque dolor vel erat sollicitudin maximus vitae vel leo. Aliquam vulputate iaculis enim, id facilisis metus tempor ut. Cras ut vestibulum ipsum, et varius nulla. Aliquam erat volutpat. Suspendisse potenti.
-                    <br>
-                    Vivamus tellus lorem, molestie vitae tristique at, iaculis vel erat. Proin ligula ante, aliquet id lorem sit amet, mollis pretium erat. Ut ac placerat neque. Aliquam faucibus, ipsum id feugiat laoreet, ligula velit elementum mauris, ut efficitur leo odio vel nunc. Nunc vehicula, risus nec sodales vehicula, diam magna mattis mi, ac sodales mi lectus non lacus. Vivamus et ornare erat, sit amet finibus ligula. Fusce auctor enim turpis, et mattis tellus tristique ut. Cras eu lorem in lorem blandit cursus eget ut diam. Suspendisse nibh dui, sagittis vel velit gravida, dapibus eleifend mi. Vivamus ante risus, vulputate et dapibus vel, sollicitudin ut diam. Integer mattis tempor nunc faucibus tempor.
-                </p>
-                <br><br>
+<!-- Testimonios -->
+<section class="testimonios">
+    <div class="container">
+        <h2 class="section-title text-center">What Our Students Say</h2>
+        <div class="row">
+            <!-- Testimonio 1 -->
+            <div class="col-md-4">
+                <div class="testimonial-card text-center">
+                    <img src="/static/assets/student1.jpg" alt="Student 1" class="testimonial-img">
+                    <p>"Prisma Ecommerce has changed the way I learn online. The courses are so interactive and easy to understand!"</p>
+                    <span>- Juan Pérez</span>
+                </div>
             </div>
-        </center>
+            <!-- Testimonio 2 -->
+            <div class="col-md-4">
+                <div class="testimonial-card text-center">
+                    <img src="/static/assets/student2.jpg" alt="Student 2" class="testimonial-img">
+                    <p>"Thanks to Prisma, I now have the skills to work from home and started my career in digital marketing."</p>
+                    <span>- Maria Gómez</span>
+                </div>
+            </div>
+            <!-- Testimonio 3 -->
+            <div class="col-md-4">
+                <div class="testimonial-card text-center">
+                    <img src="/static/assets/tienda.jpg" alt="Student 3" class="testimonial-img">
+                    <p>"I love how Prisma Ecommerce keeps things simple and straightforward, making learning enjoyable!"</p>
+                    <span>- David Torres</span>
+                </div>
+            </div>
+            <!-- Testimonio 1 -->
+            <div class="col-md-4">
+                <div class="testimonial-card text-center">
+                    <img src="/static/assets/rojo.jpg" alt="Student 1" class="testimonial-img">
+                    <p>"Prisma Ecommerce has changed the way I learn online. The courses are so interactive and easy to understand!"</p>
+                    <span>- Juan Pérez</span>
+                </div>
+            </div>
+            <!-- Testimonio 2 -->
+            <div class="col-md-4">
+                <div class="testimonial-card text-center">
+                    <img src="/static/assets/student2.jpg" alt="Student 2" class="testimonial-img">
+                    <p>"Thanks to Prisma, I now have the skills to work from home and started my career in digital marketing."</p>
+                    <span>- Maria Gómez</span>
+                </div>
+            </div>
+            <!-- Testimonio 3 -->
+            <div class="col-md-4">
+                <div class="testimonial-card text-center">
+                    <img src="/static/assets/student3.jpg" alt="Student 3" class="testimonial-img">
+                    <p>"I love how Prisma Ecommerce keeps things simple and straightforward, making learning enjoyable!"</p>
+                    <span>- David Torres</span>
+                </div>
+            </div>
+        </div>
+        <!-- Puedes agregar más testimonios aquí -->
     </div>
-</div>
+</section>
+
+
+<!-- Misión, Visión, Valores -->
+<section class="mission-vision-values">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <i class="bi bi-bullseye"></i>
+                    <h3>Misión</h3>
+                    <p>Provide top-quality digital education to learners across the globe.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <i class="bi bi-eye"></i>
+                    <h3>Visión</h3>
+                    <p>Become the leading platform for online education in the Spanish-speaking world.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <i class="bi bi-heart-fill"></i>
+                    <h3>Valores</h3>
+                    <p>Passion, transparency, and continuous improvement in education.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 {% endblock %}

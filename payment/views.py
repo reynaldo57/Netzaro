@@ -252,6 +252,9 @@ def billing_info(request):
 
         # Validar que todos los productos sean del mismo dueño
         product_list = cart_products()
+        if not product_list:
+            messages.error(request, "Tu carrito está vacío o la compra ya fue procesada.")
+            return redirect('cart_summary')  # o cualquier vista segura
         owners = set(p.user for p in product_list)
         if len(owners) > 1:
             messages.error(request, "No puedes pagar productos de diferentes vendedores en un solo pago.")
