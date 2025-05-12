@@ -12,4 +12,5 @@ urlpatterns = [
     path('no_shipped_dash', views.not_shipped_dash, name='not_shipped_dash'),
     path('orders/<int:pk>', views.orders, name='orders'),
     path('paypal-ipn/', include("paypal.standard.ipn.urls")),
+    path('stripe-checkout/<int:order_id>/', views.stripe_checkout, name='stripe_checkout'),
 ]
