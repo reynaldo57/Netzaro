@@ -18,6 +18,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.timezone import make_aware
 
 from django.contrib.auth.decorators import login_required
+import stripe
 
 # Create your views here.
 
@@ -206,7 +207,9 @@ def proccess_order(request):
         return redirect('index')
 
 def billing_info(request):
+    # Detectar si el usuario hizo clic en "Pagar con tarjeta"
     if request.POST:
+        metodo_pago = request.POST.get("pago_metodo", "paypal")
         #Get the cart
         cart = Cart(request)
         cart_products = cart.get_prods
@@ -337,7 +340,16 @@ def billing_info(request):
             #delete shoppin cart in database (old_cart field)
             current_user.update(old_cart="")
 
-            return render(request, "payment/billing_info.html", {"paypal_form":paypal_form, "cart_products":cart_products, "quantities": quantities, "totals": totals, "shipping_info": request.POST, "billing_form": billing_form})
+            return render(request, "payment/billing_info.html", {
+                "paypal_form":paypal_form, 
+                "cart_products":cart_products, 
+                "quantities": quantities, 
+                "totals": totals, 
+                "shipping_info": request.POST, 
+                "billing_form": billing_form,
+                "metodo_pago": metodo_pago,       # <-- NUEVO
+                "order": create_order,
+                })
 
         else:
             #not logged in
@@ -370,7 +382,16 @@ def billing_info(request):
             #NOt logged In
             #get the billing form
             billing_form = PaymentForm()
-            return render(request, "payment/billing_info.html", {"paypal_form":paypal_form, "cart_products":cart_products, "quantities": quantities, "totals": totals, "shipping_info": request.POST, "billing_form": billing_form})
+            return render(request, "payment/billing_info.html", {
+                "paypal_form":paypal_form, 
+                "cart_products":cart_products, 
+                "quantities": quantities, 
+                "totals": totals, 
+                "shipping_info": request.POST, 
+                "billing_form": billing_form,
+                "metodo_pago": metodo_pago,       # <-- NUEVO
+                "order": create_order  
+            })
 
     else:
         messages.success(request, "Access Denied")
@@ -416,4 +437,31 @@ def payment_success(request):
 def payment_failed(request):
     return render(request, "payment/payment_failed.html")
 
+
+
+
+
+stripe.api_key = 'sk_test_51RNf7xQvKPW9lI3d6Ywv4jvGemcWfClXw6OPja1i9pZh7eq2qRf9SCivF9fEkQpQ9lXCRteZids2EXno3vwLT4hq00mkjIudgO'
+
+def stripe_checkout(request, order_id):
+    order = Order.objects.get(id=order_id)
+
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=[{
+            'price_data': {
+                'currency': 'usd',
+                'product_data': {
+                    'name': f"Pedido #{order.invoice}",
+                },
+                'unit_amount': int(order.amount_paid * 100),  # en centavos
+            },
+            'quantity': 1,
+        }],
+        mode='payment',
+        success_url=request.build_absolute_uri(reverse('payment_success')),
+        cancel_url=request.build_absolute_uri(reverse('payment_failed')),
+    )
+
+    return redirect(session.url, code=303)
 

@@ -78,8 +78,15 @@
                 </div>
                 <br/><br/>
                 <center>
-                    {{paypal_form.render}}
-                </center>
+    {% if metodo_pago == "stripe" %}
+        <form method="POST" action="{% url 'stripe_checkout' order.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Proceder con Stripe</button>
+        </form>
+    {% else %}
+        {{ paypal_form.render }}
+    {% endif %}
+</center>
                 <br/><br/>
                 <div class="card">
                     <div class="card-header">
@@ -92,6 +99,8 @@
                         </div>
                         <br/><br/>
                         <button type="submit" class="btn btn-secondary">Pay Now</button>
+                        
+
                     </form>
                 </div>
               <br/><br/><br/><br/>

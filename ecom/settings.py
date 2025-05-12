@@ -139,7 +139,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #Add paypal settings
 #Set sandbox to true
 
-PAYPAL_TEST = False
+PAYPAL_TEST = True
 PAYPAL_RECEIVER_EMAIL = 'herrera1930@hotmail.com' #bussinees sandbox account
 
 
+# settings.py
+STRIPE_PUBLIC_KEY = 'pk_test_51RNf7xQvKPW9lI3dNxOlb3TyfecBsterPATrIPLgnEc7pED7WTtKaXozUxjyh7xn4aCUfb4a10duDLT9b0f1LmVW005ZtQkhNn'  # Clave pública
+STRIPE_SECRET_KEY = 'sk_test_51RNf7xQvKPW9lI3d6Ywv4jvGemcWfClXw6OPja1i9pZh7eq2qRf9SCivF9fEkQpQ9lXCRteZids2EXno3vwLT4hq00mkjIudgO'  # Clave secreta
