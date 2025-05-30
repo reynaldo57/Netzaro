@@ -78,15 +78,23 @@
                 </div>
                 <br/><br/>
                 <center>
-    {% if metodo_pago == "stripe" %}
-        <form method="POST" action="{% url 'stripe_checkout' order.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Proceder con Stripe</button>
-        </form>
-    {% else %}
-        {{ paypal_form.render }}
-    {% endif %}
-</center>
+                    {% if metodo_pago == "stripe" %}
+                        <form method="POST" action="{% url 'stripe_checkout' order.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Proceder con Stripe</button>
+                        </form>
+                    {% elif metodo_pago == "izipay" %}
+                        <form method="POST" action="{% url 'izipay_checkout' order.id %}">
+                            {% csrf_token %}
+                            {% for key, value in izipay_form_data.items %}
+                                <input type="hidden" name="{{ key }}" value="{{ value }}">
+                            {% endfor %}
+                            <button type="submit" class="btn btn-success">Pagar con Izipay</button>
+                        </form>
+                    {% else %}
+                        {{ paypal_form.render }}
+                    {% endif %}
+                </center>
                 <br/><br/>
                 <div class="card">
                     <div class="card-header">

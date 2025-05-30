@@ -196,6 +196,16 @@
             flex-direction: column;
         }
     }
+
+
+
+      #productSlider {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  #productSlider::-webkit-scrollbar {
+    display: none;
+  }
 </style>
 
 <section style="font-family: 'Poppins', sans-serif;;" class="horizontal-section">
@@ -246,15 +256,41 @@
 </div>
 
 <section class="product-section">
-    <div class="container-fluid">
-        <div class="product-grid">
+    <div class="slider-container" style="position: relative; overflow: hidden; padding: 2rem;">
+        <!-- Botón Izquierdo -->
+        <button class="slider-btn prev" style="
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            z-index: 10;
+            background-color: rgba(0,0,0,0.6);
+            border: none;
+            color: white;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease;
+        ">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <!-- Contenedor de Cards -->
+        <div class="slider" id="productSlider" style="
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding-bottom: 1rem;
+        ">
             {% for product in products %}
-                <div class="card">
+                <div class="card" style="min-width: 280px; flex-shrink: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: #fff; transition: transform 0.3s ease;">
                     {% if product.is_sale %}
                         <div class="badge bg-light text-black position-absolute" style="top: 0.5rem; right: 1rem;">sale</div>
                     {% endif %}
-                    <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}">
-                    <div class="card-body">
+                    <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body" style="padding: 1rem; text-align: center;">
                         <a style="color: #ff7b00;" href="{% url 'product' product.id %}">{{ product.name }}</a><br>
                         <a class="text-dark fw-bold" href="{% url 'user_information' product.user.username %}">{{ product.user.username }}</a><br>
                         {% if product.is_sale %}
@@ -265,12 +301,52 @@
                         {% endif %}
                         <p class="text-muted small">{{ product.description }}</p>
                     </div>
-                    <div class="card-footer">
+                    <div class="card-footer" style="padding: 1rem; background: #fafafa; text-align: center;">
                         <a class="btn btn-danger" href="{% url 'product' product.id %}">Ver Producto</a>
                     </div>
                 </div>
             {% endfor %}
         </div>
+
+        <!-- Botón Derecho -->
+        <button class="slider-btn next" style="
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            z-index: 10;
+            background-color: rgba(0,0,0,0.6);
+            border: none;
+            color: white;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease;
+        ">
+            <i class="fas fa-chevron-right"></i>
+        </button>
     </div>
 </section>
+
+<script>
+    // Espera a que el DOM esté cargado
+    document.addEventListener("DOMContentLoaded", function () {
+        const slider = document.getElementById('productSlider');
+        const btnNext = document.querySelector('.slider-btn.next');
+        const btnPrev = document.querySelector('.slider-btn.prev');
+
+        // Tamaño de desplazamiento: igual al ancho de una card + gap (280 + 24 px aprox)
+        const scrollAmount = 304;
+
+        btnNext.addEventListener('click', () => {
+            slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        btnPrev.addEventListener('click', () => {
+            slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+    });
+</script>
+
 {% endblock %}
