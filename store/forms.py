@@ -142,7 +142,7 @@ class CommentResponseForm(forms.ModelForm):
 
 
 class AddProductForm(forms.ModelForm):
-    
+    video = forms.FileField(required=False) 
     class Meta:
         model = Product
         fields = (
@@ -152,7 +152,7 @@ class AddProductForm(forms.ModelForm):
             "description",
             "pay_method",
             "price",
-            "video",
+            "video" ,
         )
 
 class AddClaseForm(forms.ModelForm):

@@ -218,7 +218,7 @@ def update_product(request, id):
             product.save()
 
             messages.success(request, "Curso actualizado correctamente")
-            return redirect('product', id=product.id)
+            return redirect('product', pk=product.id)
         else:
             print(form.errors)
 
