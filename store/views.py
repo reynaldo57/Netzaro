@@ -215,6 +215,8 @@ def update_product(request, id):
             product = form.save(commit=False)
             product.user = user
             product.category = category
+
+            
             product.save()
 
             messages.success(request, "Curso actualizado correctamente")

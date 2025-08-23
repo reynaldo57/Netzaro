@@ -75,6 +75,65 @@
         <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.price.errors }}</p>
       </div>
 
+
+      <!-- Checkbox: ¿Está en oferta? -->
+<div class="form-group" style="margin-bottom: 20px;">
+  <label for="is_sale" style="color: #333; font-weight: 500;">
+    <i class="fas fa-tag" style="color: #ffb300;"></i> On Sale
+  </label>
+  <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+    <!-- Campo oculto para garantizar que se envíe un valor cuando no está chequeado -->
+    <input type="hidden" name="is_sale" value="off">
+
+    <!-- Campo checkbox real -->
+    <input type="checkbox" name="is_sale" id="is_sale"
+      {% if form.instance.is_sale %}checked{% endif %}
+      style="width: 20px; height: 20px; cursor: pointer;">
+
+    <label for="is_sale" style="margin: 0; color: #777;">Check if this course is on sale</label>
+  </div>
+  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.is_sale.errors }}</p>
+</div>
+
+
+
+
+<!-- Input oculto: Precio de oferta -->
+<div id="sale_price_container" class="form-group" style="margin-bottom: 20px; display: none;">
+  <label for="sale_price" style="color: #333; font-weight: 500;">
+    <i class="fas fa-dollar-sign" style="color: #66bb6a;"></i> Sale Price
+  </label>
+  <input type="number" name="sale_price" id="sale_price" step="0.01" min="0"
+    style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; margin-top: 5px;"
+    placeholder="{{form.instance.sale_price}}">
+  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.sale_price.errors }}</p>
+</div>
+
+<!-- Script para mostrar/ocultar input de precio de oferta -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const checkbox = document.getElementById('is_sale');
+    const salePriceContainer = document.getElementById('sale_price_container');
+
+    function toggleSalePriceInput() {
+      if (checkbox.checked) {
+        salePriceContainer.style.display = 'block';
+      } else {
+        salePriceContainer.style.display = 'none';
+        document.getElementById('sale_price').value = ''; // opcional: limpia el campo
+      }
+    }
+
+    checkbox.addEventListener('change', toggleSalePriceInput);
+
+    // Ejecuta al cargar, en caso esté pre-marcado
+    toggleSalePriceInput();
+  });
+</script>
+
+
+
+
       <!-- Inputs de imagen y video -->
       <div class="general-form-group" style="display: flex; gap: 20px; margin-bottom: 25px;">
         

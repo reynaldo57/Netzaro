@@ -68,7 +68,7 @@ class Product(models.Model):
     description = models.CharField(max_length=250, default='', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/product')
     is_sale = models.BooleanField(default=False)
-    sale_price = models.DecimalField(default=0, decimal_places=2, max_digits=6)
+    sale_price = models.DecimalField(default=0, decimal_places=2, max_digits=6, null=True, blank=True)
     pay_method = models.CharField(max_length=250, null=True)
     video = models.FileField(upload_to="video", null=True)
     created_day = models.DateTimeField(default=timezone.now)

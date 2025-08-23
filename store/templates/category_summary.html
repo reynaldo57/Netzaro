@@ -2,25 +2,78 @@
 
 {% block content %}
 
-<!-- Header-->
-<header style="background: url('/static/assets/rojo.jpg') center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
-    <div class="text-center text-white">
-        <h1 class="display-4 fw-bolder"><i class="bi bi-shop"></i>  Shop in stylex</h1>
-        <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
+<!-- HEADER CON DEGRADADO ELEGANTE -->
+<header style="background: linear-gradient(135deg, #0f4c5c, #1b263b); min-height: 220px;" 
+        class="d-flex justify-content-center align-items-center text-white shadow">
+    <div class="text-center">
+        <h1 class="display-4 fw-bold mb-2" style="text-shadow: 1px 1px 6px rgba(0,0,0,0.4);">
+            <i class="bi bi-shop"></i> Shop with Elegance
+        </h1>
+        <p class="lead text-white-50 mb-0">Discover products with style and sophistication</p>
     </div>
-  </header>
+</header>
 
-<div class="container">
-    <div class="row">
-        <center>
-            <div class="col-8">
-                {% for category in categories %}
-                    <h3><a href="{% url 'category' category %}">{{ category }}</a></h3>
-                {% endfor %}
-                <br><br>
-            </div>
-        </center>
+<!-- SECCIÓN DE CATEGORÍAS -->
+<div class="container my-5">
+    <h2 class="text-center mb-4 fw-bold" style="color: #0f4c5c;">Categories</h2>
+    <div class="row justify-content-center g-4">
+        {% for category in categories %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <a href="{% url 'category' category %}" class="text-decoration-none">
+                <div class="card h-100 border-0 shadow-sm" 
+                     style="border-radius: 10px; background-color: #fdfdfd; transition: all 0.3s;">
+                    <div class="card-body text-center">
+                        <h5 class="fw-semibold" style="color: #0f4c5c;">{{ category }}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
     </div>
 </div>
+
+<!-- SECCIÓN DE CARDS INFORMATIVOS -->
+<div class="container my-5">
+    <h2 class="text-center mb-4 fw-bold" style="color: #0f4c5c;">Why Choose Us?</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100" style="background-color: #f5f3f0; border-radius: 12px;">
+                <div class="card-body text-center p-4">
+                    <i class="bi bi-star-fill fs-1" style="color: #d4af37;"></i>
+                    <h5 class="mt-3 fw-bold" style="color: #1b263b;">Premium Quality</h5>
+                    <p class="text-muted">All our products go through strict quality checks to ensure the best for you.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100" style="background-color: #edf6f9; border-radius: 12px;">
+                <div class="card-body text-center p-4">
+                    <i class="bi bi-truck fs-1" style="color: #0f4c5c;"></i>
+                    <h5 class="mt-3 fw-bold" style="color: #1b263b;">Fast Delivery</h5>
+                    <p class="text-muted">Get your orders delivered quickly and securely right to your door.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100" style="background-color: #fef9ef; border-radius: 12px;">
+                <div class="card-body text-center p-4">
+                    <i class="bi bi-shield-check fs-1" style="color: #d4af37;"></i>
+                    <h5 class="mt-3 fw-bold" style="color: #1b263b;">Secure Payment</h5>
+                    <p class="text-muted">Your transactions are encrypted and safe with our trusted payment partners.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ESTILOS EXTRA -->
+<style>
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+}
+</style>
 
 {% endblock %}

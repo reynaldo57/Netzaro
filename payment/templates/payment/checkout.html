@@ -1,77 +1,128 @@
 {% extends 'base.html' %}
 {% block content %}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Header-->
-        <header style="background: url('/static/assets/tienda.jpg') center/cover no-repeat;" class="bg-dark py-5">
-            <div style="height: 150px !important;" class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Checkout...</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Review your Order...</p>
+<style>
+  body::-webkit-scrollbar {
+    display: none;
+}
+</style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Header -->
+
+
+<header style="background: radial-gradient(circle, #10B981 0%, #065F46 70%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+  <div class="text-center text-white">
+      <h1 class="display-5 fw-bold">Finaliza tu compra</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Revisa tu pedido y proporciona tu información de envío.</p>
+  </div>
+</header>
+
+<!-- Main Content -->
+<div class="container-fluid my-5">
+    <div class="row gx-4">
+        
+        <!-- Sidebar Izquierdo -->
+        <div class="col-lg-3 mb-4">
+            <div class="card mb-3 border-info">
+                <div class="card-header bg-info text-white">Beneficios</div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li>✔️ Garantía de devolución</li>
+                        <li>✔️ Envío gratuito desde $50</li>
+                        <li>✔️ Productos verificados</li>
+                    </ul>
                 </div>
             </div>
-        </header>
-        <br/>
-        <div class="container">
-            <div class="row">
-                    <br/><br/>
-                    <br/><br/>
-                    <br/><br/>
-                    <div class="col-md-6 offset-md-3">
-                        <div class="card">
-                            <div style="background-color: #d70000 !important; border-color: #ff0000; color: #ffffff;" class="card-header">
-                              Order Summary
-                            </div>
-                            <div class="card-body">
+
+            <div class="card mb-3 border-success">
+                <div class="card-header bg-success text-white">Métodos de pago</div>
+                <div class="card-body">
+                    <p>Aceptamos:</p>
+                    <ul class="list-unstyled">
+                        <li>💳 Tarjetas de crédito</li>
+                        <li>💰 Izipay</li>
+                        <li>🪙 Criptomonedas (próximamente)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido Central -->
+        <div class="col-lg-6">
+            <!-- Order Summary -->
+            <div class="card mb-4 shadow">
+                <div class="card-header text-white bg-danger">Resumen del pedido</div>
+                <div class="card-body">
                               {% for product in cart_products %}
-                                
-                                {{ product.name }}:
+                                <div class="d-flex justify-content-between">
+                                <strong>{{ product.name }}</strong>
+                            <span>
                                     {% if product.is_sale %}
                                         ${{ product.sale_price}}
                                     {% else %}
                                         ${{product.price}}
                                     {% endif %}
-                                <br/>
-                                <small>
-                                    Quantity:
+                                </span>
+                                 </div>
+                        <small>Cantidad: 
                                     {% for key, value in quantities.items %}
                                         {% if key == product.id|slugify %}
                                           {{value}}
                                         {% endif %}
                                     {% endfor %}
                                 </small>
-                              <br/><br/>
+                        <hr>
                               {% endfor %}
                               
-                              Total: ${{ totals }}
-                              <br/><br/>
-                              <a style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-secondary">Update items</a>
+                              <h5 class="text-end">Total: ${{ totals }}</h5>
+                              <div class="text-end">
+                              <a href="{% url 'cart_summary' %}" class="btn btn-outline-danger btn-sm">Actualizar carrito</a>
                             </div>
-                          </div>
-            <br/><br/>
-            <div class="card">
-                <div style="background-color: #d70000 !important; border-color: #ff0000; color: #ffffff;" class="card-header">
-                  Shipping Info
                 </div>
+            </div>
+
+            <!-- Shipping Form -->
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">Información de envío</div>
                 <div class="card-body">
                   <form method="POST" action="{% url 'billing_info' %}">
                         {% csrf_token %}
                         {{ shipping_form.as_p}}
-                      </div>
-                    </div>
-                    <br/><br/>
-                    <div style="text-align: center;">
-                      <div style="text-align: center;">
-                        <button style="background-color: #d70000 !important; border-color: #d70000; color: #ffffff;" type="submit" class="btn btn-secondary">Continue to Billing</button>
-                        <button type="submit" name="pago_metodo" value="stripe" class="btn btn-success">Pagar con Tarjeta</button>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-danger me-2">Pagar con PayPal</button>
+                        <button type="submit" name="pago_metodo" value="stripe" class="btn btn-success me-2">Pagar con Stripe</button>
                         <button type="submit" name="pago_metodo" value="izipay" class="btn btn-secondary" id="izipay-btn">Pagar con Izypay</button>
                       </div>
-                    </div>
-                  </form>
-              <br/><br/><br/><br/>
+                    </form>
+                </div>
             </div>
         </div>
+
+        <!-- Sidebar Derecho -->
+        <div class="col-lg-3 mb-4">
+            <div class="card mb-3 border-warning">
+                <div class="card-header bg-warning text-dark">¿Necesitas ayuda?</div>
+                <div class="card-body">
+                    <p>📞 Soporte 24/7</p>
+                    <p>✉️ soporte@tienda.com</p>
+                    <p>💬 Chat en vivo</p>
+                </div>
+            </div>
+
+            <div class="card mb-3 border-primary">
+                <div class="card-header bg-primary text-white">Pasos del proceso</div>
+                <div class="card-body">
+                    <ol class="mb-0">
+                        <li>Revisa tu pedido</li>
+                        <li>Ingresa datos de envío</li>
+                        <li>Selecciona método de pago</li>
+                        <li>Recibe tu orden</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
     </div>
-
-
+</div>
 {% endblock %}
