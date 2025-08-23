@@ -256,7 +256,7 @@ def billing_info(request):
         # Validar que todos los productos sean del mismo dueño
         product_list = cart_products()
         if not product_list:
-            messages.error(request, "Tu carrito está vacío o la compra ya fue procesada.")
+            messages.error(request, "No hay cursos reservados")
             return redirect('cart_summary')  # o cualquier vista segura
         owners = set(p.user for p in product_list)
         if len(owners) > 1:
@@ -480,9 +480,6 @@ import hmac
 from django.http import HttpResponse
 from Keys.keys import keys
 
-
-def index(request):
-    return render(request,'Demo/index.html')
 
 def izipay_checkout(request, order_id):
     #URL de Web Service REST

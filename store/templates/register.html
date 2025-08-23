@@ -1,38 +1,95 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden; /* ❌ Evita scroll vertical innecesario */
+        font-family: Arial, sans-serif;
+        background-color: #f3f6f8;
+    }
+    .register-wrapper {
+        display: flex;
+        height: 100vh; /* ✅ Ocupa toda la pantalla */
+        width: 100%;
+    }
+    .register-image {
+        flex: 1;
+        background: 
+            linear-gradient(rgba(10, 102, 194, 0.6), rgba(10, 102, 194, 0.6)), 
+            url('/static/assets/fondo.jpg') center/cover no-repeat;
+    }
+    .register-form-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fff;
+    }
+    .register-form {
+        width: 80%;
+        max-width: 400px;
+    }
+    .register-form h2 {
+        color: #0A66C2;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .register-form p {
+        color: #666;
+        margin-bottom: 30px;
+    }
+    .form-control {
+        border-radius: 6px;
+        padding: 12px;
+    }
+    .btn-primary {
+        background-color: #0A66C2;
+        border: none;
+        padding: 12px;
+        border-radius: 6px;
+        width: 100%;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    .btn-primary:hover {
+        background-color: #004182;
+    }
+    a {
+        text-decoration: none;
+    }
+    /* 📱 Responsive */
+    @media (max-width: 768px) {
+        .register-wrapper {
+            flex-direction: column;
+        }
+        .register-image {
+            display: none;
+        }
+        .register-form-container {
+            flex: none;
+            height: 100vh;
+        }
+    }
+</style>
 
-<!-- Header-->
-<header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Register</h1>
-            <p class="lead fw-normal text-white-50 mb-0">Register fo a User Account...</p>
+<div class="register-wrapper">
+    <div class="register-image"></div>
+    <div class="register-form-container">
+        <div class="register-form">
+            <h2>Create Your Account</h2>
+            <p>Fill in the details to get started</p>
+            <form method="POST" action="{% url 'register' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+            <p class="mt-3 text-center">
+                Already have an account? <a href="{% url 'login' %}" style="color: #0A66C2;">Log in</a>
+            </p>
         </div>
     </div>
-</header>
-
-<div class="container">
-    <div class="row">
-            <br/><br/>
-            <br/><br/>
-            <br/><br/>
-            <div class="col-md-6 offset-md-3">
-                <form method="POST" action="{% url 'register' %}">
-                    <br/><br/>
-                    {% csrf_token %}
-                    {{ form.as_p}}
-                    <br/><br/>
-                    <button type="submit" class="btn btn-secondary">Register</button>
-                  </form>
-                <br/><br/>
-                <br/><br/>
-                <br/><br/>
-                <br/><br/>
-                
-
-            </div>
-    </div>
 </div>
-
 {% endblock %}

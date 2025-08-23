@@ -2,44 +2,50 @@
 
 {% block content %}
 
-<!-- Header-->
-<header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Update info</h1>
-            <p class="lead fw-normal text-white-50 mb-0">Update User xInfo...</p>
-        </div>
-    </div>
-</header>
-<section style="background: url('/static/assets/azul.jpg') center/cover no-repeat;"   class="py-5">
-    <div class="container">
-    <div class="row">
-            <br/><br/>
-            <br/><br/>
-            <br/><br/>
-            <div class="col-md-6 offset-md-3">
-                <strong>Billing Information</strong>
-                <br/><br/>
-                <form method="POST" action="{% url 'update_info' %}">
-                    <br/><br/>
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <br/><br/>
-                    <strong>Shiping Information</strong>
-                    <br/><br/>
-                    {{ shipping_form.as_p}}
-                    <br/><br/>
-                    <button type="submit" class="btn btn-secondary">Update Profile</button>
-                  </form>
-                <br/><br/>
-                
-                <br/><br/>
-                <br/><br/>
-                <br/><br/>
-                
+<!-- HEADER ELEGANTE -->
 
+<header style="background: radial-gradient(circle, #10B981 0%, #065F46 70%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+  <div class="text-center text-white">
+      <h1 class="display-5 fw-bold">Actualizar Información</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Mantén tus datos al día con un toque profesional</p>
+  </div>
+</header>
+
+<!-- SECCIÓN PRINCIPAL -->
+<section class="py-5" style="background-color: #f4f4f4;">
+    <div class="container">
+        <form method="POST" action="{% url 'update_info' %}">
+            {% csrf_token %}
+            <div class="row g-4">
+                <!-- Billing Information -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-0" style="border-radius: 10px; background-color: #ffffff;">
+                        <div class="card-body p-4">
+                            <h5 class="mb-3 text-primary"><i class="bi bi-credit-card"></i> Información de Facturación</h5>
+                            {{ form.as_p }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Information -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-0" style="border-radius: 10px; background-color: #ffffff;">
+                        <div class="card-body p-4">
+                            <h5 class="mb-3 text-success"><i class="bi bi-truck"></i> Información de Envío</h5>
+                            {{ shipping_form.as_p }}
+                        </div>
+                    </div>
+                </div>
             </div>
-    </div>
+
+            <!-- Botón centrado -->
+            <div class="text-center mt-5">
+                <button type="submit" 
+                    style="background: linear-gradient(90deg, #2c5364, #203a43); color: white; border: none; padding: 12px 28px; border-radius: 6px; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                    Guardar Cambios
+                </button>
+            </div>
+        </form>
     </div>
 </section>
 

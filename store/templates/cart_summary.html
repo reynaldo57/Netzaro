@@ -1,122 +1,175 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+  body {
+    background-color: #f3f6f8;
+  }
+  body::-webkit-scrollbar {
+    display: none;
+  }
+  .header-custom {
+    background: url('/static/assets/header.jpg') center/cover no-repeat;
+    min-height: 200px;
+    color: white;
+  }
+  .info-card {
+    border-left: 5px solid #0A66C2;
+    border-radius: 8px;
+    background: white;
+    padding: 15px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease-in-out;
+  }
+  .info-card:hover {
+    transform: translateY(-3px);
+  }
+  .info-icon {
+    font-size: 1.8rem;
+    color: #0A66C2;
+  }
+</style>
 
-        <!-- Header-->
-        <header style="background: url('/static/assets/header.jpg') center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
-          <div class="text-center text-white">
-              <h1 class="display-4 fw-bolder"><i class="bi bi-shop"></i>  Shop in stylex</h1>
-              <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
-          </div>
-        </header>
+<!-- Header -->
 
-        <section class="py-5 bg-light">
-          <div class="container">
-          {% if cart_products %}
-              {% for product in cart_products %}
-              <div class="card shadow-sm mb-4 border-0 rounded-4 overflow-hidden">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                      <img src="{{ product.image.url }}" class="img-fluid h-100 w-100 object-fit-cover" alt="{{ product.name }}">
-                    </div>
-                    <div class="col-md-8 p-4 d-flex flex-column justify-content-center align-items-center text-center">
-                      <div>
-                        <h5 class="card-title text-primary">{{product.name}}</h5>
-                        <p class="card-text text-muted">{{product.description}}</p>
-                      
-                        {% if product.is_sale %}
-                        <div class="mb-2">
-                          <span class="badge bg-warning text-dark">Sale</span>
-                        </div>
-                        <!-- Product price-->
-                        <p class="mb-1">
-                          <del class="text-muted">${{ product.price }}</del>
-                          <span class="fw-bold text-danger ms-2">${{ product.sale_price }}</span>
-                        </p>
-                      
-                        {% else %}
-                          <p class="fw-bold text-success">${{ product.price }}</p>
+
+<header style="background: radial-gradient(circle, #10B981 0%, #065F46 70%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+  <div class="text-center text-white">
+      <h1 class="display-5 fw-bold">Shop in style</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Find your perfect product here</p>
+  </div>
+</header>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+
+      <!-- Columna principal (productos) -->
+      <div class="col-lg-8">
+        {% if cart_products %}
+          {% for product in cart_products %}
+          <div class="card shadow-sm mb-4 border-0 rounded-4 overflow-hidden">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="{{ product.image.url }}" class="img-fluid h-100 w-100 object-fit-cover" alt="{{ product.name }}">
+              </div>
+              <div class="col-md-8 p-4 text-center">
+                <h5 class="card-title text-primary fw-bold">{{ product.name }}</h5>
+                <p class="text-muted">{{ product.description }}</p>
+                {% if product.is_sale %}
+                  <span class="badge bg-warning text-dark">Sale</span>
+                  <p class="mb-1">
+                    <del class="text-muted">${{ product.price }}</del>
+                    <span class="fw-bold text-danger ms-2">${{ product.sale_price }}</span>
+                  </p>
+                {% else %}
+                  <p class="fw-bold text-success">${{ product.price }}</p>
+                {% endif %}
+
+                <div class="mt-3">
+                  <div class="d-flex justify-content-center align-items-center mb-3 gap-2">
+                    <label class="fw-bold">Quantity:</label>
+                    <select class="form-select form-select-sm w-auto" id="select{{product.id}}">
+                      {% for key, value in quantities.items %}
+                        {% if key == product.id|slugify %}
+                          <option selected>{{ value }}</option>
                         {% endif %}
-                      </div>
-
-                      <div class="mt-3">
-                        <div class="d-flex align-items-center justify-content-center mb-3 gap-2">
-                            <label class="fw-bold">Quantity:</label>
-                            <select class="form-select form-select-sm w-auto" id="select{{product.id}}">
-                            {% for key, value in quantities.items %}
-                              {% if key == product.id|slugify %}
-                                <option selected>{{value}}</option>
-                              {% endif %}
-                            {% endfor %}
-                              <option value="1">1 select</option>
-                              <option value="2">2 select</option>
-                              <option value="3">3 select</option>
-                            </select>
-                        </div>
-                        <div class="d-flex flex-wrap justify-content-center gap-2">          
-                          <a href="{% url 'index' %}" class="btn btn-outline-primary btn-sm rounded-3">Home</a>
-                          <button type="button" class="btn btn-primary btn-sm rounded-3 update-cart" data-index="{{product.id}}">Update</button>
-                          <button type="button" class="btn btn-danger btn-sm rounded-3 delete-product" data-index="{{product.id}}">Remove</button>
-                        </div>
-                      </div>
-                    </div>
+                      {% endfor %}
+                      <option value="1">1 select</option>
+                      <option value="2">2 select</option>
+                      <option value="3">3 select</option>
+                    </select>
+                  </div>
+                  <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <a href="{% url 'index' %}" class="btn btn-outline-primary btn-sm rounded-3">Home</a>
+                    <button type="button" class="btn btn-primary btn-sm rounded-3 update-cart" data-index="{{product.id}}">Update</button>
+                    <button type="button" class="btn btn-danger btn-sm rounded-3 delete-product" data-index="{{product.id}}">Remove</button>
                   </div>
                 </div>
-                {% endfor %}
-                <div class="text-end">
-                  <h4 class="fw-bold">Total: {{ totals }}</h4>
-                  <a href="{% url 'checkout' %}" class="btn btn-success rounded-3 mt-2">Checkout</a>
-                </div>
-                {% else %}
-                <div class="text-center py-5">
-                  <h3 class="text-muted">There's nothing in your cart</h3>
-                  <p class="text-muted">Start adding some amazing products!</p>
-                </div>
-                {% endif %}
+              </div>
+            </div>
           </div>
-        </section>
+          {% endfor %}
+          <div class="text-end">
+            <h4 class="fw-bold">Total: {{ totals }}</h4>
+            <a href="{% url 'checkout' %}" class="btn btn-success rounded-3 mt-2">Proceed with checkout</a>
+          </div>
+        {% else %}
+          <div class="text-center py-5">
+            <h3 class="text-muted">Your cart is empty</h3>
+            <p class="text-muted">Start adding some amazing products!</p>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Columna lateral (info cards SIEMPRE visibles) -->
+      <div class="col-lg-4">
+        <div class="info-card mb-3">
+          <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-truck info-icon"></i>
+            <div>
+              <h6 class="fw-bold mb-1">Fast Delivery</h6>
+              <p class="mb-0 text-muted">Get your items in 2-3 business days.</p>
+            </div>
+          </div>
+        </div>
+        <div class="info-card mb-3">
+          <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-shield-check info-icon"></i>
+            <div>
+              <h6 class="fw-bold mb-1">Secure Payment</h6>
+              <p class="mb-0 text-muted">We protect your data with SSL encryption.</p>
+            </div>
+          </div>
+        </div>
+        <div class="info-card mb-3">
+          <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-arrow-repeat info-icon"></i>
+            <div>
+              <h6 class="fw-bold mb-1">Easy Returns</h6>
+              <p class="mb-0 text-muted">Not satisfied? Return within 30 days.</p>
+            </div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-headset info-icon"></i>
+            <div>
+              <h6 class="fw-bold mb-1">24/7 Support</h6>
+              <p class="mb-0 text-muted">We are here to help anytime you need.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
-
 <script>
 $(document).on('click', '.update-cart', function(e){
     e.preventDefault();
     var productid = $(this).data('index');
-    $.ajax({
-        type: 'POST',
-        url: "{% url 'cart_update' %}",
-        data: {
-            product_id: productid,
-            product_qty: $('#select' + productid + ' option:selected').val(),
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-            action: 'post'
-        },
-        success: function(json){
-            location.reload();
-        },
-        error: function(xhr, errmsg, err){
-            console.error(xhr.status + ": " + xhr.responseText);
-        }
+    $.post("{% url 'cart_update' %}", {
+        product_id: productid,
+        product_qty: $('#select' + productid).val(),
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        action: 'post'
+    }, function(){
+        location.reload();
     });
 });
 
 $(document).on('click', '.delete-product', function(e){
     e.preventDefault();
-    $.ajax({
-        type: 'POST',
-        url: "{% url 'cart_delete' %}",
-        data: {
-            product_id: $(this).data('index'),
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-            action: 'post'
-        },
-        success: function(json){
-            location.reload();
-        },
-        error: function(xhr, errmsg, err){
-            console.error(xhr.status + ": " + xhr.responseText);
-        }
+    $.post("{% url 'cart_delete' %}", {
+        product_id: $(this).data('index'),
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        action: 'post'
+    }, function(){
+        location.reload();
     });
 });
 </script>
-<br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock %}

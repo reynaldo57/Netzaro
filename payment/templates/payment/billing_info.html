@@ -1,123 +1,226 @@
 {% extends 'base.html' %}
 {% block content %}
 
-        <!-- Header-->
-        <header class="bg-dark py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Billing_Info</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Enter Your Payment Info</p>
-                </div>
-            </div>
-        </header>
-        <br/>
-        <div class="container">
-            <div class="row">
-                    <br/><br/>
-                    <br/><br/>
-                    <br/><br/>
-                    <div class="col-md-6 offset-md-3">
-                        <div class="card">
-                            <div class="card-header">
-                              Order Summary
-                            </div>
-                            <div class="card-body">
-                              {% for product in cart_products %}
-                                
-                                {{ product.name }}:
-                                    {% if product.is_sale %}
-                                        ${{ product.sale_price}}
-                                    {% else %}
-                                        ${{product.price}}
-                                    {% endif %}
-                                <br/>
-                                <small>
-                                    Quantity:
-                                    {% for key, value in quantities.items %}
-                                        {% if key == product.id|slugify %}
-                                          {{value}}
-                                        {% endif %}
-                                    {% endfor %}
-                                </small>
-                              <br/><br/>
-                              {% endfor %}
-                              
-                              Total: ${{ totals }}
-                              <br/><br/>
-                              <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-secondary">Update items</a>
-                            </div>
-                          </div>
-            <br/><br/>
-                <div class="card">
-                    <div class="card-header">
-                      Shipping Info
-                    </div>
-                    <div class="card-body">
-                    
-                        name: {{ shipping_info.shipping_full_name}}<br/><br/>
-                        Email: {{ shipping_info.shipping_email}}<br/><br/>
-                        Address1: {{ shipping_info.shipping_address1}}<br/><br/>
-                        Address2: {{ shipping_info.shipping_address2}}<br/><br/>
-                        City: {{ shipping_info.shipping_city}}<br/><br/>
-                        State: {{ shipping_info.shipping_state}}<br/><br/>
-                        CipCode: {{ shipping_info.shipping_cipcode}}<br/><br/>
-                        Country: {{ shipping_info.shipping_country}}<br/><br/>
-                        
-                        Tiempo de Inicio: {{ shipping_info.shipping_tiempo_inicio|stringformat:"s"|cut:"T"|slice:":10" }} {{ shipping_info.shipping_tiempo_inicio|stringformat:"s"|slice:"11:16" }}
-                        <br/><br/>
-                        Tiempo de fin: {{ shipping_info.shipping_tiempo_fin|stringformat:"s"|cut:"T"|slice:":10" }} {{ shipping_info.shipping_tiempo_fin|stringformat:"s"|slice:"11:16" }}
-                        <br/><br/>
-                        Tema de estudio: {{ shipping_info.shipping_tema_estudio}}<br/><br/> 
-                        
-                        <br/>
-                        <a href="{% url 'checkout' %}" class="btn btn-outline-secondary">Update Shipping</a>
-                    
-                    </div>
-                    <br/><br/>
-                    
-                </div>
-                <br/><br/>
-                <center>
-                    {% if metodo_pago == "stripe" %}
-                        <form method="POST" action="{% url 'stripe_checkout' order.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary">Proceder con Stripe</button>
-                        </form>
-                    {% elif metodo_pago == "izipay" %}
-                        <form method="POST" action="{% url 'izipay_checkout' order.id %}">
-                            {% csrf_token %}
-                            {% for key, value in izipay_form_data.items %}
-                                <input type="hidden" name="{{ key }}" value="{{ value }}">
-                            {% endfor %}
-                            <button type="submit" class="btn btn-success">Pagar con Izipay</button>
-                        </form>
-                    {% else %}
-                        {{ paypal_form.render }}
-                    {% endif %}
-                </center>
-                <br/><br/>
-                <div class="card">
-                    <div class="card-header">
-                      Billing Info
-                    </div>
-                    <div class="card-body">
-                    <form method="POST" action="{% url 'proccess_order' %}">
-                            {% csrf_token %}
-                            {{ billing_form.as_p }}
-                        </div>
-                        <br/><br/>
-                        <button type="submit" class="btn btn-secondary">Pay Now</button>
-                        
+<style>
+  body {
+    background: #f3f4f6;
+  }
 
-                    </form>
-                </div>
-              <br/><br/><br/><br/>
-            </div>
+  .info-card {
+    border-radius: 1rem;
+    padding: 1.5rem;
+    color: #333;
+    transition: 0.3s ease;
+    border: none;
+  }
+
+  .info-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0.8rem 1.5rem rgba(0, 0, 0, 0.1);
+  }
+
+  .info-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+
+  .section-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+</style>
+
+
+<header style="background: radial-gradient(circle, #10B981 0%, #065F46 70%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+  <div class="text-center text-white">
+      <h1 class="display-5 fw-bold">Confirmación de Envío y Pago</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Verifica tus datos antes de pagar</p>
+  </div>
+</header>
+
+<div class="container-fluid py-5 px-lg-5">
+  <div class="row g-4">
+
+    <!-- Shipping Info -->
+    <div class="col-lg-6">
+      <div class="section-title text-primary">📦 Información de Envío</div>
+      <div class="row g-3">
+
+        <div class="col-md-6">
+          <div class="info-card bg-light shadow-sm">
+            <span class="info-icon">👤</span> <strong>Nombre:</strong><br>
+            {{ shipping_info.shipping_full_name }}
+          </div>
         </div>
+
+        <div class="col-md-6">
+          <div class="info-card bg-info-subtle shadow-sm">
+            <span class="info-icon">✉️</span> <strong>Email:</strong><br>
+            {{ shipping_info.shipping_email }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="info-card bg-success-subtle shadow-sm">
+            <span class="info-icon">🏠</span> <strong>Dirección 1:</strong><br>
+            {{ shipping_info.shipping_address1 }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="info-card bg-danger-subtle shadow-sm">
+            <span class="info-icon">🏡</span> <strong>Dirección 2:</strong><br>
+            {{ shipping_info.shipping_address2 }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="info-card bg-warning-subtle shadow-sm">
+            <span class="info-icon">🏙️</span> <strong>Ciudad:</strong><br>
+            {{ shipping_info.shipping_city }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="info-card bg-primary-subtle shadow-sm">
+            <span class="info-icon">🌆</span> <strong>Estado:</strong><br>
+            {{ shipping_info.shipping_state }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="info-card bg-secondary-subtle shadow-sm">
+            <span class="info-icon">📮</span> <strong>Código Postal:</strong><br>
+            {{ shipping_info.shipping_zipcode }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="info-card bg-light shadow-sm">
+            <span class="info-icon">🌎</span> <strong>País:</strong><br>
+            {{ shipping_info.shipping_country }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="info-card bg-info-subtle shadow-sm">
+            <span class="info-icon">⏰</span> <strong>Inicio:</strong><br>
+            {{ shipping_info.shipping_tiempo_inicio|stringformat:"s"|cut:"T"|slice:":10" }}
+            {{ shipping_info.shipping_tiempo_inicio|stringformat:"s"|slice:"11:16" }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="info-card bg-success-subtle shadow-sm">
+            <span class="info-icon">⏳</span> <strong>Fin:</strong><br>
+            {{ shipping_info.shipping_tiempo_fin|stringformat:"s"|cut:"T"|slice:":10" }}
+            {{ shipping_info.shipping_tiempo_fin|stringformat:"s"|slice:"11:16" }}
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="info-card bg-warning-subtle shadow-sm">
+            <span class="info-icon">📚</span> <strong>Tema:</strong><br>
+            {{ shipping_info.shipping_tema_estudio }}
+          </div>
+        </div>
+
+        <div class="col-12 text-center mt-3">
+          <a href="{% url 'cart_summary' %}" class="btn btn-outline-dark">Cancelar</a>
+        </div>
+
+      </div>
     </div>
 
+    <!-- Order Summary & Payment -->
+    <div class="col-lg-6">
+
+<!-- Order Summary -->
+<div class="section-title text-success">🛒 Tu Pedido</div>
+
+<div class="row g-3">
+  {% for product in cart_products %}
+    <div class="col-12">
+      <div class="card border-0 shadow-sm rounded-4 p-3 bg-white d-flex flex-md-row flex-column align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width: 60px; height: 60px; background-color: #e5f4fd; border-radius: 12px;" class="d-flex align-items-center justify-content-center">
+            <span style="font-size: 2rem;">📦</span>
+          </div>
+          <div>
+            <h5 class="mb-1">{{ product.name }}</h5>
+            <small class="text-muted">
+              {% if product.is_sale %}
+                <strong class="text-success">${{ product.sale_price }}</strong>
+              {% else %}
+                <strong class="text-primary">${{ product.price }}</strong>
+              {% endif %}
+            </small>
+          </div>
+        </div>
+
+        <div class="text-center mt-2 mt-md-0">
+          <span class="text-muted">Cantidad:</span><br>
+          <span class="fw-semibold">
+            {% for key, value in quantities.items %}
+              {% if key == product.id|slugify %}
+                {{ value }}
+              {% endif %}
+            {% endfor %}
+          </span>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+  <!-- Total -->
+  <div class="col-12">
+    <div class="card bg-light border-0 shadow-sm rounded-4 p-4 text-end">
+      <h5 class="fw-bold text-success">Total: ${{ totals }}</h5>
+      <a href="#" class="btn btn-outline-secondary mt-2">📝 Estas a un paso de cumplir tus sueños</a>
+    </div>
+  </div>
+</div>
 
 
+      <!-- Payment Method -->
+      <div class="section-title text-danger">💳 Método de Pago</div>
+      <div class="card shadow-sm mb-4">
+        <div class="card-body text-center">
+          {% if metodo_pago == "stripe" %}
+            <form method="POST" action="{% url 'stripe_checkout' order.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary w-100">Pagar con Stripe</button>
+            </form>
+          {% elif metodo_pago == "izipay" %}
+            <form method="POST" action="{% url 'izipay_checkout' order.id %}">
+              {% csrf_token %}
+              {% for key, value in izipay_form_data.items %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+              {% endfor %}
+              <button type="submit" class="btn btn-success w-100">Pagar con Izipay</button>
+            </form>
+          {% else %}
+            {{ paypal_form.render }}
+          {% endif %}
+        </div>
+      </div>
 
+      <!-- Billing Form -->
+      <div class="section-title text-dark">🧾 Datos de Facturación</div>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <form method="POST" action="{% url 'proccess_order' %}">
+            {% csrf_token %}
+            {{ billing_form.as_p }}
+            <button type="submit" class="btn btn-dark w-100 mt-3">Confirmar y Pagar</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 {% endblock %}
