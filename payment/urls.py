@@ -15,6 +15,8 @@ urlpatterns = [
     path('stripe-checkout/<int:order_id>/', views.stripe_checkout, name='stripe_checkout'),
     path('izipay_checkout/<int:order_id>/', views.izipay_checkout, name='izipay_checkout'),
     path('izipay_result', views.izipay_result, name='izipay_result'),
-    path('ipn', views.ipn, name='ipn')
+    path('ipn', views.ipn, name='ipn'),
 
+    path('izipay/checkout/<int:clase_id>/', views.izipay_checkout_clase, name='izipay_checkout_clase'),
+    path('izipay/result/', views.izipay_result_clase, name='izipay_result_clase'),
 ]

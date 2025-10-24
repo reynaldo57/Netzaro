@@ -147,6 +147,14 @@ class Clase(models.Model):
 
     class_date = models.DateField(auto_now_add=True)
 
+      # 🔥 Nuevos campos para control de pagos
+    usuarios_pagados = models.ManyToManyField(
+        User, 
+        related_name='clases_pagadas', 
+        blank=True,
+        help_text="Usuarios que han pagado por esta clase"
+    )
+
     def __str__(self) -> str:
         return f"{self.titleClase} - {self.nivel}"
 
@@ -154,3 +162,21 @@ class Clase(models.Model):
         if not self.slugClase:
             self.slugClase = slugify(self.titleClase)
         super().save(*args, **kwargs)
+
+ # 🔥 Método para verificar si un usuario ha pagado
+    def usuario_ha_pagado(self, usuario):
+        """Verifica si el usuario ha pagado por esta clase"""
+        if not usuario.is_authenticated:
+            return False
+        return self.usuarios_pagados.filter(id=usuario.id).exists()
+    
+    # 🔥 Método para marcar clase como pagada por un usuario
+    def marcar_como_pagada(self, usuario):
+        """Marca esta clase como pagada por el usuario"""
+        if usuario.is_authenticated and not self.usuario_ha_pagado(usuario):
+            self.usuarios_pagados.add(usuario)
+    
+    # 🔥 Método para saber si requiere pago
+    def requiere_pago(self):
+        """Solo las clases avanzadas requieren pago"""
+        return self.nivel == "Avanzado"

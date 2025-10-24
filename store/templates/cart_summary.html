@@ -34,7 +34,7 @@
 
 <header style="background: radial-gradient(circle, #10B981 0%, #065F46 70%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
   <div class="text-center text-white">
-      <h1 class="display-5 fw-bold">Shop in style</h1>
+      <h1 class="display-5 fw-bold">Shop in stylex</h1>
       <p class="lead fw-normal text-white-50 mb-0">Find your perfect product here</p>
   </div>
 </header>
@@ -91,7 +91,11 @@
           {% endfor %}
           <div class="text-end">
             <h4 class="fw-bold">Total: {{ totals }}</h4>
-            <a href="{% url 'checkout' %}" class="btn btn-success rounded-3 mt-2">Proceed with checkout</a>
+            {% if user.is_authenticated %}
+              <a href="{% url 'checkout' %}" class="btn btn-success rounded-3 mt-2">Proceed with checkout</a>
+            {% else %}
+              <a href="#" class="btn btn-success rounded-3 mt-2">You have to login</a>
+            {% endif %}
           </div>
         {% else %}
           <div class="text-center py-5">

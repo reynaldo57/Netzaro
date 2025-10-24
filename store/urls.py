@@ -23,6 +23,7 @@ urlpatterns = [
 
     path('add_clase/', views.add_clase, name='add_clase'),
     path('product/<int:id>/detail/', views.product_detail_view, name='product_detail'),
+    
 
 
 ]

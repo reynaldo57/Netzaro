@@ -1,17 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from cart.cart import Cart
 from payment.forms import ShippingForm, PaymentForm
 from payment.models import ShippingAddress, Order, OrderItem
 from django.contrib.auth.models import User
 from django.contrib import messages
-from store.models import Product, Profile
+from store.models import Product, Profile, Clase
 import datetime
 #import some paypal stuff
 from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
 from django.conf import settings
 import uuid #unique user id for duplicated orders
-
 from django.utils import timezone
 
 from django.utils.dateparse import parse_datetime
@@ -557,4 +556,93 @@ def checkHash(response, key):
 
     calculateHash = hmac.new(key.encode('utf-8'), answer, hashlib.sha256).hexdigest()
 
+    return calculateHash == response['kr-hash']
+
+
+
+
+
+
+def izipay_checkout_clase(request, clase_id):
+    url = 'https://api.micuentaweb.pe/api-payment/V4/Charge/CreatePayment'
+    clase = get_object_or_404(Clase, id=clase_id)
+
+    auth = 'Basic ' + base64.b64encode(f"{keys['USERNAME']}:{keys['PASSWORD']}".encode('utf-8')).decode('utf-8')
+    headers = {'Content-Type': 'application/json', 'Authorization': auth}
+
+    # URL absoluta para que Izipay POSTee y redirija
+    result_url = request.build_absolute_uri(reverse('izipay_result_clase'))
+    
+    data = {
+        "amount": 200, #aqui cambias la cantidad de dinero que quieres cobrar
+        "currency": "USD",
+        "orderId": f"CLASE-{clase.id}",
+        "customer": {
+            "email": request.user.email if request.user.is_authenticated else "anonimo@example.com",
+            "reference": str(clase.id),
+        },
+    }
+
+    response = requests.post(url, json=data, headers=headers)
+    response_data = response.json()
+    if response.status_code != 200 or response_data.get('status') != 'SUCCESS':
+        return HttpResponse(f"Error en la respuesta de Izipay: {response_data}", status=500)
+
+    token = response_data['answer']['formToken']
+
+    return render(request, 'checkout_izipay_clase.html', {
+        'token': token,
+        'publickey': keys['PUBLIC_KEY'],
+        'clase': clase,
+        'result_url': result_url,
+    })
+
+@csrf_exempt
+def izipay_result_clase(request):
+    # Manejar redirección GET
+    if request.method == 'GET':
+        messages.info(request, "Por favor completa el pago para descargar el PDF.")
+        return redirect('home')
+    
+    # Manejar POST (respuesta de Izipay)
+    if not request.POST:
+        return HttpResponse("No post data received!", status=400)
+
+    if not checkHash(request.POST, keys["HMACSHA256"]):
+        return HttpResponse("Firma inválida", status=403)
+
+    answer_json = json.loads(request.POST['kr-answer'])
+    order_id = answer_json["orderDetails"]["orderId"]
+    
+    # Verificar que sea una orden de clase
+    if not order_id.startswith("CLASE-"):
+        return HttpResponse("Orden inválida", status=400)
+    
+    clase_id = order_id.split("-")[1]
+    clase = get_object_or_404(Clase, id=clase_id)
+    product_id = clase.productClase.id
+
+    # 🔥 Marcar clase como pagada si el pago fue exitoso
+    if answer_json.get("orderStatus") == "PAID":
+        if request.user.is_authenticated:
+            # Marcar clase como pagada para este usuario
+            clase.marcar_como_pagada(request.user)
+            messages.success(request, f"✅ Pago exitoso. Ahora puedes descargar el PDF de '{clase.titleClase}'.")
+        else:
+            # Si el usuario no está autenticado, guardar en sesión temporalmente
+            clases_pagadas = request.session.get('clases_pagadas', [])
+            if clase_id not in clases_pagadas:
+                clases_pagadas.append(clase_id)
+                request.session['clases_pagadas'] = clases_pagadas
+                request.session.modified = True
+            messages.warning(request, "⚠️ Inicia sesión para mantener tu compra permanentemente.")
+    else:
+        messages.error(request, "⚠️ El pago no se completó. Por favor, inténtalo nuevamente.")
+
+    return redirect('product_detail', id=product_id)
+
+def checkHash(response, key):
+    """Verifica la firma del mensaje (seguridad Izipay)"""
+    answer = response['kr-answer'].encode('utf-8')
+    calculateHash = hmac.new(key.encode('utf-8'), answer, hashlib.sha256).hexdigest()
     return calculateHash == response['kr-hash']
