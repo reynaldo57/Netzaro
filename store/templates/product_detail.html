@@ -124,7 +124,7 @@
     <div class="levels-wrapper">
         <!-- Básico -->
         <div class="level-column">
-            <h3 class="level-title basic">Nivel Básico</h3>
+            <h3 class="level-title basic">Nivel Básicox</h3>
             {% if clases_basico %}
                 {% for clase in clases_basico %}
                     <div class="class-card">
@@ -165,7 +165,20 @@
                         <img src="{{ clase.bannerClase.url }}" alt="Banner avanzado" class="class-image">
                         <h4 class="class-title">{{ clase.titleClase }}</h4>
                         <p class="class-description">{{ clase.descriptionClase }}</p>
-                        <a href="{{ clase.fileClase.url }}" class="download-button" download>Descargar</a>
+                        
+                        {% if user.is_authenticated %}
+                            {% if clase.id|stringformat:"s" in clases_pagadas %}
+                                <a href="{{ clase.fileClase.url }}" class="download-button" download>Descargar PDF</a>
+                            {% else %}
+                                <form method="POST" action="{% url 'izipay_checkout_clase' clase.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="download-button">Pagar $2 por PDF</button>
+                                </form>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'login' %}" class="download-button">Inicia sesión para comprar</a>
+                        {% endif %}
+                        
                     </div>
                 {% endfor %}
             {% else %}

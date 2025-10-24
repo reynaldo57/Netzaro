@@ -365,11 +365,24 @@ def product_detail_view(request, id):
     clases_intermedio = Clase.objects.filter(productClase=product, nivel="Intermedio")
     clases_avanzado = Clase.objects.filter(productClase=product, nivel="Avanzado")
 
+    # 🔥 Obtener IDs de clases pagadas por el usuario
+    clases_pagadas = []
+    
+    if request.user.is_authenticated:
+        # Usuarios logueados: obtener desde la relación ManyToMany
+        clases_pagadas = [
+            str(clase.id) for clase in request.user.clases_pagadas.filter(productClase=product)
+        ]
+    else:
+        # Usuarios anónimos: obtener desde sesión
+        clases_pagadas = request.session.get('clases_pagadas', [])
+
     context = {
         "product": product,
         "clases_basico": clases_basico,
         "clases_intermedio": clases_intermedio,
         "clases_avanzado": clases_avanzado,
+        "clases_pagadas": clases_pagadas,  # 👈 agregado
     }
     return render(request, 'product_detail.html', context)
 

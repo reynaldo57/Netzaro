@@ -1,250 +1,577 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiénes Somos - Nuestra Historia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-{% block content %}
-<header style="background: radial-gradient(circle, #10B981 0%, #065F46 70%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
-  <div class="text-center text-white">
-      <h1 class="display-5 fw-bold">Sobre Nosotros</h1>
-      <p class="lead fw-normal text-white-50 mb-0">Descubre lo que ofrecemos</p>
-  </div>
-</header>
-<style>
-    /* Sección de Introducción */
-.intro-section {
-  padding: 5rem 0;
-  background-color: #f5f5f5;
-  text-align: center;
-  border-bottom: 3px solid #d32f2f;
-}
-.intro-section h2 {
-  font-size: 2.5rem;
-  color: #333;
-}
-.intro-section p {
-  font-size: 1.2rem;
-  color: #777;
-  margin-bottom: 2rem;
-}
-.intro-section .btn {
-  background-color: #d32f2f;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 25px;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-.intro-section img {
-  border-radius: 15px;
-  box-shadow: 0px 15px 30px rgba(0,0,0,0.1);
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
 
-/* Estilo para la sección de testimonios */
-.testimonios {
-  background-color: #f9f9f9;
-  padding: 4rem 0;
-}
+        /* Header */
+        header {
+            background: #dc2626;
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-.testimonios .section-title {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: #d32f2f; /* Rojo para el título */
-}
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            opacity: 0.3;
+        }
 
-/* Estilo para cada tarjeta de testimonio */
-.testimonial-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  text-align: center;
-  transition: transform 0.3s ease;
-  margin-bottom: 2rem; /* Espaciado entre tarjetas */
-}
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            position: relative;
+            animation: fadeInDown 1s ease;
+        }
 
-/* Imagen del testimonio */
-.testimonial-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 15px;
-  /* Eliminar borde rojo alrededor de la imagen */
-}
+        header p {
+            font-size: 1.2em;
+            position: relative;
+            animation: fadeInUp 1s ease;
+        }
 
-/* Estilo para el texto de los testimonios */
-.testimonial-card p {
-  font-size: 1.2rem;
-  color: #333;
-  margin: 15px 0;
-}
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
 
-/* Nombre del estudiante */
-.testimonial-card span {
-  font-weight: bold;
-  color: #d32f2f; /* Rojo para el nombre */
-}
+        /* Sección Historia */
+        .historia {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 80px;
+            flex-wrap: wrap;
+        }
 
-/* Hover para las tarjetas */
-.testimonial-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-}
+        .historia-content {
+            flex: 1;
+            min-width: 300px;
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideInLeft 1s ease forwards;
+        }
 
-/* Responsividad */
-@media (max-width: 768px) {
-  .testimonios .row {
-    flex-direction: column; /* En pantallas pequeñas, las tarjetas se apilan */
-  }
-  .testimonial-card {
-    width: 100%; /* Las tarjetas ocupan el 100% del ancho en pantallas pequeñas */
-  }
-}
+        .historia-content h2 {
+            color: #dc2626;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
 
+        .historia-content p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: #555;
+        }
 
+        .historia-image {
+            flex: 1;
+            min-width: 300px;
+            opacity: 0;
+            transform: translateX(50px);
+            animation: slideInRight 1s ease forwards;
+        }
 
-/* Misión, Visión, Valores */
-.mission-vision-values {
-  padding: 4rem 0;
-  background-color: #f5f5f5;
-}
-.mission-vision-values .card {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  text-align: center;
-  margin: 1rem;
-}
-.mission-vision-values .card i {
-  font-size: 3rem;
-  color: #d32f2f;
-  margin-bottom: 1rem;
-}
-.mission-vision-values .card h3 {
-  font-size: 1.8rem;
-  color: #333;
-  margin-bottom: 1rem;
-}
-.mission-vision-values .card p {
-  font-size: 1.1rem;
-  color: #777;
-}
-.mission-vision-values .card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  transition: 0.3s ease;
-}
+        .historia-image img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
 
-/* Botones adicionales */
-.btn-primary {
-  background-color: #d32f2f;
-  border-color: #d32f2f;
-}
+        /* Valores */
+        .valores {
+            background: #1e40af;
+            padding: 80px 20px;
+            color: white;
+            margin: 60px 0;
+        }
 
-</style>
-<!-- Sección de Introducción -->
-<section class="intro-section">
+        .valores h2 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+        }
+
+        .valores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .valor-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .valor-card:nth-child(1) {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .valor-card:nth-child(2) {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .valor-card:nth-child(3) {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .valor-card:nth-child(4) {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .valor-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .valor-card .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .valor-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        /* Equipo */
+        .equipo {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .equipo h2 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #dc2626;
+            margin-bottom: 50px;
+        }
+
+        .equipo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .miembro {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .miembro:nth-child(1) { animation-delay: 0.2s; }
+        .miembro:nth-child(2) { animation-delay: 0.4s; }
+        .miembro:nth-child(3) { animation-delay: 0.6s; }
+        .miembro:nth-child(4) { animation-delay: 0.8s; }
+
+        .miembro:hover {
+            transform: translateY(-10px);
+        }
+
+        .miembro-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #dc2626;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: white;
+        }
+
+        .miembro:nth-child(1) .miembro-avatar {
+            background: #dc2626;
+        }
+
+        .miembro:nth-child(2) .miembro-avatar {
+            background: #1e40af;
+        }
+
+        .miembro:nth-child(3) .miembro-avatar {
+            background: #64748b;
+        }
+
+        .miembro:nth-child(4) .miembro-avatar {
+            background: #dc2626;
+        }
+
+        .miembro h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .miembro .cargo {
+            color: #dc2626;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .miembro p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        /* Footer */
+        footer {
+            background: #1e293b;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+        }
+
+        /* Animaciones */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .historia-content h2,
+            .valores h2,
+            .equipo h2 {
+                font-size: 2em;
+            }
+
+            .historia {
+                flex-direction: column;
+            }
+        }
+
+        /* Botón CTA */
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #dc2626;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
+            background: #b91c1c;
+        }
+
+        /* Estadísticas */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #dc2626;
+        }
+
+        .stat-item:nth-child(1) .stat-number {
+            color: #dc2626;
+        }
+
+        .stat-item:nth-child(2) .stat-number {
+            color: #1e40af;
+        }
+
+        .stat-item:nth-child(3) .stat-number {
+            color: #64748b;
+        }
+
+        .stat-item:nth-child(4) .stat-number {
+            color: #dc2626;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Quiénes Somos</h1>
+        <p>Construyendo el futuro con innovación y pasión</p>
+    </header>
+
+    <!-- Historia -->
     <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <h2>Welcome to Prisma</h2>
+        <section class="historia">
+            <div class="historia-content">
+                <h2>Nuestra Historia</h2>
                 <p>
-                    At Prisma Ecommerce, we strive to offer the best educational courses online, with expert instructors and a unique learning experience. Our mission is to empower individuals by providing access to quality education.
+                    Desde nuestros humildes comienzos en 2015, hemos crecido hasta convertirnos en 
+                    líderes en innovación tecnológica. Lo que comenzó como un sueño compartido entre 
+                    tres amigos en un pequeño garaje, hoy es una empresa que impacta miles de vidas.
                 </p>
-                <a href="#learn-more" class="btn btn-primary">Learn More</a>
+                <p>
+                    Nuestra misión siempre ha sido clara: crear soluciones que realmente marquen 
+                    la diferencia. Creemos en el poder de la tecnología para transformar industrias 
+                    y mejorar la calidad de vida de las personas.
+                </p>
+                <p>
+                    A lo largo de los años, hemos mantenido nuestros valores fundamentales mientras 
+                    evolucionamos y nos adaptamos a un mundo en constante cambio.
+                </p>
+                <a href="#contacto" class="cta-button">Contáctanos</a>
             </div>
-            <div class="col-lg-6">
-                <img src="/static/assets/about.png" alt="Education" class="img-fluid rounded shadow-lg">
+            <div class="historia-image">
+                <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="500" height="400" fill="#f8fafc"/>
+                    <circle cx="250" cy="200" r="80" fill="#dc2626" opacity="0.3"/>
+                    <circle cx="150" cy="150" r="60" fill="#1e40af" opacity="0.3"/>
+                    <circle cx="350" cy="250" r="70" fill="#64748b" opacity="0.3"/>
+                    <rect x="150" y="280" width="200" height="80" rx="10" fill="#dc2626"/>
+                    <text x="250" y="325" text-anchor="middle" fill="white" font-size="24" font-weight="bold">2015-2025</text>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Estadísticas -->
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" data-target="10">0</div>
+                <div class="stat-label">Años de Experiencia</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="500">0</div>
+                <div class="stat-label">Clientes Satisfechos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="50">0</div>
+                <div class="stat-label">Profesionales</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="1000">0</div>
+                <div class="stat-label">Proyectos Completados</div>
             </div>
         </div>
     </div>
-</section>
 
-<!-- Testimonios -->
-<section class="testimonios">
-    <div class="container">
-        <h2 class="section-title text-center">What Our Students Say</h2>
-        <div class="row">
-            <!-- Testimonio 1 -->
-            <div class="col-md-4">
-                <div class="testimonial-card text-center">
-                    <img src="/static/assets/student1.jpg" alt="Student 1" class="testimonial-img">
-                    <p>"Prisma Ecommerce has changed the way I learn online. The courses are so interactive and easy to understand!"</p>
-                    <span>- Juan Pérez</span>
-                </div>
+    <!-- Valores -->
+    <section class="valores">
+        <h2>Nuestros Valores</h2>
+        <div class="valores-grid">
+            <div class="valor-card">
+                <div class="icon">💡</div>
+                <h3>Innovación</h3>
+                <p>Buscamos constantemente nuevas formas de resolver problemas y mejorar procesos.</p>
             </div>
-            <!-- Testimonio 2 -->
-            <div class="col-md-4">
-                <div class="testimonial-card text-center">
-                    <img src="/static/assets/student2.jpg" alt="Student 2" class="testimonial-img">
-                    <p>"Thanks to Prisma, I now have the skills to work from home and started my career in digital marketing."</p>
-                    <span>- Maria Gómez</span>
-                </div>
+            <div class="valor-card">
+                <div class="icon">🤝</div>
+                <h3>Integridad</h3>
+                <p>Actuamos con honestidad y transparencia en cada decisión que tomamos.</p>
             </div>
-            <!-- Testimonio 3 -->
-            <div class="col-md-4">
-                <div class="testimonial-card text-center">
-                    <img src="/static/assets/tienda.jpg" alt="Student 3" class="testimonial-img">
-                    <p>"I love how Prisma Ecommerce keeps things simple and straightforward, making learning enjoyable!"</p>
-                    <span>- David Torres</span>
-                </div>
+            <div class="valor-card">
+                <div class="icon">🎯</div>
+                <h3>Excelencia</h3>
+                <p>Nos comprometemos con la calidad en cada proyecto que emprendemos.</p>
             </div>
-            <!-- Testimonio 1 -->
-            <div class="col-md-4">
-                <div class="testimonial-card text-center">
-                    <img src="/static/assets/rojo.jpg" alt="Student 1" class="testimonial-img">
-                    <p>"Prisma Ecommerce has changed the way I learn online. The courses are so interactive and easy to understand!"</p>
-                    <span>- Juan Pérez</span>
-                </div>
-            </div>
-            <!-- Testimonio 2 -->
-            <div class="col-md-4">
-                <div class="testimonial-card text-center">
-                    <img src="/static/assets/student2.jpg" alt="Student 2" class="testimonial-img">
-                    <p>"Thanks to Prisma, I now have the skills to work from home and started my career in digital marketing."</p>
-                    <span>- Maria Gómez</span>
-                </div>
-            </div>
-            <!-- Testimonio 3 -->
-            <div class="col-md-4">
-                <div class="testimonial-card text-center">
-                    <img src="/static/assets/student3.jpg" alt="Student 3" class="testimonial-img">
-                    <p>"I love how Prisma Ecommerce keeps things simple and straightforward, making learning enjoyable!"</p>
-                    <span>- David Torres</span>
-                </div>
+            <div class="valor-card">
+                <div class="icon">🌟</div>
+                <h3>Pasión</h3>
+                <p>Amamos lo que hacemos y eso se refleja en nuestros resultados.</p>
             </div>
         </div>
-        <!-- Puedes agregar más testimonios aquí -->
-    </div>
-</section>
+    </section>
 
-
-<!-- Misión, Visión, Valores -->
-<section class="mission-vision-values">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <i class="bi bi-bullseye"></i>
-                    <h3>Misión</h3>
-                    <p>Provide top-quality digital education to learners across the globe.</p>
-                </div>
+    <!-- Equipo -->
+    <section class="equipo">
+        <h2>Nuestro Equipo</h2>
+        <div class="equipo-grid">
+            <div class="miembro">
+                <div class="miembro-avatar">👨‍💼</div>
+                <h3>Carlos Mendoza</h3>
+                <div class="cargo">CEO & Fundador</div>
+                <p>Visionario con más de 15 años de experiencia liderando proyectos de innovación tecnológica.</p>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <i class="bi bi-eye"></i>
-                    <h3>Visión</h3>
-                    <p>Become the leading platform for online education in the Spanish-speaking world.</p>
-                </div>
+            <div class="miembro">
+                <div class="miembro-avatar">👩‍💻</div>
+                <h3>Ana García</h3>
+                <div class="cargo">CTO</div>
+                <p>Experta en desarrollo de software con pasión por crear soluciones escalables y eficientes.</p>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <i class="bi bi-heart-fill"></i>
-                    <h3>Valores</h3>
-                    <p>Passion, transparency, and continuous improvement in education.</p>
-                </div>
+            <div class="miembro">
+                <div class="miembro-avatar">👨‍🎨</div>
+                <h3>Luis Ramírez</h3>
+                <div class="cargo">Director de Diseño</div>
+                <p>Creativo excepcional que transforma ideas en experiencias visuales memorables.</p>
+            </div>
+            <div class="miembro">
+                <div class="miembro-avatar">👩‍💼</div>
+                <h3>María Torres</h3>
+                <div class="cargo">Directora de Marketing</div>
+                <p>Estratega de marketing digital con un historial comprobado de éxito en campañas innovadoras.</p>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-{% endblock %}
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Tu Empresa. Todos los derechos reservados.</p>
+        <p>Construyendo el futuro, un proyecto a la vez.</p>
+    </footer>
+
+    <script>
+        // Animación de contadores
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            const speed = 200;
+
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const increment = target / speed;
+                let count = 0;
+
+                const updateCount = () => {
+                    count += increment;
+                    if (count < target) {
+                        counter.textContent = Math.ceil(count);
+                        setTimeout(updateCount, 10);
+                    } else {
+                        counter.textContent = target + '+';
+                    }
+                };
+
+                updateCount();
+            });
+        }
+
+        // Observador de intersección para animar cuando sea visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const statsSection = document.querySelector('.stats');
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+
+        // Efecto parallax suave en el scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('header');
+            if (header) {
+                header.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Agregar efecto de hover interactivo a las tarjetas de valores
+        document.querySelectorAll('.valor-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.background = 'rgba(255, 255, 255, 0.2)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.background = 'rgba(255, 255, 255, 0.1)';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Resultado del Pago de Clase</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css"
+      integrity="sha384-QDSPDoVOoSWz2ypaRUidLmLYl4RyoBWI44iA5agn6jHegBxZkNqgm2eHb6yZ5bYs" crossorigin="anonymous" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar bg-primary" style="background-color: #FF2D46!important;">
+    <div class="container-fluid">
+      <a href="/" class="navbar-brand mb-1">
+        <img src="https://iziweb001b.s3.amazonaws.com/webresources/img/logo.png" width="80" alt="Logo">
+      </a>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <section class="container mt-5 mb-5">
+    <div class="row">
+      <div class="col-md-3"></div>
+
+      <div class="center-column col-md-6">
+        <section class="result-form p-4 border rounded shadow-sm bg-light">
+          <h2 class="text-center text-success mb-4">Resultado del Pago de la Clase</h2>
+
+          <!-- Información del pago -->
+          <p><strong>Clase:</strong> {{ clase.titleClase }}</p>
+          <p><strong>Usuario:</strong> {{ clase.user.username }}</p>
+          <hr>
+
+          <p><strong>Estado del pago:</strong> {{ answer.orderStatus }}</p>
+          <p><strong>Monto:</strong> {{ answer.orderDetails.orderCurrency }} {{ answer.orderDetails.orderTotalAmount|floatformat:2 }}</p>
+          <p><strong>Order ID:</strong> {{ answer.orderDetails.orderId }}</p>
+
+          {% if answer.orderStatus == "PAID" %}
+            <div class="alert alert-success mt-3" role="alert">
+              ✅ ¡Pago exitoso! Gracias por adquirir la clase <strong>{{ clase.titleClase }}</strong>.
+            </div>
+          {% else %}
+            <div class="alert alert-danger mt-3" role="alert">
+              ⚠️ El pago no se completó. Por favor, inténtalo nuevamente.
+            </div>
+          {% endif %}
+          <hr>
+
+          <!-- Datos técnicos (solo para depuración o validación) -->
+          <details open>
+            <summary>
+              <h5 class="text-primary">Respuesta recibida del servidor:</h5>
+            </summary>
+            <pre class="bg-dark text-white p-2 rounded">{{ postData }}</pre>
+          </details>
+
+          <hr>
+          <details>
+            <summary>
+              <h5 class="text-primary">KR-Answer:</h5>
+            </summary>
+            <pre class="bg-dark text-white p-2 rounded">{{ krAnswerData }}</pre>
+          </details>
+
+          <hr>
+          <div class="text-center">
+            <a href="/" class="btn btn-primary mt-3">Volver al inicio</a>
+          </div>
+        </section>
+      </div>
+
+      <div class="col-md-3"></div>
+    </div>
+  </section>
+</body>
+</html>
