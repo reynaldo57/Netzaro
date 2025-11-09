@@ -487,7 +487,7 @@ def izipay_checkout(request, order_id):
     
 
     #Encabezado Basic con concatenación de "usuario:contraseña" en base64
-    auth = 'Basic ' + base64.b64encode(f"{keys["USERNAME"]}:{keys["PASSWORD"]}".encode('utf-8')).decode('utf-8')
+    auth = 'Basic ' + base64.b64encode(f"{keys['USERNAME']}:{keys['PASSWORD']}".encode('utf-8')).decode('utf-8')
 
     headers = {
         'Content-Type': 'application/json',
