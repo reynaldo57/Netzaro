@@ -1,22 +1,308 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<style>
+    :root {
+        --color-primary: #8b0101;       /* Rojo principal */
+        --color-secondary: #8b0101;     /* Rojo oscuro */
+        --color-accent: #2563eb;        /* Azul */
+        --color-success: #059669;       /* Verde */
+        --color-warning: #d97706;       /* Ámbar */
+        --color-bg: #f8fafc;
+        --color-text: #1e293b;
+    }
+
+
+    /* ========== SECCIÓN DE CURSOS ========== */
+    section.py-5 {
+        background: transparent !important;
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+    }
+
+    /* ========== CARDS DE PRODUCTOS - Profesionales ========== */
+    .card {
+        border-radius: 16px !important;
+        overflow: hidden !important;
+        border: 1px solid #e5e7eb !important;
+        background: white !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+    }
+
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .card:hover::before {
+        opacity: 1;
+    }
+
+    .card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 16px 48px rgba(220, 38, 38, 0.2) !important;
+        border-color: rgba(220, 38, 38, 0.3) !important;
+    }
+
+    .card-img-top {
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .card:hover .card-img-top {
+        transform: scale(1.1);
+    }
+
+    /* Badge de oferta */
+    .badge.bg-danger {
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%) !important;
+        padding: 0.5rem 1rem !important;
+        border-radius: 8px !important;
+        font-weight: 700 !important;
+        font-size: 0.875rem !important;
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        z-index: 10;
+    }
+
+    .card-body {
+        padding: 1.5rem !important;
+    }
+
+    .card-body h5 {
+        color: var(--color-text) !important;
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        line-height: 1.4;
+        min-height: 2.8rem;
+    }
+
+    .card-body p {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Precios */
+    .card-body .fw-bold {
+        color: var(--color-primary) !important;
+        font-size: 1.375rem;
+    }
+
+    .card-body strike {
+        color: #94a3b8 !important;
+        font-size: 1.125rem;
+    }
+
+    .card-body .text-muted {
+        color: #64748b !important;
+        line-height: 1.6;
+    }
+
+    /* Footer de card */
+    .card-footer {
+        background: #fafafa !important;
+        padding: 1.25rem !important;
+        border-top: 1px solid #e5e7eb !important;
+    }
+
+    .card-footer .btn {
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%) !important;
+        color: white !important;
+        border-radius: 10px !important;
+        padding: 0.75rem 1.75rem !important;
+        font-weight: 600 !important;
+        border: none !important;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 12px rgba(220, 38, 38, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-footer .btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.5s, height 0.5s;
+    }
+
+    .card-footer .btn:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .card-footer .btn:hover {
+        background: linear-gradient(135deg, var(--color-secondary) 0%, #7f1d1d 100%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 18px rgba(220, 38, 38, 0.4);
+    }
+
+    /* ========== CARDS INFORMATIVOS - Profesionales ========== */
+    section.py-4 {
+        background: white !important;
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    section.py-4 .card {
+        border-radius: 16px !important;
+        background: white !important;
+        border: 1px solid #e5e7eb !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+        transition: all 0.3s ease;
+        padding: 1.5rem !important;
+    }
+
+    section.py-4 .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.12) !important;
+    }
+
+    /* Primera card - Rojo */
+    section.py-4 .col:nth-child(1) .card {
+        border-top: 4px solid var(--color-primary) !important;
+    }
+
+    section.py-4 .col:nth-child(1) .bi {
+        color: var(--color-primary) !important;
+    }
+
+    /* Segunda card - Azul */
+    section.py-4 .col:nth-child(2) .card {
+        border-top: 4px solid var(--color-accent) !important;
+    }
+
+    section.py-4 .col:nth-child(2) .bi {
+        color: var(--color-accent) !important;
+    }
+
+    /* Tercera card - Verde */
+    section.py-4 .col:nth-child(3) .card {
+        border-top: 4px solid var(--color-success) !important;
+    }
+
+    section.py-4 .col:nth-child(3) .bi {
+        color: var(--color-success) !important;
+    }
+
+    /* Cuarta card - Ámbar */
+    section.py-4 .col:nth-child(4) .card {
+        border-top: 4px solid var(--color-warning) !important;
+    }
+
+    section.py-4 .col:nth-child(4) .bi {
+        color: var(--color-warning) !important;
+    }
+
+    section.py-4 .bi {
+        font-size: 2.5rem !important;
+        margin-bottom: 0.75rem;
+        transition: transform 0.3s ease;
+    }
+
+    section.py-4 .card:hover .bi {
+        transform: scale(1.15);
+    }
+
+    section.py-4 h6 {
+        font-weight: 700;
+        color: var(--color-text);
+        font-size: 1.0625rem;
+        margin-bottom: 0.5rem;
+    }
+
+    section.py-4 .text-muted {
+        color: #64748b !important;
+        font-size: 0.9375rem;
+    }
+
+    /* ========== ANIMACIONES ========== */
+    @keyframes fadeInScale {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .card {
+        animation: fadeInScale 0.6s ease forwards;
+    }
+
+    /* Delays secuenciales para productos */
+    .row > .col:nth-child(1) .card { animation-delay: 0.1s; }
+    .row > .col:nth-child(2) .card { animation-delay: 0.15s; }
+    .row > .col:nth-child(3) .card { animation-delay: 0.2s; }
+    .row > .col:nth-child(4) .card { animation-delay: 0.25s; }
+    .row > .col:nth-child(5) .card { animation-delay: 0.3s; }
+    .row > .col:nth-child(6) .card { animation-delay: 0.35s; }
+    .row > .col:nth-child(7) .card { animation-delay: 0.4s; }
+    .row > .col:nth-child(8) .card { animation-delay: 0.45s; }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 992px) {
+        header h1 { font-size: 2.25rem; }
+        .card-img-top { height: 200px; }
+    }
+
+    @media (max-width: 576px) {
+        header { min-height: 220px !important; }
+        header h1 { font-size: 1.875rem; }
+        header p { font-size: 1rem; }
+        .card-body h5 { font-size: 1rem; min-height: auto; }
+        .card-img-top { height: 180px; }
+    }
+
+    /* ========== CONTAINER ========== */
+    .container {
+        max-width: 1400px;
+    }
+
+    /* ========== MEJORAS GENERALES ========== */
+    .row {
+        gap: 1.5rem 0;
+    }
+
+    /* Sin productos */
+    .alert {
+        border-radius: 12px;
+        border-left: 4px solid var(--color-primary);
+    }
+</style>
+
 <!-- Header -->
-<header style="background: linear-gradient(135deg, #1e3c72, #2a5298); min-height: 180px;" 
-        class="d-flex justify-content-center align-items-center shadow-lg">
-    <div class="text-center text-white">
-        <h1 class="display-5 fw-bold"><i class="bi bi-shop"></i> {{ category }}</h1>
-        <p class="lead text-light mb-0">Los mejores cursos para tu crecimiento</p>
-    </div>
+<header style="background: radial-gradient(circle, #8b0101 0%, #8b0101 100%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+  <div class="text-center text-white">
+      <h1 class="display-5 fw-bold">{{category}}</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Desafía tu mente</p>
+  </div>
 </header>
 
 <!-- Sección de Cursos -->
-<section class="py-5" style="background-color: #f8f9fa;">
+<section class="py-5">
     <div class="container">
-        
         <div class="row gx-4 gy-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center">
             {% for product in products %}
                 <div class="col">
-                    <div class="card h-100 shadow-lg border-0" style="border-radius: 12px; overflow: hidden;">
+                    <div class="card h-100 shadow-lg border-0">
                         {% if product.is_sale %}
                         <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; right: 0.5rem;">
                             Oferta
@@ -24,18 +310,19 @@
                         {% endif %}
                         <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" />
                         <div class="card-body p-3">
-                            <h5 class="fw-bold" style="color: #1e3c72;">{{ product.name }}</h5>
+                            <h5 class="fw-bold">{{ product.name }}</h5>
                             {% if product.is_sale %}
-                                <p class="mb-1"><strike class="text-muted">{{ product.price }}</strike> 
-                                   <span class="fw-bold" style="color: #38a3a5;">{{ product.sale_price }}</span></p>
+                                <p class="mb-1">
+                                    <strike class="text-muted">{{ product.price }}</strike> 
+                                    <span class="fw-bold">{{ product.sale_price }}</span>
+                                </p>
                             {% else %}
-                                <p class="fw-bold" style="color: #38a3a5;">{{ product.price }}</p>
+                                <p class="fw-bold">{{ product.price }}</p>
                             {% endif %}
                             <p class="text-muted small">{{ product.description|truncatewords:15 }}</p>
                         </div>
                         <div class="card-footer bg-transparent border-0 text-center">
-                            <a class="btn" style="background-color: #38a3a5; color: white; border-radius: 20px;" 
-                               href="{% url 'product' product.id %}">Ver Curso</a>
+                            <a class="btn" href="{% url 'product' product.id %}">Ver Curso</a>
                         </div>
                     </div>
                 </div>
@@ -45,40 +332,40 @@
 </section>
 
 <!-- Cards Informativos -->
-<section class="py-4" style="background-color: #ffffff;">
+<section class="py-4">
     <div class="container">
         <div class="row g-4 text-center">
             <div class="col-6 col-md-3">
-                <div class="card shadow-sm border-0 h-100 p-3" style="border-top: 4px solid #38a3a5;">
+                <div class="card shadow-sm border-0 h-100 p-3">
                     <div class="card-body">
-                        <i class="bi bi-truck fs-1" style="color: #38a3a5;"></i>
+                        <i class="bi bi-truck fs-1"></i>
                         <h6 class="fw-bold mt-2">Envío Gratis</h6>
                         <p class="text-muted small mb-0">En compras de +$50</p>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="card shadow-sm border-0 h-100 p-3" style="border-top: 4px solid #1e3c72;">
+                <div class="card shadow-sm border-0 h-100 p-3">
                     <div class="card-body">
-                        <i class="bi bi-shield-check fs-1" style="color: #1e3c72;"></i>
+                        <i class="bi bi-shield-check fs-1"></i>
                         <h6 class="fw-bold mt-2">Pago Seguro</h6>
                         <p class="text-muted small mb-0">Protección total</p>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="card shadow-sm border-0 h-100 p-3" style="border-top: 4px solid #f4b942;">
+                <div class="card shadow-sm border-0 h-100 p-3">
                     <div class="card-body">
-                        <i class="bi bi-arrow-repeat fs-1" style="color: #f4b942;"></i>
+                        <i class="bi bi-arrow-repeat fs-1"></i>
                         <h6 class="fw-bold mt-2">Devoluciones</h6>
                         <p class="text-muted small mb-0">Hasta 30 días</p>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="card shadow-sm border-0 h-100 p-3" style="border-top: 4px solid #38a3a5;">
+                <div class="card shadow-sm border-0 h-100 p-3">
                     <div class="card-body">
-                        <i class="bi bi-star-fill fs-1" style="color: #38a3a5;"></i>
+                        <i class="bi bi-star-fill fs-1"></i>
                         <h6 class="fw-bold mt-2">Cursos Premium</h6>
                         <p class="text-muted small mb-0">Garantía de calidad</p>
                     </div>

@@ -1,58 +1,508 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
-  <title>Resultado de pago</title>
-  <link rel='stylesheet' href='static/css/style.css' />
+  <title>Resultado de Pago</title>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <!-- Bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css"
       integrity="sha384-QDSPDoVOoSWz2ypaRUidLmLYl4RyoBWI44iA5agn6jHegBxZkNqgm2eHb6yZ5bYs" crossorigin="anonymous" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+        --color-primary: #dc2626;
+        --color-secondary: #991b1b;
+        --color-success: #059669;
+        --color-error: #dc2626;
+        --color-warning: #d97706;
+        --color-bg: #f8fafc;
+        --color-text: #1e293b;
+    }
+
+    
+
+    /* ========== NAVBAR ========== */
+    .navbar {
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%) !important;
+        padding: 1.25rem 0;
+        box-shadow: 0 4px 20px rgba(220, 38, 38, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .navbar::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .navbar-brand {
+        position: relative;
+        z-index: 10;
+        transition: transform 0.3s ease;
+    }
+
+    .navbar-brand:hover {
+        transform: scale(1.05);
+    }
+
+    .navbar-brand img {
+        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+    }
+
+    /* ========== CONTAINER ========== */
+    .container {
+        margin-top: 3rem;
+        animation: fadeInUp 0.8s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ========== RESULT CARD ========== */
+    .result-form {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        padding: 0;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+    }
+
+    /* ========== STATUS HEADER ========== */
+    .status-header {
+        text-align: center;
+        padding: 3rem 2rem;
+        position: relative;
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        border-bottom: 3px solid var(--color-primary);
+    }
+
+    .status-header.success {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-bottom-color: var(--color-success);
+    }
+
+    .status-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        animation: scaleIn 0.5s ease;
+    }
+
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .status-icon.success {
+        color: var(--color-success);
+    }
+
+    .status-icon.error {
+        color: var(--color-error);
+    }
+
+    .status-header h2 {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.5px;
+    }
+
+    .status-header.success h2 {
+        color: var(--color-success);
+    }
+
+    .status-header.error h2 {
+        color: var(--color-error);
+    }
+
+    .status-header p {
+        color: #64748b;
+        font-size: 1.0625rem;
+        margin: 0;
+    }
+
+    /* ========== PAYMENT INFO ========== */
+    .payment-info {
+        padding: 2.5rem;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        background: #fafafa;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        transition: all 0.3s ease;
+    }
+
+    .info-row:hover {
+        background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-label i {
+        color: var(--color-primary);
+        font-size: 1.25rem;
+    }
+
+    .info-value {
+        font-weight: 700;
+        color: var(--color-primary);
+        font-size: 1.125rem;
+    }
+
+    /* ========== TECHNICAL DETAILS ========== */
+    .technical-section {
+        padding: 0 2.5rem 2.5rem 2.5rem;
+    }
+
+    details {
+        margin-bottom: 1.5rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        overflow: hidden;
+        background: white;
+    }
+
+    summary {
+        padding: 1.25rem 1.5rem;
+        background: #fafafa;
+        cursor: pointer;
+        font-weight: 700;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+
+    summary:hover {
+        background: #f1f5f9;
+    }
+
+    summary::after {
+        content: '▼';
+        font-size: 0.875rem;
+        color: var(--color-primary);
+        transition: transform 0.3s ease;
+    }
+
+    details[open] summary::after {
+        transform: rotate(180deg);
+    }
+
+    summary h2 {
+        font-size: 1.125rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    summary i {
+        color: var(--color-primary);
+        font-size: 1.25rem;
+    }
+
+    pre {
+        padding: 1.5rem;
+        background: #1e293b;
+        color: #e2e8f0;
+        border-radius: 0;
+        margin: 0;
+        overflow-x: auto;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        font-family: 'Courier New', monospace;
+    }
+
+    /* ========== WARNING BANNER ========== */
+    .warning-banner {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 2px solid var(--color-warning);
+        border-radius: 12px;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .warning-banner i {
+        color: var(--color-warning);
+        font-size: 1.75rem;
+        flex-shrink: 0;
+    }
+
+    .warning-banner div {
+        flex: 1;
+    }
+
+    .warning-banner h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #92400e;
+        margin-bottom: 0.5rem;
+    }
+
+    .warning-banner p {
+        font-size: 0.875rem;
+        color: #78350f;
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    /* ========== ACTIONS ========== */
+    .actions {
+        padding: 0 2.5rem 2.5rem 2.5rem;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .btn-custom {
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2.5rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.0625rem;
+        box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-custom::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.5s, height 0.5s;
+    }
+
+    .btn-custom:hover::before {
+        width: 400px;
+        height: 400px;
+    }
+
+    .btn-custom:hover {
+        background: linear-gradient(135deg, var(--color-secondary) 0%, #7f1d1d 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 28px rgba(220, 38, 38, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+        .container {
+            margin-top: 2rem;
+        }
+
+        .status-header {
+            padding: 2.5rem 1.5rem;
+        }
+
+        .status-icon {
+            font-size: 3rem;
+        }
+
+        .status-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .payment-info,
+        .technical-section,
+        .actions {
+            padding: 1.5rem;
+        }
+
+        .info-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .actions {
+            flex-direction: column;
+        }
+
+        .btn-custom {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .navbar-brand img {
+            width: 70px;
+        }
+
+        .result-form {
+            border-radius: 16px;
+        }
+
+        .status-icon {
+            font-size: 2.5rem;
+        }
+
+        .status-header h2 {
+            font-size: 1.25rem;
+        }
+
+        pre {
+            font-size: 0.75rem;
+            padding: 1rem;
+        }
+    }
+  </style>
 </head>
+
 <body>
-  <nav class="navbar bg-primary" style="background-color: #FF2D46!important;">
+  <!-- NAVBAR -->
+  <nav class="navbar">
     <div class="container-fluid">
-        <a href="/" class="navbar-brand mb-1"><img src="https://iziweb001b.s3.amazonaws.com/webresources/img/logo.png" width="80"></a>
+        <a href="/" class="navbar-brand mb-1">
+            <img src="https://iziweb001b.s3.amazonaws.com/webresources/img/logo.png" width="80" alt="Logo">
+        </a>
     </div>
   </nav>
-<section class="container">
-  <div class="row">
-    <div class="col-md-3"></div>
-    <div class="center-column col-md-6">
-      <section class="result-form">
-        <h2>Resultado de pago:</h2>
-        <hr>
-        <p><strong>Estado:</strong> {{ answer.orderStatus }}</p>
-        <p><strong>Monto:</strong> {{ answer.orderDetails.orderCurrency }}. {{ answer.orderDetails.orderTotalAmount|floatformat:2 }}</p>
-        <p><strong>Order-id:</strong> {{ answer.orderDetails.orderId }}</p>
-        <hr>
-        <details open>
-          <summary>
-            <h2>Respuesta recibida del servidor:</h2>
-          </summary>
-          <pre>{{ postData }}</pre>
-        </details>
-        <hr>
-        <details>
-          <summary>
-            <h2>kr-answer:</h2>
-          </summary>
-          <pre>{{ krAnswerData }}</pre>
-        </details>
-        <hr>
-        <form action="/" method="get">
-          <button class="btn btn-primary">Volver a probar</button>
-        </form>
-      </section>
-    </div>
-    <div class="col-md-3"></div>
-  </div>
-</section>
-</body>
 
+  <!-- SECCIÓN PRINCIPAL -->
+  <section class="container">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <section class="result-form">
+          <!-- Status Header - Cambia la clase según el estado -->
+          <div class="status-header {% if answer.orderStatus == 'PAID' %}success{% else %}error{% endif %}">
+            <i class="bi {% if answer.orderStatus == 'PAID' %}bi-check-circle-fill success{% else %}bi-x-circle-fill error{% endif %} status-icon"></i>
+            <h2>{% if answer.orderStatus == 'PAID' %}¡Pago Exitoso!{% else %}Pago Rechazado{% endif %}</h2>
+            <p>{% if answer.orderStatus == 'PAID' %}Tu transacción se ha completado correctamente{% else %}No se pudo procesar el pago{% endif %}</p>
+          </div>
+
+          <!-- Payment Info -->
+          <div class="payment-info">
+            <div class="info-row">
+              <span class="info-label">
+                <i class="bi bi-check-circle"></i>
+                Estado
+              </span>
+              <span class="info-value">{{ answer.orderStatus }}</span>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">
+                <i class="bi bi-cash-stack"></i>
+                Monto
+              </span>
+              <span class="info-value">{{ answer.orderDetails.orderCurrency }} {{ answer.orderDetails.orderTotalAmount|floatformat:2 }}</span>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">
+                <i class="bi bi-receipt"></i>
+                Número de Orden
+              </span>
+              <span class="info-value">{{ answer.orderDetails.orderId }}</span>
+            </div>
+          </div>
+
+          <!-- Technical Details (Colapsados por defecto) -->
+          <div class="technical-section">
+            <!-- Warning Banner -->
+            <div class="warning-banner">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              <div>
+                <h3>⚠️ Información de Desarrollo</h3>
+                <p>Esta información técnica NO debería mostrarse en producción por razones de seguridad. Solo para propósitos de debugging.</p>
+              </div>
+            </div>
+
+            <details>
+              <summary>
+                <h2><i class="bi bi-server"></i> Respuesta del Servidor</h2>
+              </summary>
+              <pre>{{ postData }}</pre>
+            </details>
+
+            <details>
+              <summary>
+                <h2><i class="bi bi-code-square"></i> kr-answer (Datos Internos)</h2>
+              </summary>
+              <pre>{{ krAnswerData }}</pre>
+            </details>
+          </div>
+
+          <!-- Actions -->
+          <div class="actions">
+            <form action="/" method="get" style="margin: 0;">
+              <button type="submit" class="btn-custom">
+                <i class="bi bi-arrow-left-circle"></i> Volver al Inicio
+              </button>
+            </form>
+          </div>
+        </section>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+  </section>
+</body>
 </html>

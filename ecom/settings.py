@@ -26,8 +26,8 @@ SECRET_KEY = '9%^t2q1!z&7b%a1flg#^s5@x$w)8=lu+fdml9+v#%f1ew8w0p('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['b593a78cfada.ngrok-free.app', '127.0.0.1']
-CSRF_TRUSTED_ORIGINS = [' https://b593a78cfada.ngrok-free.app']
+ALLOWED_HOSTS = ['6db038de9092.ngrok-free.app', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://6db038de9092.ngrok-free.app']
 
 
 # Application definition
@@ -127,7 +127,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = ['static/']
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type

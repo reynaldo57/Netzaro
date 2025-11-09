@@ -10,7 +10,6 @@ admin.site.register(Order)
 admin.site.register(Profile)
 admin.site.register(Comment)
 admin.site.register(CommentResponse)
-admin.site.register(Clase)
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -20,3 +19,35 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.unregister(User)
 
 admin.site.register(User, UserAdmin)
+
+
+
+
+
+@admin.register(Clase)
+class ClaseAdmin(admin.ModelAdmin):
+    list_display = ('titleClase', 'nivel', 'productClase', 'class_date', 'total_pagos')
+    list_filter = ('nivel', 'class_date', 'productClase')
+    search_fields = ('titleClase', 'descriptionClase')
+    filter_horizontal = ('usuarios_pagados',)  # 🔥 Para gestionar usuarios que pagaron
+    readonly_fields = ('class_date', 'slugClase')
+    
+    fieldsets = (
+        ('Información básica', {
+            'fields': ('user', 'productClase', 'titleClase', 'slugClase', 'nivel')
+        }),
+        ('Contenido', {
+            'fields': ('descriptionClase', 'fileClase', 'bannerClase')
+        }),
+        ('Pagos', {
+            'fields': ('usuarios_pagados',)
+        }),
+        ('Fechas', {
+            'fields': ('class_date',)
+        }),
+    )
+    
+    def total_pagos(self, obj):
+        """Muestra cuántos usuarios han pagado por esta clase"""
+        return obj.usuarios_pagados.count()
+    total_pagos.short_description = 'Total de pagos'

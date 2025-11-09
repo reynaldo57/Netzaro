@@ -14,18 +14,480 @@
     
     <link rel="stylesheet" href="https://api.micuentaweb.pe/static/js/krypton-client/V4.0/ext/classic-reset.css">
     <script src="https://api.micuentaweb.pe/static/js/krypton-client/V4.0/ext/classic.js"></script>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-primary: #dc2626;
+            --color-secondary: #991b1b;
+            --color-accent: #2563eb;
+            --color-success: #059669;
+            --color-bg: #f8fafc;
+            --color-text: #1e293b;
+        }
+
+
+        /* ========== CONTAINER PRINCIPAL ========== */
+        .payment-container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== HEADER ========== */
+        .payment-header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            padding: 2.5rem 2rem;
+            border-radius: 16px 16px 0 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.2);
+        }
+
+        .payment-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+        }
+
+        .payment-header h1 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .payment-header .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .payment-header i {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 1rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* ========== CARD PRINCIPAL ========== */
+        .payment-card {
+            background: white;
+            border-radius: 0 0 16px 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+
+        /* ========== INFORMACIÓN DEL CURSO ========== */
+        .course-info {
+            padding: 2rem;
+            border-bottom: 2px solid #f1f5f9;
+            position: relative;
+        }
+
+        .course-info::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 2rem;
+            width: 80px;
+            height: 2px;
+            background: var(--color-primary);
+        }
+
+        .course-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .course-title i {
+            color: var(--color-primary);
+            font-size: 1.75rem;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .price-label {
+            font-size: 1rem;
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        .price-amount {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            letter-spacing: -1px;
+        }
+
+        /* ========== SECCIÓN DE PAGO ========== */
+        .payment-section {
+            padding: 2rem;
+            text-align: center;  /* AÑADE ESTA LÍNEA */
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            justify-content: center;  /* AÑADE ESTA LÍNEA */
+        }
+
+        .section-title i {
+            color: var(--color-primary);
+            font-size: 1.5rem;
+        }
+
+        /* ========== FORMULARIO DE PAGO ========== */
+        .kr-embedded {
+            padding: 1.5rem;
+            background: #fafafa;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            margin: 0 auto;  /* AÑADE ESTA LÍNEA */
+            max-width: 500px;
+        }
+
+        /* Estilos personalizados para inputs de Izipay */
+        .kr-pan,
+        .kr-expiry,
+        .kr-security-code {
+            margin-bottom: 1.25rem;
+        }
+
+        /* Botón de pago personalizado */
+        .kr-payment-button {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%) !important;
+            color: white !important;
+            border: none !important;
+            padding: 1rem 2.5rem !important;
+            border-radius: 12px !important;
+            font-weight: 700 !important;
+            font-size: 1.0625rem !important;
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3) !important;
+            transition: all 0.3s ease !important;
+            cursor: pointer !important;
+            width: 100% !important;
+            margin-top: 1rem !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kr-payment-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .kr-payment-button:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .kr-payment-button:hover {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, #7f1d1d 100%) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(220, 38, 38, 0.4) !important;
+        }
+
+        .kr-form-error {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #fef2f2;
+            border-left: 4px solid var(--color-primary);
+            border-radius: 8px;
+            color: var(--color-secondary);
+            font-weight: 500;
+        }
+
+        /* ========== SECURITY BADGES ========== */
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem;
+            background: #fafafa;
+            border-top: 1px solid #e5e7eb;
+            flex-wrap: wrap;
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-text);
+            font-size: 0.9375rem;
+            font-weight: 500;
+        }
+
+        .security-badge i {
+            font-size: 1.5rem;
+            color: var(--color-success);
+        }
+
+        /* ========== INFORMACIÓN ADICIONAL ========== */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            background: white;
+        }
+
+        .info-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: #fafafa;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .info-card i {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-card:nth-child(1) i { color: var(--color-primary); }
+        .info-card:nth-child(2) i { color: var(--color-accent); }
+        .info-card:nth-child(3) i { color: var(--color-success); }
+
+        .info-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin: 0;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+
+            .payment-header {
+                padding: 2rem 1.5rem;
+            }
+
+            .payment-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .payment-header i {
+                font-size: 2.5rem;
+            }
+
+            .course-info,
+            .payment-section {
+                padding: 1.5rem;
+            }
+
+            .course-title {
+                font-size: 1.25rem;
+            }
+
+            .price-amount {
+                font-size: 1.875rem;
+            }
+
+            .security-badges {
+                gap: 1rem;
+            }
+
+            .info-cards {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
+        /* ========== LOADING STATE ========== */
+        .kr-payment-button.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .kr-payment-button.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        @keyframes spin {
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-    <h1>Pagar por {{ clase.titleClase }}</h1>
-    <p>Precio: $2.00 USD</p>
-    
-    <!-- Formulario de pago de Izipay -->
-    <div class="kr-embedded" kr-form-token="{{ token }}">
-        <div class="kr-pan"></div>
-        <div class="kr-expiry"></div>
-        <div class="kr-security-code"></div>
-        <button class="kr-payment-button"></button>
-        <div class="kr-form-error"></div>
+    <div class="payment-container">
+        <!-- Header -->
+        <div class="payment-header">
+            <i class="bi bi-credit-card-2-front"></i>
+            <h1>Proceso de Pago Seguro</h1>
+            <p class="subtitle">Completa tu compra de forma rápida y protegida</p>
+        </div>
+
+        <div class="payment-card">
+            <!-- Información del curso -->
+            <div class="course-info">
+                <div class="course-title">
+                    <i class="bi bi-play-circle-fill"></i>
+                    <span>{{ clase.titleClase }}</span>
+                </div>
+                
+                <div class="price-container">
+                    <span class="price-label">Total a pagar</span>
+                    <span class="price-amount">$2.00 USD</span>
+                </div>
+            </div>
+
+            <!-- Sección de pago -->
+            <div class="payment-section">
+                <div class="section-title">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    <span>Información de Pago</span>
+                </div>
+
+                <!-- Formulario de pago de Izipay -->
+                <div class="kr-embedded" kr-form-token="{{ token }}">
+                    <div class="kr-pan"></div>
+                    <div class="kr-expiry"></div>
+                    <div class="kr-security-code"></div>
+                    <button class="kr-payment-button"></button>
+                    <div class="kr-form-error"></div>
+                </div>
+            </div>
+
+            <!-- Badges de seguridad -->
+            <div class="security-badges">
+                <div class="security-badge">
+                    <i class="bi bi-shield-check"></i>
+                    <span>Pago Seguro SSL</span>
+                </div>
+                <div class="security-badge">
+                    <i class="bi bi-lock-fill"></i>
+                    <span>Datos Encriptados</span>
+                </div>
+                <div class="security-badge">
+                    <i class="bi bi-credit-card"></i>
+                    <span>Todas las Tarjetas</span>
+                </div>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="info-cards">
+                <div class="info-card">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                    <h3>Acceso Inmediato</h3>
+                    <p>Disponible al instante después del pago</p>
+                </div>
+                <div class="info-card">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    <h3>Garantía 30 Días</h3>
+                    <p>Devolución si no estás satisfecho</p>
+                </div>
+                <div class="info-card">
+                    <i class="bi bi-headset"></i>
+                    <h3>Soporte 24/7</h3>
+                    <p>Atención personalizada siempre</p>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Agregar efecto de loading al botón al hacer click
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentButton = document.querySelector('.kr-payment-button');
+            if (paymentButton) {
+                paymentButton.addEventListener('click', function() {
+                    this.classList.add('loading');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
