@@ -86,7 +86,7 @@ class UpdateProfileForm(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self.fields['image'].label = "Foto de perfil"
+		self.fields['image'].label = ""
 
 
 class SignUpForm(UserCreationForm):

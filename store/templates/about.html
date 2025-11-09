@@ -1,66 +1,22 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
     <title>Quiénes Somos - Nuestra Historia</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        /* Header */
-        header {
-            background: #dc2626;
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
-            opacity: 0.3;
-        }
-
-        header h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            position: relative;
-            animation: fadeInDown 1s ease;
-        }
-
-        header p {
-            font-size: 1.2em;
-            position: relative;
-            animation: fadeInUp 1s ease;
-        }
 
         /* Container */
-        .container {
+        .container-QS {
             max-width: 1200px;
             margin: 0 auto;
             padding: 60px 20px;
         }
 
         /* Sección Historia */
-        .historia {
+        .historia-QS {
             display: flex;
             align-items: center;
             gap: 40px;
@@ -68,7 +24,7 @@
             flex-wrap: wrap;
         }
 
-        .historia-content {
+        .historia-content-QS {
             flex: 1;
             min-width: 300px;
             opacity: 0;
@@ -388,32 +344,28 @@
             margin-top: 10px;
         }
     </style>
-</head>
-<body>
+
     <!-- Header -->
-    <header>
-        <h1>Quiénes Somos</h1>
-        <p>Construyendo el futuro con innovación y pasión</p>
-    </header>
+<header style="background: radial-gradient(circle, #8b0101 0%, #8b0101 100%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+  <div class="text-center text-white">
+      <h1 class="display-5 fw-bold">'Quiénes Somos</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Nuestra Historia desde su Fundación</p>
+  </div>
+</header>
 
     <!-- Historia -->
-    <div class="container">
-        <section class="historia">
-            <div class="historia-content">
+    <div class="container-QS">
+        <section class="historia-QS">
+            <div class="historia-content-QS">
                 <h2>Nuestra Historia</h2>
                 <p>
-                    Desde nuestros humildes comienzos en 2015, hemos crecido hasta convertirnos en 
-                    líderes en innovación tecnológica. Lo que comenzó como un sueño compartido entre 
-                    tres amigos en un pequeño garaje, hoy es una empresa que impacta miles de vidas.
+                    Somos apasionados por los idiomas y por compartirlo con el mundo. Creemos que aprender una lengua es mucho más que memorizar palabras: es descubrir una cultura, conectar con personas y abrir nuevas oportunidades.
                 </p>
                 <p>
-                    Nuestra misión siempre ha sido clara: crear soluciones que realmente marquen 
-                    la diferencia. Creemos en el poder de la tecnología para transformar industrias 
-                    y mejorar la calidad de vida de las personas.
+                    Nuestra misión es enseñar de forma clara, dinámica y cercana, adaptándonos a las necesidades de cada estudiante. Ya sea que estés comenzando desde cero o buscando perfeccionar tu nivel, aquí encontrarás un espacio donde aprender es una experiencia enriquecedora y divertida.
                 </p>
                 <p>
-                    A lo largo de los años, hemos mantenido nuestros valores fundamentales mientras 
-                    evolucionamos y nos adaptamos a un mundo en constante cambio.
+                    Con cada clase, buscamos que nuestros alumnos se sientan seguros, motivados y acompañados en su camino hacia la fluidez. Porque enseñar no es solo nuestro trabajo, es nuestra vocación.
                 </p>
                 <a href="#contacto" class="cta-button">Contáctanos</a>
             </div>
@@ -575,3 +527,5 @@
     </script>
 </body>
 </html>
+
+{% endblock %}

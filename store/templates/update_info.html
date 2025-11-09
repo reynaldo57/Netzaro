@@ -2,26 +2,317 @@
 
 {% block content %}
 
-<!-- HEADER ELEGANTE -->
+<style>
+    :root {
+        --color-primary: #8b0101;       /* Verde esmeralda */
+        --color-secondary: #8b0101;     /* Verde oscuro */
+        --color-accent: #dc2626;        /* Rojo */
+        --color-blue: #2563eb;          /* Azul */
+        --color-bg: #f8fafc;
+        --color-text: #1e293b;
+    }
 
-<header style="background: radial-gradient(circle, #10B981 0%, #065F46 70%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
+
+    /* ========== SECTION ========== */
+    section {
+        background: transparent !important;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    /* ========== CARDS - Modernas y elegantes ========== */
+    .card {
+        border-radius: 16px !important;
+        background: white !important;
+        border: 1px solid #e5e7eb !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .card:hover::before {
+        opacity: 1;
+    }
+
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.15) !important;
+        border-color: rgba(16, 185, 129, 0.3) !important;
+    }
+
+    .card-body {
+        padding: 2.25rem !important;
+    }
+
+    /* ========== TÍTULOS DE CARDS ========== */
+    .card h5 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 1.75rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #f1f5f9;
+        position: relative;
+        letter-spacing: -0.3px;
+    }
+
+    .card h5::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 70px;
+        height: 2px;
+        border-radius: 2px;
+    }
+
+    /* Primera card - Verde */
+    .col-md-6:nth-child(1) .card h5 {
+        color: var(--color-primary);
+    }
+
+    .col-md-6:nth-child(1) .card h5::after {
+        background: var(--color-primary);
+    }
+
+    .col-md-6:nth-child(1) .card h5 i {
+        color: var(--color-primary);
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    /* Segunda card - Azul */
+    .col-md-6:nth-child(2) .card h5 {
+        color: var(--color-blue);
+    }
+
+    .col-md-6:nth-child(2) .card h5::after {
+        background: var(--color-blue);
+    }
+
+    .col-md-6:nth-child(2) .card h5 i {
+        color: var(--color-blue);
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    /* ========== FORMULARIOS - Profesionales ========== */
+    .card input[type="text"],
+    .card input[type="email"],
+    .card input[type="tel"],
+    .card input[type="number"],
+    .card textarea,
+    .card select {
+        width: 100%;
+        padding: 0.875rem 1.125rem;
+        border-radius: 10px;
+        border: 2px solid #e5e7eb;
+        background: #fafafa;
+        color: var(--color-text);
+        font-size: 0.9375rem;
+        transition: all 0.3s ease;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .card input:focus,
+    .card textarea:focus,
+    .card select:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .card label {
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+        font-size: 0.9375rem;
+        display: block;
+    }
+
+    .card p {
+        margin-bottom: 1.25rem;
+    }
+
+    /* ========== BOTÓN - Dinámico y profesional ========== */
+    button[type="submit"] {
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%) !important;
+        color: white !important;
+        border: none !important;
+        padding: 1rem 2.5rem !important;
+        border-radius: 12px !important;
+        font-weight: 700 !important;
+        font-size: 1.0625rem !important;
+        box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3) !important;
+        transition: all 0.4s ease !important;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        letter-spacing: 0.3px;
+    }
+
+    button[type="submit"]::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    button[type="submit"]:hover::before {
+        width: 400px;
+        height: 400px;
+    }
+
+    button[type="submit"]:hover {
+        background: linear-gradient(135deg, var(--color-secondary) 0%, #064e3b 100%) !important;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 28px rgba(16, 185, 129, 0.4) !important;
+    }
+
+    button[type="submit"]:active {
+        transform: translateY(-1px);
+    }
+
+    /* ========== ANIMACIONES DE ENTRADA ========== */
+    @keyframes fadeInScale {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .card {
+        animation: fadeInScale 0.6s ease forwards;
+        opacity: 0;
+    }
+
+    .col-md-6:nth-child(1) .card {
+        animation-delay: 0.1s;
+    }
+
+    .col-md-6:nth-child(2) .card {
+        animation-delay: 0.2s;
+    }
+
+    button[type="submit"] {
+        animation: fadeInScale 0.6s ease 0.3s forwards;
+        opacity: 0;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 992px) {
+        header h1 {
+            font-size: 2.25rem;
+        }
+        
+        .card-body {
+            padding: 1.75rem !important;
+        }
+    }
+
+    @media (max-width: 576px) {
+        header {
+            min-height: 200px !important;
+        }
+
+        header h1 {
+            font-size: 1.875rem;
+        }
+
+        header p {
+            font-size: 1rem;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 0.875rem 2rem !important;
+        }
+
+        .card h5 {
+            font-size: 1.125rem;
+        }
+    }
+
+    /* ========== ICONOS EN INPUTS ========== */
+    .bi-credit-card,
+    .bi-truck {
+        font-size: 1.25rem;
+        vertical-align: middle;
+    }
+
+    /* ========== CONTAINER ========== */
+    .container {
+        max-width: 1200px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ========== MEJORAS ADICIONALES ========== */
+    .text-center.mt-5 {
+        margin-top: 3rem !important;
+    }
+
+    /* Placeholder styling */
+    input::placeholder,
+    textarea::placeholder {
+        color: #94a3b8;
+        opacity: 1;
+    }
+
+    /* Select styling */
+    select {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23334155' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        padding-right: 2.5rem;
+    }
+</style>
+
+<!-- HEADER ELEGANTE -->
+<header style="background: radial-gradient(circle, #8b0101 0%, #8b0101 100%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
   <div class="text-center text-white">
-      <h1 class="display-5 fw-bold">Actualizar Información</h1>
-      <p class="lead fw-normal text-white-50 mb-0">Mantén tus datos al día con un toque profesional</p>
+      <h1 class="display-5 fw-bold">Mi Panel</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Gestiona tu cuenta y productos desde aquí</p>
   </div>
 </header>
 
 <!-- SECCIÓN PRINCIPAL -->
-<section class="py-5" style="background-color: #f4f4f4;">
+<section class="py-5">
     <div class="container">
         <form method="POST" action="{% url 'update_info' %}">
             {% csrf_token %}
             <div class="row g-4">
                 <!-- Billing Information -->
                 <div class="col-md-6">
-                    <div class="card shadow-sm border-0" style="border-radius: 10px; background-color: #ffffff;">
+                    <div class="card shadow-sm border-0">
                         <div class="card-body p-4">
-                            <h5 class="mb-3 text-primary"><i class="bi bi-credit-card"></i> Información de Facturación</h5>
+                            <h5 class="mb-3"><i class="bi bi-credit-card"></i> Información de Facturación</h5>
                             {{ form.as_p }}
                         </div>
                     </div>
@@ -29,9 +320,9 @@
 
                 <!-- Shipping Information -->
                 <div class="col-md-6">
-                    <div class="card shadow-sm border-0" style="border-radius: 10px; background-color: #ffffff;">
+                    <div class="card shadow-sm border-0">
                         <div class="card-body p-4">
-                            <h5 class="mb-3 text-success"><i class="bi bi-truck"></i> Información de Envío</h5>
+                            <h5 class="mb-3"><i class="bi bi-truck"></i> Información de Envío</h5>
                             {{ shipping_form.as_p }}
                         </div>
                     </div>
@@ -40,8 +331,7 @@
 
             <!-- Botón centrado -->
             <div class="text-center mt-5">
-                <button type="submit" 
-                    style="background: linear-gradient(90deg, #2c5364, #203a43); color: white; border: none; padding: 12px 28px; border-radius: 6px; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                <button type="submit">
                     Guardar Cambios
                 </button>
             </div>
