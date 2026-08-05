@@ -1,0 +1,639 @@
+
+{% load static %}
+{% static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impacto Juvenil | Derechos Humanos, Igualdad y Liderazgo</title>
+    <style>
+        :root {
+            --primary: #521293; /* Morado profundo de la mascota */
+            --primary-dark: #3a0b6a;
+            --accent: #ff1476; /* Rosa/Magenta brillante de la mascota */
+            --accent-dark: #d80058;
+            --gold: #ffcc00; /* Amarillo/Dorado de las estrellas */
+            --dark: #1f0833; /* Tono oscuro con matiz morado */
+            --light: #fbf9ff; /* Fondo claro con un toque sutil lavanda */
+            --white: #ffffff;
+            --font: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font);
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navbar */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 4px 20px rgba(82, 18, 147, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .logo-img-nav {
+            height: 40px;
+            width: auto;
+            border-radius: 50%;
+        }
+
+        .cta-nav {
+            background-color: var(--accent);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(255, 20, 118, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .cta-nav:hover {
+            background-color: var(--accent-dark);
+            transform: translateY(-1px);
+        }
+
+        /* Hero Section Split */
+        .hero {
+            background: linear-gradient(135deg, #fff5f8 0%, #f3ebff 100%);
+            padding: 80px 0;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .badge {
+            background-color: rgba(82, 18, 147, 0.08);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 24px;
+            border: 1px solid rgba(82, 18, 147, 0.15);
+        }
+
+        h1 {
+            font-size: 46px;
+            font-weight: 900;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+            color: var(--primary);
+        }
+
+        h1 span {
+            color: var(--accent);
+            position: relative;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--dark);
+            opacity: 0.85;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 18px 38px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(82, 18, 147, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(82, 18, 147, 0.4);
+        }
+
+        .hero-image-container {
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Efecto de fondo redondo para resaltar al personaje */
+        .hero-image-container::before {
+            content: '';
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            background: linear-gradient(135deg, rgba(255, 20, 118, 0.15), rgba(82, 18, 147, 0.15));
+            border-radius: 50%;
+            z-index: 1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .mascota-hero {
+            max-width: 340px;
+            width: 100%;
+            height: auto;
+            position: relative;
+            z-index: 2;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Manifiesto */
+        .manifesto {
+            padding: 90px 0;
+            background-color: var(--white);
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        .section-subtitle {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 48px;
+        }
+
+        .quote-box {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 24px;
+            font-style: italic;
+            color: var(--dark);
+            font-weight: 600;
+            line-height: 1.5;
+            border-left: 5px solid var(--accent);
+            padding: 10px 40px;
+            text-align: left;
+        }
+
+        /* Pilares */
+        .pilares {
+            padding: 90px 0;
+            background-color: var(--light);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .card {
+            background-color: var(--white);
+            padding: 45px 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(82, 18, 147, 0.02);
+            border: 1px solid rgba(82, 18, 147, 0.04);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(82, 18, 147, 0.08);
+            border-color: rgba(255, 20, 118, 0.2);
+        }
+
+        .card-icon {
+            font-size: 42px;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+
+        .card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--primary);
+        }
+
+        .card p {
+            color: var(--dark);
+            opacity: 0.8;
+            font-size: 15px;
+        }
+
+        /* Beneficios */
+        .beneficios {
+            padding: 90px 0;
+            background-color: var(--white);
+        }
+
+        .list-beneficios {
+            max-width: 800px;
+            margin: 0 auto;
+            list-style: none;
+        }
+
+        .list-beneficios li {
+            font-size: 17px;
+            margin-bottom: 28px;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        .list-beneficios li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--gold);
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .list-beneficios strong {
+            color: var(--primary);
+        }
+
+        /* Testimonios */
+        .testimonios {
+            padding: 90px 0;
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .testimonios .section-title {
+            color: var(--white);
+        }
+
+        .testimonios .section-subtitle {
+            color: var(--gold);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .testimonial-card {
+            background-color: rgba(255, 255, 255, 0.08);
+            padding: 36px;
+            border-radius: 16px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stars {
+            color: var(--gold);
+            margin-bottom: 18px;
+            font-size: 18px;
+        }
+
+        .testimonial-card p {
+            font-style: italic;
+            margin-bottom: 24px;
+            color: #f3ebff;
+            font-size: 16px;
+        }
+
+        .author {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .author span {
+            display: block;
+            font-weight: 400;
+            color: #d2bcff;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        /* Formulario / Conversión */
+        .cta-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .form-container {
+            background-color: var(--white);
+            padding: 45px;
+            border-radius: 20px;
+            max-width: 580px;
+            margin: 45px auto 0 auto;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            color: var(--dark);
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e1dbec;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 20, 118, 0.1);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: var(--accent);
+            color: var(--white);
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 20, 118, 0.3);
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--accent-dark);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #120324;
+            color: #8c7e9c;
+            padding: 50px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        footer p {
+            margin-bottom: 18px;
+        }
+
+        .footer-links a {
+            color: #bfaecf;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-image-container {
+                order: -1; /* Pone la mascota arriba en móviles */
+                margin-bottom: 20px;
+            }
+            .quote-box {
+                padding: 10px 20px;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 36px; }
+            .section-title { font-size: 28px; }
+            .form-container { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container nav-container">
+            <div class="logo">
+                <img src="{% static 'assets/image_1c2e07.png' %}" alt="Mascota" class="logo-img-nav">
+                Impacto<span>Juvenil</span>
+            </div>
+            <a href="#unirse" class="cta-nav">Únete ahora</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <span class="badge">Convocatoria Abierta</span>
+                    <h1>El futuro no se espera, <span>se construye hoy.</span></h1>
+                    <p>Impulsamos a la próxima generación de agentes de cambio en la defense de los derechos humanos y la igualdad de género. Tu voz es el motor de la transformación social.</p>
+                    <a href="#unirse" class="btn">Quiero ser parte del movimiento</a>
+                </div>
+                <div class="hero-image-container">
+                    <img src="image_1c2e07.png" alt="Mascota Liderazgo Juvenil" class="mascota-hero">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="manifesto">
+        <div class="container">
+            <div class="section-subtitle">Nuestra Postura</div>
+            <h2 class="section-title">No somos el mañana, somos el ahora</h2>
+            <div class="quote-box">
+                "En un entorno donde las brechas de género persisten y los derechos fundamentales enfrentan constantes desafíos, la juventud no puede quedarse de brazos cruzados. Nos negamos a ser espectadores. Es hora de ocupar los espacios de toma de decisión."
+            </div>
+        </div>
+    </section>
+
+    <section class="pilares">
+        <div class="container">
+            <div style="text-align: center;">
+                <div class="section-subtitle">Ejes Estratégicos</div>
+                <h2 class="section-title">Nuestros Pilares de Acción</h2>
+            </div>
+            
+            <div class="grid-3" style="margin-top: 20px;">
+                <div class="card">
+                    <span class="card-icon">💜</span>
+                    <h3>Igualdad de Género</h3>
+                    <p>Desmantelamos estereotipos dañinos, promovemos la equidad real de oportunidades y formamos en liderazgos feministas y corresponsabilidad.</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">✊</span>
+                    <h3>Derechos Humanos</h3>
+                    <p>Educamos en la defensa, promoción y monitoreo de los derechos fundamentales para todas las personas, sin distinción ni fronteras.</p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">⚡</span>
+                    <h3>Liderazgo Juvenil</h3>
+                    <p>Brindamos herramientas prácticas de oratoria, gestión de proyectos de alto impacto social, incidencia política y activismo digital.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="beneficios">
+        <div class="container">
+            <div style="text-align: center;">
+                <div class="section-subtitle">Beneficios</div>
+                <h2 class="section-title">¿Qué vas a lograr aquí?</h2>
+            </div>
+
+            <ul class="list-beneficios">
+                <li><strong>Comunidad Global:</strong> Conéctate directamente con una red internacional de activistas y jóvenes que comparten tus mismas convicciones y luchas.</li>
+                <li><strong>Formación de Alto Nivel:</strong> Acceso exclusivo a bootcamps, mentorías personalizadas y talleres dictados por especialistas en la materia.</li>
+                <li><strong>Financiamiento e Incubación:</strong> Oportunidades para postular tus propios proyectos sociales y recibir capital semilla o guía estratégica.</li>
+                <li><strong>Espacios de Incidencia Real:</strong> Lleva tu voz a foros internacionales, mesas de diálogo gubernamentales y agendas públicas integrales.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="testimonios">
+        <div class="container">
+            <div style="text-align: center;">
+                <div class="section-subtitle">Comunidad</div>
+                <h2 class="section-title">Voces que ya están transformando</h2>
+            </div>
+
+            <div class="grid-2" style="margin-top: 20px;">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"Entré buscando herramientas para un proyecto local y terminé codirigiendo una campaña regional sobre derechos reproductivos. Aquí encontré mi voz y mi comunidad."</p>
+                    <div class="author">
+                        Alejandra M.
+                        <span>22 años, México</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"El programa de liderazgo me dio la confianza técnica que necesitaba para hablar frente a legisladores de mi país. El cambio es posible si nos organizamos bien."</p>
+                    <div class="author">
+                        Mateo D.
+                        <span>19 años, Colombia</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="unirse">
+        <div class="container">
+            <h2 class="section-title" style="color: var(--white); margin-bottom: 10px;">Da el primer paso hoy</h2>
+            <p style="max-width: 600px; margin: 0 auto; opacity: 0.9; color: #f3ebff;">Completa el formulario y únete a la próxima cohorte de activistas y líderes globales.</p>
+            
+            <div class="form-container">
+                <form action="#" method="POST" onsubmit="event.preventDefault(); alert('¡Gracias por registrarte! Pronto nos pondremos en contacto contigo.');">
+                    <div class="form-group">
+                        <label for="name">Nombre completo</label>
+                        <input type="text" id="name" class="form-control" placeholder="Ej. Juan Pérez" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" id="email" class="form-control" placeholder="juan@ejemplo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">País de residencia</label>
+                        <input type="text" id="country" class="form-control" placeholder="Ej. Argentina" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="causa">¿Cuál es tu principal causa?</label>
+                        <select id="causa" class="form-control" required>
+                            <option value="">Selecciona una opción</option>
+                            <option value="genero">Igualdad de Género</option>
+                            <option value="ddhh">Derechos Humanos</option>
+                            <option value="liderazgo">Liderazgo y Activismo Político</option>
+                            <option value="otro">Otras causas sociales</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit">Quiero Ser Líder</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>"Por un mundo donde ser joven sea sinónimo de transformar."</p>
+            <div class="footer-links">
+                <a href="#">Privacidad</a>
+                <a href="#">Términos y Condiciones</a>
+                <a href="#">Contacto</a>
+            </div>
+            <p style="margin-top: 24px; font-size: 12px; opacity: 0.4;">&copy; 2026 Impacto Juvenil. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

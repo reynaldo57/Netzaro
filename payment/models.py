@@ -79,7 +79,17 @@ def set_shipped_date_on_update(sender,instance, **kawargs):
         obj = sender._default_manager.get(pk=instance.pk)
         if instance.shipped and not  obj.shipped:
             instance.date_shipped = now
-    
+
+@receiver(pre_save, sender=Order)
+def grant_course_access_on_payment(sender, instance, **kwargs):
+    if not instance.pk:
+        return
+    previous = sender._default_manager.filter(pk=instance.pk).first()
+    just_paid = previous and not previous.paid and instance.paid
+    if just_paid and instance.user:
+        for item in instance.orderitem_set.select_related('product'):
+            item.product.grant_access(instance.user)
+            
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<header class="text-center py-4">
+    <h1>Mis Cursos</h1>
+</header>
+
+<section class="py-4">
+    <div class="container">
+        {% if products %}
+        <div class="row gx-4 gy-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center">
+            {% for product in products %}
+            <div class="col">
+                <div class="card h-100 shadow-lg border-0">
+                    <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" />
+                    <div class="card-body p-3">
+                        <h5 class="fw-bold">{{ product.name }}</h5>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 text-center">
+                        <a class="btn" href="{% url 'product' product.id %}">Ir al curso</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-warning">Todavía no has comprado ningún curso.</div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

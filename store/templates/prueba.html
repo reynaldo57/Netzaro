@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Tech | Diseño Equilibrado</title>
+    <style>
+        :root {
+            --rojo-main: #e63946;       /* Rojo vivo pero elegante */
+            --azul-dark: #1d3557;       /* Azul medianoche secundario */
+            --gris-fondo: #f1faee;      /* Fondo muy suave */
+            --blanco: #ffffff;
+            --texto: #2b2d42;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body { background-color: var(--blanco); color: var(--texto); line-height: 1.6; }
+
+        /* --- HEADER LIMPIO --- */
+        header {
+            background: var(--blanco);
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--rojo-main); /* Detalle sutil en rojo */
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--texto); }
+        .logo span { color: var(--rojo-main); }
+
+        nav a {
+            text-decoration: none;
+            color: var(--azul-dark);
+            margin-left: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        nav a:hover { color: var(--rojo-main); }
+
+        /* --- SLIDER DINÁMICO --- */
+        .slider {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            background: var(--azul-dark);
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex;
+            align-items: center;
+            padding: 0 8%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .slide.active { opacity: 1; }
+
+        .slide::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(29, 53, 87, 0.9), transparent);
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 10;
+            color: var(--blanco);
+            max-width: 600px;
+        }
+
+        .slide-content h2 { font-size: 3rem; margin-bottom: 15px; }
+        .slide-content h2 span { color: var(--rojo-main); }
+
+        /* --- BOTONES --- */
+        .btn-group { display: flex; gap: 15px; margin-top: 25px; }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .btn-rojo { background: var(--rojo-main); color: var(--blanco); }
+        .btn-rojo:hover { background: #c1272d; transform: translateY(-2px); }
+
+        .btn-outline { border-color: var(--blanco); color: var(--blanco); }
+        .btn-outline:hover { background: var(--blanco); color: var(--azul-dark); }
+
+        /* --- SECCIÓN DE CONTENIDO --- */
+        .info-grid {
+            padding: 80px 8%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            align-items: center;
+        }
+
+        .info-image img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 15px 15px 0 var(--gris-fondo);
+        }
+
+        .info-text h3 { font-size: 2rem; color: var(--azul-dark); margin-bottom: 20px; }
+        .info-text h3::after {
+            content: ""; display: block; width: 50px; height: 4px; background: var(--rojo-main); margin-top: 10px;
+        }
+
+        /* --- TARJETAS --- */
+        .cards-section { background: var(--gris-fondo); padding: 80px 8%; text-align: center; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-top: 40px; }
+        
+        .card {
+            background: var(--blanco);
+            padding: 30px;
+            border-radius: 10px;
+            transition: 0.3s;
+            border-bottom: 4px solid transparent;
+        }
+
+        .card:hover { border-bottom-color: var(--rojo-main); transform: translateY(-5px); }
+        .card i { color: var(--rojo-main); font-size: 2rem; }
+
+        footer {
+            padding: 40px 8%;
+            background: var(--azul-dark);
+            color: var(--blanco);
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .slide-content h2 { font-size: 2rem; }
+            header nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">NETWORK<span>RED</span></div>
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#nosotros">Nosotros</a>
+            <a href="#" class="btn btn-rojo" style="padding: 8px 20px;">Acceso</a>
+        </nav>
+    </header>
+
+    <div class="slider" id="inicio">
+        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc48?q=80&w=1470')">
+            <div class="slide-content">
+                <h2>Conexión <span>Segura</span></h2>
+                <p>Administramos tu infraestructura con la precisión que tu negocio requiere.</p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-rojo">Ver Soluciones</a>
+                    <a href="#" class="btn btn-outline">Contacto</a>
+                </div>
+            </div>
+        </div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1470')">
+            <div class="slide-content">
+                <h2>Rendimiento <span>Máximo</span></h2>
+                <p>Optimización de redes y agentes de seguridad en tiempo real.</p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-rojo">Saber más</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="info-grid" id="nosotros">
+        <div class="info-text">
+            <h3>Arquitectura de Red</h3>
+            <p>Implementamos soluciones escalables que garantizan la continuidad de tus operaciones. El enfoque en los detalles marca la diferencia en cada paquete de datos.</p>
+            <a href="#" class="btn btn-rojo" style="margin-top: 20px; display: inline-block;">Leer reporte</a>
+        </div>
+        <div class="info-image">
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1470" alt="Tecnología">
+        </div>
+    </section>
+
+    <section class="cards-section" id="servicios">
+        <h2>Nuestros Pilares</h2>
+        <div class="grid">
+            <div class="card">
+                <h4 style="margin-bottom: 10px;">Firewalls</h4>
+                <p>Bloqueo de IPs maliciosas y gestión de tráfico avanzado.</p>
+            </div>
+            <div class="card">
+                <h4 style="margin-bottom: 10px;">Soporte</h4>
+                <p>Asistencia técnica especializada para entornos críticos.</p>
+            </div>
+            <div class="card">
+                <h4 style="margin-bottom: 10px;">Cloud</h4>
+                <p>Migración y seguridad en la nube con altos estándares.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 NetworkRed Solutions. Innovación en cada conexión.</p>
+    </footer>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        let current = 0;
+
+        function nextSlide() {
+            slides[current].classList.remove('active');
+            current = (current + 1) % slides.length;
+            slides[current].classList.add('active');
+        }
+
+        setInterval(nextSlide, 5000);
+    </script>
+</body>
+</html>

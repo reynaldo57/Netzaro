@@ -3,16 +3,14 @@
 {% block content %}
 
 <!-- HERO HEADER -->
-<header style="background: radial-gradient(circle, #8b0101 0%, #8b0101 100%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
-  <div class="text-center text-white">
-      <h1 class="display-5 fw-bold">Listado de Órdenes Enviadas</h1>
-      <p class="lead fw-normal text-white-50 mb-0">Gestión de pedidos con estilo y funcionalidad</p>
-  </div>
+<header>
+      <h1>Listado de Órdenes Enviadas</h1>
+      <p>Gestión de pedidos con estilo y funcionalidad</p>
 </header>
 
 <!-- CONTENIDO -->
-<div class="container-fluid px-4 py-5">
-  <div class="bg-white rounded shadow p-4">
+<div class="container-fluid px-4 py-1">
+  <div class="bg-white rounded p-2">
     <h4 class="text-center text-primary mb-4">Órdenes Enviadas</h4>
 
     <div class="table-responsive">
@@ -63,7 +61,39 @@
 
 <!-- ESTILOS -->
 <style>
+      :root {
+        --color-dominante: #ffffff;    /* 60% - Blanco (Limpieza absoluta) */
+        --color-primario: #b91c1c;      /* 30% - Rojo Sangre (Poder y acción) */
+        --color-secundario: #1d3557;    /* 10% - Azul Marino (Confianza y detalle) */
+        --gris-borde: #e2e8f0;
+        --texto-negro: #000000;
+    }
+    /* ========== HEADER REFINADO ========== */
+    header {
+        background: var(--color-primario) !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 5px solid var(--color-secundario);
+        margin-bottom: 1rem;
+        height: 100px !important;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        padding: 1rem 0 !important;
+    }
 
+    header h1 {
+        color: white !important;
+        font-weight: bold !important;
+        text-transform: uppercase;
+        margin-top: 1rem;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        letter-spacing: -0.5px;
+    }
+    header p {
+        color: white !important;
+        margin-top: 1px;
+    }
 
   #ordersTable_wrapper {
     padding-top: 10px;

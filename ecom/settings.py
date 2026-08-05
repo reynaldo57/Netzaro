@@ -26,8 +26,8 @@ SECRET_KEY = '9%^t2q1!z&7b%a1flg#^s5@x$w)8=lu+fdml9+v#%f1ew8w0p('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['6db038de9092.ngrok-free.app', '127.0.0.1', 'netzaro.pythonanywhere.com']
-CSRF_TRUSTED_ORIGINS = ['https://6db038de9092.ngrok-free.app']
+ALLOWED_HOSTS = ['c8a1-38-25-57-65.ngrok-free.app', '127.0.0.1', 'netzaro.pythonanywhere.com']
+CSRF_TRUSTED_ORIGINS = ['https://c8a1-38-25-57-65.ngrok-free.app']
 
 
 # Application definition
@@ -147,9 +147,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 PAYPAL_TEST = True
 PAYPAL_RECEIVER_EMAIL = 'herrera1930@hotmail.com' #bussinees sandbox account
-
-
-# stripe
-STRIPE_PUBLIC_KEY = 'pk_test_51RNf7xQvKPW9lI3dNxOlb3TyfecBsterPATrIPLgnEc7pED7WTtKaXozUxjyh7xn4aCUfb4a10duDLT9b0f1LmVW005ZtQkhNn'  # Clave pública
-STRIPE_SECRET_KEY = 'sk_test_51RNf7xQvKPW9lI3d6Ywv4jvGemcWfClXw6OPja1i9pZh7eq2qRf9SCivF9fEkQpQ9lXCRteZids2EXno3vwLT4hq00mkjIudgO'  # Clave secreta
 

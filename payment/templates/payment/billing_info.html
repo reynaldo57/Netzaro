@@ -5,6 +5,42 @@
   body {
     background: #f3f4f6;
   }
+  :root {
+        --color-dominante: #ffffff;    /* 60% - Blanco (Limpieza absoluta) */
+        --color-primario: #b91c1c;      /* 30% - Rojo Sangre (Poder y acción) */
+        --color-secundario: #1d3557;    /* 10% - Azul Marino (Confianza y detalle) */
+        --gris-borde: #e2e8f0;
+        --gris-fondo: #f8fafc;         /* Color neutro para suavizar fondos */
+        --texto-negro: #000000;
+    }
+    
+    /* ========== HEADER REFINADO (SIN CAMBIOS) ========== */
+    header {
+        background: var(--color-primario) !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 5px solid var(--color-secundario);
+        margin-bottom: 1rem;
+        height: 100px !important;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        padding: 1rem 0 !important;
+    }
+
+    header h1 {
+        color: white !important;
+        font-weight: bold !important;
+        text-transform: uppercase;
+        margin-top: 1rem;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        letter-spacing: -0.5px;
+    }
+    header p {
+        color: white !important;
+        margin-top: 1px;
+    }
+
 
   .info-card {
     border-radius: 1rem;
@@ -33,12 +69,10 @@
 </style>
 
 
-<header style="background: url('/static/assets/rojo.jpg') center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
-    <div class="text-center text-white">
-        <h1 class="display-4 fw-bolder"><i class="bi bi-shop"></i>Confirmación de Envío y Pago<h1>
-        <p class="lead fw-normal text-white-50 mb-0">Verifica tus datos antes de pagar</p>
-    </div>
-  </header>
+    <header>
+      <h1>Confirmación de Envío y Pago</h1>
+      <p>Verifica tus datos antes de pagar</p>
+</header>
 
 <div class="container-fluid py-5 px-lg-5">
   <div class="row g-4">
@@ -188,12 +222,7 @@
       <div class="section-title text-danger">💳 Método de Pago</div>
       <div class="card shadow-sm mb-4">
         <div class="card-body text-center">
-          {% if metodo_pago == "stripe" %}
-            <form method="POST" action="{% url 'stripe_checkout' order.id %}">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-primary w-100">Pagar con Stripe</button>
-            </form>
-          {% elif metodo_pago == "izipay" %}
+          {% if metodo_pago == "izipay" %}
             <form method="POST" action="{% url 'izipay_checkout' order.id %}">
               {% csrf_token %}
               {% for key, value in izipay_form_data.items %}

@@ -10,6 +10,38 @@
         --color-warning: #d97706;       /* Ámbar */
         --color-bg: #f8fafc;
         --color-text: #1e293b;
+        --color-dominante: #ffffff;    /* 60% - Blanco (Limpieza absoluta) */
+        --color-primario: #b91c1c;      /* 30% - Rojo Sangre (Poder y acción) */
+        --color-secundario: #1d3557;    /* 10% - Azul Marino (Confianza y detalle) */
+        --gris-borde: #e2e8f0;
+        --texto-negro: #000000;
+    }
+    
+    /* ========== HEADER REFINADO ========== */
+    header {
+        background: var(--color-primario) !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 5px solid var(--color-secundario);
+        margin-bottom: 1rem;
+        height: 100px !important;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        padding: 1rem 0 !important;
+    }
+
+    header h1 {
+        color: white !important;
+        font-weight: bold !important;
+        text-transform: uppercase;
+        margin-top: 1rem;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        letter-spacing: -0.5px;
+    }
+    header p {
+        color: white !important;
+        margin-top: 1px;
     }
 
 
@@ -93,7 +125,7 @@
 
     /* Precios */
     .card-body .fw-bold {
-        color: var(--color-primary) !important;
+        color: var(--color-secundario) !important;
         font-size: 1.375rem;
     }
 
@@ -115,7 +147,7 @@
     }
 
     .card-footer .btn {
-        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%) !important;
+        background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success) 100%) !important;
         color: white !important;
         border-radius: 10px !important;
         padding: 0.75rem 1.75rem !important;
@@ -247,6 +279,12 @@
         animation: fadeInScale 0.6s ease forwards;
     }
 
+    /* 5. ICONOS: Colores variados para quitar el exceso de rojo */
+.bi-truck { color: #2563eb !important; }        /* Azul */
+.bi-shield-check { color: #059669 !important; } /* Verde */
+.bi-arrow-repeat { color: #d97706 !important; } /* Ámbar */
+.bi-star-fill { color: #1d3557 !important; }    /* Marino */
+
     /* Delays secuenciales para productos */
     .row > .col:nth-child(1) .card { animation-delay: 0.1s; }
     .row > .col:nth-child(2) .card { animation-delay: 0.15s; }
@@ -289,11 +327,9 @@
 </style>
 
 <!-- Header -->
-<header style="background: radial-gradient(circle, #8b0101 0%, #8b0101 100%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
-  <div class="text-center text-white">
-      <h1 class="display-5 fw-bold">{{category}}</h1>
-      <p class="lead fw-normal text-white-50 mb-0">Desafía tu mente</p>
-  </div>
+<header>
+      <h1>Elije lo que quieres</h1>
+      <p>El curso que siempre deseaste</p>
 </header>
 
 <!-- Sección de Cursos -->

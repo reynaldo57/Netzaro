@@ -15,6 +15,7 @@
     --gris: #64748b;
     --gris-claro: #f1f5f9;
     --blanco: #ffffff;
+    --azul-dark: #1d3557; 
 }
 
 
@@ -26,10 +27,17 @@
     align-items: center;
     gap: 3rem;
     padding: 4rem 5vw;
-    background: linear-gradient(to right, rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/static/assets/mundo.webp') center/cover no-repeat;
-    color: white;
+    background: linear-gradient(
+    to right, 
+    rgba(29, 53, 87, 0.95), /* El azul oscuro casi opaco al inicio */
+    rgba(29, 53, 87, 0.4),  /* El mismo azul pero más transparente al medio */
+    transparent             /* Desaparece al final para ver la imagen clara */
+), 
+url('/static/assets/tec.jpg') center/cover no-repeat;
+    color: rgb(255, 255, 255);
     position: relative;
     overflow: hidden;
+    font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 .horizontal-section::after {
@@ -41,6 +49,7 @@
     height: 100px;
     background: linear-gradient(to bottom, transparent, var(--blanco));
     pointer-events: none;
+    display: none;
 }
 
 .slogan-text {
@@ -62,25 +71,28 @@
 }
 
 .slogan-text h2 {
-    font-size: 3.5rem;
+    font-size: 3rem;
     color: var(--blanco);
     font-weight: 800;
     margin-bottom: 1.2rem;
     line-height: 1.2;
     text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 .slogan-text p {
-    font-size: 1.15rem;
+    
     margin-bottom: 1rem;
     line-height: 1.7;
     opacity: 0.95;
+    font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 .slogan-text p:first-of-type {
-    font-size: 1.3rem;
-    font-weight: 500;
+    
+    font-weight: 0;
     margin-bottom: 1.5rem;
+    font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 .logo-image {
@@ -164,19 +176,13 @@
 }
 
 .form-horizontal label {
-    font-weight: 600;
-    color: var(--gris-oscuro);
+    font-weight: 0;
+    color: var(--azul-dark);
     margin-bottom: 0.6rem;
     display: flex;
     align-items: center;
-    font-size: 0.95rem;
+    font-family: 'Segoe UI', system-ui, sans-serif;
     transition: color 0.3s ease;
-}
-
-.form-horizontal label i {
-    color: var(--rojo);
-    margin-right: 0.6rem;
-    font-size: 1rem;
 }
 
 .form-horizontal input,
@@ -217,8 +223,8 @@
     color: white;
     border: none;
     border-radius: 12px;
-    font-weight: 700;
-    font-size: 1.05rem;
+    font-weight: bold;
+    
     cursor: pointer;
     transition: all 0.3s ease;
     margin-top: 1rem;
@@ -227,6 +233,7 @@
     justify-content: center;
     gap: 0.6rem;
     box-shadow: 0 4px 15px rgba(220, 38, 38, 0.25);
+    font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 .form-horizontal button:hover {
@@ -288,8 +295,8 @@
 }
 
 .category-links a:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 60px 0;
+    background: #ffffff; /* Fondo limpio para resaltar las cards */
 }
 
 /* ========== SECCIÓN DE CATEGORÍAS - Profesional ========== */
@@ -299,86 +306,109 @@
 }
 
 .learning-section {
-    padding: 4rem 1rem 3rem;
+    padding: 5rem 1rem 3rem;
     text-align: center;
-    background: var(--blanco);
-    position: relative;
 }
 
-.learning-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 5px;
-    background: var(--rojo);
-    border-radius: 0 0 10px 10px;
-}
+
 
 .learning-title {
-    display: inline-block;
     font-family: 'Poppins', sans-serif;
     font-size: 2.8rem;
-    font-weight: 800;
-    color: var(--gris-oscuro);
+    font-weight: 700;
+    color: var(--rojo-hover);
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
     position: relative;
-    padding-bottom: 1.5rem;
-    margin-bottom: 3rem;
-    letter-spacing: -0.5px;
 }
 
 .learning-title::after {
     content: '';
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    width: 100px;
-    height: 5px;
-    background: linear-gradient(90deg, transparent, var(--rojo), transparent);
-    transform: translateX(-50%);
-    border-radius: 3px;
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--rojo);
+    margin: 15px auto 0;
+    border-radius: 2px;
 }
 
-/* ========== BOTONES DE CATEGORÍAS - Outline navy profesional ========== */
+.row.g-2 {
+    padding: 0 2vw;
+    justify-content: center;
+}
+/* Botones de Idiomas - Estilo Minimalista de Lujo */
 .btn-outline-primary,
 .btn-outline-success,
 .btn-outline-info,
 .btn-outline-danger,
 .btn-outline-warning,
-/*.btn-outline-dark,*/
 .btn-outline-secondary {
-    padding: 1rem 1.8rem;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    text-decoration: none;
+    background: transparent;
+    color: var(--azul-dark);
+    border: 1px solid rgba(29, 53, 87, 0.2); /* Borde azul muy suave */
+    border-radius: 0px; /* Bordes rectos suelen verse más ejecutivos/elegantes */
+    padding: 15px 10px;
+    height: 65px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
     display: flex;
+    flex-direction: column; /* Icono arriba, texto abajo para estilo minimal */
     align-items: center;
     justify-content: center;
-    gap: 0.7rem;
-    background: var(--blanco);
-    border: 2px solid #1e3a8a;
-    color: #1e3a8a;
-    box-shadow: 0 2px 10px rgba(30, 58, 138, 0.1);
+    gap: 5px;
 }
 
+/* Iconos sutiles */
+.btn-outline-primary i, .btn-outline-success i, .btn-outline-info i,
+.btn-outline-danger i, .btn-outline-warning i, .btn-outline-secondary i {
+    color: var(--azul-dark);
+    font-size: 1.1rem;
+    opacity: 0.7;
+    transition: all 0.4s ease;
+}
+
+/* HOVER: Aquí entra el Rojo de forma sofisticada */
 .btn-outline-primary:hover,
 .btn-outline-success:hover,
 .btn-outline-info:hover,
 .btn-outline-danger:hover,
 .btn-outline-warning:hover,
-.btn-outline-dark:hover,
 .btn-outline-secondary:hover {
-    background: #1e3a8a;
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(30, 58, 138, 0.25);
-    border-color: #1e3a8a;
+    background-color: var(--azul-dark) !important;
+    color: var(--blanco) !important;
+    border-color: var(--azul-dark);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(29, 53, 87, 0.15);
 }
 
+/* El detalle rojo aparece solo en el hover sobre el icono */
+.btn-outline-primary:hover i, .btn-outline-success:hover i, .btn-outline-info:hover i,
+.btn-outline-danger:hover i, .btn-outline-warning:hover i, .btn-outline-secondary:hover i {
+    color: var(--rojo); /* El rojo como detalle de acento */
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Línea decorativa roja que aparece al hacer hover en la base del botón */
+.btn-outline-primary::after, .btn-outline-success::after, .btn-outline-info::after,
+.btn-outline-danger::after, .btn-outline-warning::after, .btn-outline-secondary::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--rojo);
+    transition: width 0.4s ease;
+}
+
+.btn-outline-primary:hover::after, .btn-outline-success:hover::after, .btn-outline-info:hover::after,
+.btn-outline-danger:hover::after, .btn-outline-warning:hover::after, .btn-outline-secondary:hover::after {
+    width: 100%;
+}
 /* ========== CARDS DE PRODUCTOS - Más dinámicas ========== */
 #productSlider {
     -ms-overflow-style: none;
@@ -449,18 +479,18 @@
 }
 
 .card-body {
-    padding: 1.5rem;
+    padding: 0rem;
     text-align: center;
 }
 
 .card-body a {
-    font-weight: 700;
+    font-weight: bold;
     text-decoration: none;
     color: var(--gris-oscuro);
     font-size: 1.15rem;
     transition: color 0.3s ease;
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: -0.5rem;
 }
 
 .card-body a:hover {
@@ -473,7 +503,7 @@
 }
 
 .card-footer {
-    padding: 1.2rem 1.5rem;
+    padding: 0.2rem 1.5rem;
     background: #fafafa;
     text-align: center;
     border-top: 1px solid #e2e8f0;
@@ -558,7 +588,7 @@
     }
 
     .slogan-text h2 {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
 
     .learning-title {
@@ -590,7 +620,7 @@
 
 @media (max-width: 480px) {
     .slogan-text h2 {
-        font-size: 2rem;
+        font-size: 3rem;
     }
 
     .learning-title {
@@ -604,15 +634,15 @@
 
 </style>
 
-<section style="font-family: 'Poppins', sans-serif;" class="horizontal-section">
+<section class="horizontal-section",>
     <div class="slogan-text">
-        <h2>NETZARO</h2>
-        <p>Domina Nuevos Idiomas y Expande Tus Fronteras🚀</p>
-        <p>📖 Aprendizaje Personalizado</p>
-        <p>🎯 Metodología Eficaz</p>
-        <p>💡 Contenido Innovador</p>
-        <p>🎯 Estrategias Eficaces</p>
-        <p>¡Haz despegar tus metas con nosotros hoy! 🌟</p>
+        <h2>ReyTech</h2>
+        <p>Domina Nuevos Idiomas y Expande Tus Fronteras</p>
+        <p>Aprendizaje Personalizado</p>
+        <p>Metodología Eficaz</p>
+        <p>Contenido Innovador</p>
+        <p>Estrategias Eficaces</p>
+        <p>¡Haz despegar tus metas con nosotros hoy!</p>
         <a href="#" class="btn btn-danger mt-3">Conocimiento que Conecta, Tecnología que Transforma</a>
     </div>
 
@@ -641,12 +671,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
 
-<div class="container mt-4 mb-n3" style="max-width: 95%; margin-top: 90px;">
-  <section class="learning-section">
-  <h2 class="learning-title">¿Qué aprenderás hoy?</h2>
-</section>
+<div class="container mt-4 mb-n3" style="max-width: 95%; margin-bottom: 70px;">
+   <section class="learning-section">
+        <h2 class="learning-title">¿Qué aprenderás hoy?</h2>
+   </section>
 
-  <div class="row g-2" style="margin-top: 20px;">
+  <div class="row g-2" style="margin-top: -40px;">
     <div class="col-6 col-md-4 col-lg-2">
       <a href="{% url 'category' 'Inglés' %}" class="btn btn-outline-primary w-100">
         <i class="fa-solid fa-language me-2"></i> Inglés
@@ -673,8 +703,8 @@
       </a>
     </div>
     <div class="col-6 col-md-4 col-lg-2">
-      <a href="{% url 'category' 'Koreano' %}" class="btn btn-outline-dark w-100">
-        <i class="fa-solid fa-language me-2"></i> Koreano
+      <a href="{% url 'category' 'coreano' %}" class="btn btn-outline-warning w-100">
+        <i class="fa-solid fa-laptop-code me-2"></i> Coreano
       </a>
     </div>
     <div class="col-6 col-md-4 col-lg-2">

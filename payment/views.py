@@ -17,7 +17,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.timezone import make_aware
 
 from django.contrib.auth.decorators import login_required
-import stripe
+
 
 # Create your views here.
 
@@ -54,7 +54,10 @@ def orders(request, pk):
 
 @login_required
 def not_shipped_dash(request):
-    orders = Order.objects.filter(user=request.user, shipped=False)
+    if not request.user.is_superuser:
+       messages.error(request, "No tienes permiso para ver estapágina.")
+       return redirect('index')
+    orders = Order.objects.filter(shipped=False)
     if request.method == "POST":
         status = request.POST.get('shipping_status')
         num = request.POST.get('num')
@@ -81,7 +84,7 @@ def not_shipped_dash(request):
 @login_required
 def shipped_dash(request):
     # Mostrar sólo las órdenes YA enviadas del usuario autenticado
-    orders = Order.objects.filter(user=request.user, shipped=True)
+    orders = Order.objects.filter(shipped=True)
 
     if request.method == "POST":
         status = request.POST.get('shipping_status')
@@ -101,6 +104,15 @@ def shipped_dash(request):
         return redirect('shipped_dash')  # Puedes redirigir de nuevo a este dashboard
 
     return render(request, "payment/shipped_dash.html", {"orders": orders})
+
+@login_required
+def my_courses(request):
+    product_ids = OrderItem.objects.filter(
+        order__user=request.user, order__paid=True
+    ).values_list('product_id', flat=True)
+    products = Product.objects.filter(id__in=product_ids).distinct()
+
+    return render(request, "payment/my_courses.html", {"products": products})
 
 def proccess_order(request):
     if request.POST:
@@ -440,29 +452,29 @@ def payment_failed(request):
 
 
 
-stripe.api_key = 'sk_test_51RNf7xQvKPW9lI3d6Ywv4jvGemcWfClXw6OPja1i9pZh7eq2qRf9SCivF9fEkQpQ9lXCRteZids2EXno3vwLT4hq00mkjIudgO'
 
-def stripe_checkout(request, order_id):
-    order = Order.objects.get(id=order_id)
 
-    session = stripe.checkout.Session.create(
-        payment_method_types=['card'],
-        line_items=[{
-            'price_data': {
-                'currency': 'usd',
-                'product_data': {
-                    'name': f"Pedido #{order.invoice}",
-                },
-                'unit_amount': int(order.amount_paid * 100),  # en centavos
-            },
-            'quantity': 1,
-        }],
-        mode='payment',
-        success_url=request.build_absolute_uri(reverse('payment_success')),
-        cancel_url=request.build_absolute_uri(reverse('payment_failed')),
-    )
 
-    return redirect(session.url, code=303)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -529,6 +541,12 @@ def izipay_result(request):
 
     answer_json["orderDetails"]["orderTotalAmount"] = answer_json["orderDetails"]["orderTotalAmount"] / 100
 
+    order_id = answer_json["orderDetails"]["orderId"]
+    order = Order.objects.get(id=order_id)
+    if answer_json.get("orderStatus") == "PAID":
+        order.paid = True
+        order.save()
+
     return render(request, 'izipay_result.html', {'answer': answer_json, 'postData': postData, 'krAnswerData': krAnswerData})
 
 @csrf_exempt
@@ -547,6 +565,11 @@ def ipn(request):
     orderStatus = answer['orderStatus']
     orderId = answer['orderDetails']['orderId']
     transactionUuid = transaction['uuid']
+
+    order = Order.objects.get(id=orderId)
+    if orderStatus == "PAID":
+        order.paid = True
+        order.save()
 
     return HttpResponse(status=200, content=f"OK! OrderStatus is {orderStatus} ")
 

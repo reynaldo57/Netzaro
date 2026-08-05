@@ -3,13 +3,46 @@
 {% block content %}
 
 <style>
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    background-color: #f4f5f7;
+html, body {
+    
+    /* Si necesitas mantener el scroll funcional pero sin ver la barra visualmente, usa lo siguiente: */
+    -ms-overflow-style: none;  /* IE y Edge */
+    scrollbar-width: none;     /* Firefox */
 }
+:root {
+        --color-dominante: #ffffff;    /* 60% - Blanco (Limpieza absoluta) */
+        --color-primario: #b91c1c;      /* 30% - Rojo Sangre (Poder y acción) */
+        --color-secundario: #1d3557;    /* 10% - Azul Marino (Confianza y detalle) */
+        --gris-borde: #e2e8f0;
+        --texto-negro: #000000;
+    }
+    /* ========== HEADER REFINADO ========== */
+    header {
+        background: var(--color-primario) !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 5px solid var(--color-secundario);
+        margin-bottom: 0;
+        height: 100px !important;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        padding: 1rem 0 !important;
+    }
 
+    header h1 {
+        color: white !important;
+        font-weight: bold !important;
+        text-transform: uppercase;
+        margin-top: 1rem;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        letter-spacing: -0.5px;
+    }
+    header p {
+        color: white !important;
+        margin-top: 1px;
+    }
+    
 .form-wrapper {
     width: 100%;
     min-height: 100vh;
@@ -17,7 +50,8 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    background: linear-gradient(to right, #e8eaf6, #f3e5f5);
+    background: linear-gradient(to right, #f8fafc, #e2e8f0);
+    
 }
 
 .form-container {
@@ -101,7 +135,7 @@ textarea {
 
 .custom-file-input span {
     display: block;
-    background-color: #8e44ad;
+    background-color: #44ad5b;
     color: white;
     padding: 0.7rem 1rem;
     text-align: center;
@@ -133,6 +167,10 @@ textarea {
 }
 
 </style>
+<header>
+      <h1>Agrega una clase al curso</h1>
+      <p>Aqui puedes agregar las clases que quieras</p>
+</header>
 
 <div class="form-wrapper">
     <div class="form-container">

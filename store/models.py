@@ -76,6 +76,12 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def grant_access(self, user):
+        if not user or not user.is_authenticated:
+            return
+        for clase in self.clases.all():
+            clase.marcar_como_pagada(user)
     
 class Order(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

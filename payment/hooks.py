@@ -23,4 +23,4 @@ def paypal_payment_received(sender, **kwargs):
     my_Order.paid = True
 
     #Save the order
-    my_Order.save
+    my_Order.save()

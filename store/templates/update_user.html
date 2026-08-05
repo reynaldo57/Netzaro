@@ -2,368 +2,180 @@
 {% load static %}
 {% block content %}
 
-<header style="background: radial-gradient(circle, #8b0101 0%, #8b0101 100%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
-  <div class="text-center text-white">
-      <h1 class="display-5 fw-bold">Mi Panel</h1>
-      <p class="lead fw-normal text-white-50 mb-0">Gestiona tu cuenta y productos desde aquí</p>
-  </div>
+<header>
+      <h1>Mi Panel</h1>
+      <p>Gestiona tu cuenta y productos desde aquí</p>
 </header>
-<section class="py-5 dashboard-section">
+<section>
 <style>
-        :root {
-            --color-primary: #8b0101;       /* Rojo elegante */
-            --color-secondary: #1e40af;     /* Azul profundo */
-            --color-tertiary: #059669;      /* Verde esmeralda */
-            --color-accent: #d97706;        /* Ámbar */
-            --color-bg: #f8fafc;
-            --color-text: #1e293b;
-        }
+    :root {
+        --color-dominante: #ffffff;    /* 60% - Blanco (Limpieza absoluta) */
+        --color-primario: #b91c1c;      /* 30% - Rojo Sangre (Poder y acción) */
+        --color-secundario: #1d3557;    /* 10% - Azul Marino (Confianza y detalle) */
+        --gris-borde: #e2e8f0;
+        --texto-negro: #000000;
+    }
 
-        /* ========== DASHBOARD SECTION ========== */
-        .dashboard-section {
-            background: transparent;
-            padding-top: 3rem;
-            padding-bottom: 3rem;
-        }
+    
 
-        .dashboard-card {
-            border-radius: 16px;
-            padding: 2rem;
-            background: white;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin-bottom: 1.75rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+    /* ========== HEADER REFINADO ========== */
+    header {
+        background: var(--color-primario) !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 5px solid var(--color-secundario);
+        margin-bottom: 3rem;
+        height: 100px !important;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        padding: 1rem 0 !important;
+    }
 
-        .dashboard-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 5px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-accent) 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+    header h1 {
+        color: white !important;
+        font-weight: bold !important;
+        text-transform: uppercase;
+        margin-top: 1rem;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        letter-spacing: -0.5px;
+    }
+    header p {
+        color: white !important;
+        margin-top: 1px;
+    }
 
-        .dashboard-card:hover::before {
-            opacity: 1;
-        }
+    /* ========== CARDS ELEGANTES (SIN EL WRAPPER ANTERIOR) ========== */
+    .dashboard-card {
+        background: #ffffff;
+        border: 1px solid var(--gris-borde);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        transition: border-color 0.3s ease;
+    }
 
-        .dashboard-card:hover {
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-            transform: translateY(-4px);
-            border-color: rgba(220, 38, 38, 0.2);
-        }
+    .dashboard-card:hover {
+        border-color: var(--color-primario);
+    }
 
-        .dashboard-card h5 {
-            padding-bottom: 1rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            color: var(--color-text);
-            border-bottom: 2px solid #f1f5f9;
-            font-size: 1.25rem;
-            position: relative;
-            letter-spacing: -0.3px;
-        }
+    .dashboard-card h5 {
+        color: var(--texto-negro);
+        font-weight: 700;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        justify-content: center; /* Centra el contenido si usas flex */
+    }
 
-        .dashboard-card h5::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 70px;
-            height: 2px;
-            background: var(--color-primary);
-        }
+    .dashboard-card h5 i {
+        color: var(--color-primario); /* Icono en Rojo */
+    }
 
-        .dashboard-card h5 i {
-            color: var(--color-primary);
-            margin-right: 0.625rem;
-            font-size: 1.125rem;
-        }
+    /* ========== FOTO DE PERFIL Y BOTÓN ========== */
+    .profile-image-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-dominante);
+    box-shadow: 0 0 0 2px var(--color-primario);
+    display: block;      /* Asegura que sea bloque */
+    margin: 0 auto 1.5rem auto; /* Centra horizontalmente y da espacio abajo */
+}
 
-        /* ========== PROFILE IMAGE - Elegante ========== */
-        .profile-image-preview {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid var(--color-primary);
-            margin-bottom: 1.5rem;
-            box-shadow: 0 6px 24px rgba(220, 38, 38, 0.25);
-            transition: all 0.3s ease;
-        }
+    /* Botón Cambiar Foto - ROJO */
+    label[for="id_image"] {
+        background: var(--color-primario) !important;
+        color: white !important;
+        padding: 8px 18px;
+        border-radius: 5px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
 
-        .profile-image-preview:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 32px rgba(220, 38, 38, 0.35);
-        }
+    label[for="id_image"]:hover {
+        opacity: 0.9;
+    }
 
-        /* ========== BUTTONS - Elegantes y funcionales ========== */
-        .btn-custom {
-            border-radius: 10px;
-            padding: 0.75rem 1.75rem;
-            font-size: 0.9375rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            letter-spacing: 0.3px;
-        }
+    /* ========== BOTONES DE ACCIÓN ========== */
+    /* Guardar - ROJO (Acción Principal) */
+    .btn-primary {
+        background-color: var(--color-primario) !important;
+        border: none !important;
+        padding: 10px 25px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase;
+    }
 
-        .btn-custom:hover {
-            transform: translateY(-2px);
-        }
+    /* Navegación - AZUL (Sutil) */
+    .btn-outline-primary {
+        border: 1px solid var(--color-secundario) !important;
+        color: var(--color-secundario) !important;
+        background: transparent !important;
+        font-weight: 600 !important;
+    }
 
-        .btn-custom i {
-            margin-right: 0.5rem;
-        }
+    .btn-outline-primary:hover {
+        background: var(--color-secundario) !important;
+        color: white !important;
+    }
 
-        /* Botón ROJO - Principal */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--color-primary) 0%, #b91c1c 100%);
-            border: none;
-            color: white;
-            box-shadow: 0 3px 12px rgba(220, 38, 38, 0.3);
-        }
+    /* ========== INFO CARDS (Métricas) ========== */
+    .card-info {
+        border-radius: 8px;
+        border: 1px solid var(--gris-borde);
+        padding: 1rem;
+        text-align: center;
+        /* El azul aquí es un acento mínimo en el icono */
+    }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
-            box-shadow: 0 5px 18px rgba(220, 38, 38, 0.4);
-            color: white;
-        }
+    .card-info i {
+        color: var(--color-secundario);
+        font-size: 1.2rem;
+    }
 
-        label[for="id_image"] {
-            cursor: pointer;
-            background: linear-gradient(135deg, var(--color-primary) 0%, #b91c1c 100%);
-            border: none;
-            color: white;
-            box-shadow: 0 3px 12px rgba(220, 38, 38, 0.3);
-        }
+    .card-info h6 {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin: 5px 0;
+    }
 
-        label[for="id_image"]:hover {
-            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
-            box-shadow: 0 5px 18px rgba(220, 38, 38, 0.4);
-        }
+    .card-info p {
+        font-weight: 800;
+        color: var(--texto-negro);
+        margin: 0;
+    }
 
-        /* Botones Outline - Diferentes colores */
-        .btn-outline-primary {
-            border: 2px solid;
-            background: white;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
+    /* ========== FORMULARIOS LIMPIOS ========== */
+    input, select, textarea {
+        border: 1px solid var(--gris-borde) !important;
+        border-radius: 6px !important;
+        padding: 10px !important;
+        background: #fcfcfc !important;
+    }
 
-        /* Primer botón - Azul */
-        .btn-outline-primary:nth-of-type(1) {
-            border-color: var(--color-secondary);
-            color: var(--color-secondary);
-        }
+    input:focus {
+        border-color: var(--color-secundario) !important; /* Azul solo al enfocar */
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1) !important;
+    }
 
-        .btn-outline-primary:nth-of-type(1):hover {
-            background-color: var(--color-secondary);
-            color: white;
-            box-shadow: 0 3px 12px rgba(30, 64, 175, 0.3);
-        }
+    label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #475569;
+    }
 
-        /* Segundo botón - Verde */
-        .btn-outline-primary:nth-of-type(2) {
-            border-color: var(--color-tertiary);
-            color: var(--color-tertiary);
-        }
+    #id_image { display: none; }
 
-        .btn-outline-primary:nth-of-type(2):hover {
-            background-color: var(--color-tertiary);
-            color: white;
-            box-shadow: 0 3px 12px rgba(5, 150, 105, 0.3);
-        }
-
-        /* Tercer botón - Ámbar */
-        .btn-outline-primary:nth-of-type(3) {
-            border-color: var(--color-accent);
-            color: var(--color-accent);
-        }
-
-        .btn-outline-primary:nth-of-type(3):hover {
-            background-color: var(--color-accent);
-            color: white;
-            box-shadow: 0 3px 12px rgba(217, 119, 6, 0.3);
-        }
-
-        /* ========== INFO CARDS - Elegantes ========== */
-        .card-info {
-            border-radius: 16px;
-            padding: 2rem;
-            background: white;
-            border: 1px solid #e5e7eb;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-info::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-        }
-
-        .card-info:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-        }
-
-        /* Primera card - Verde */
-        .card-info:nth-child(2)::before {
-            background: var(--color-tertiary);
-        }
-
-        .card-info:nth-child(2) i {
-            color: var(--color-tertiary);
-        }
-
-        /* Segunda card - Ámbar */
-        .card-info:nth-child(3)::before {
-            background: var(--color-accent);
-        }
-
-        .card-info:nth-child(3) i {
-            color: var(--color-accent);
-        }
-
-        .card-info i {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            transition: transform 0.3s ease;
-            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));
-        }
-
-        .card-info:hover i {
-            transform: scale(1.1);
-        }
-
-        .card-info h6 {
-            font-weight: 700;
-            color: var(--color-text);
-            margin-bottom: 0.625rem;
-            font-size: 1.0625rem;
-        }
-
-        .card-info p {
-            color: #64748b;
-            margin-bottom: 0;
-            font-size: 0.9375rem;
-        }
-
-        /* ========== FORM STYLES ========== */
-        #id_image {
-            display: none;
-        }
-
-        .dashboard-card input[type="text"],
-        .dashboard-card input[type="email"],
-        .dashboard-card input[type="password"],
-        .dashboard-card textarea,
-        .dashboard-card select {
-            width: 100%;
-            padding: 0.875rem 1.125rem;
-            border-radius: 10px;
-            border: 2px solid #e5e7eb;
-            background: #fafafa;
-            color: var(--color-text);
-            font-size: 0.9375rem;
-            transition: all 0.3s ease;
-        }
-
-        .dashboard-card input:focus,
-        .dashboard-card textarea:focus,
-        .dashboard-card select:focus {
-            outline: none;
-            border-color: var(--color-primary);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-        }
-
-        .dashboard-card label {
-            font-weight: 600;
-            color: var(--color-text);
-            margin-bottom: 0.5rem;
-            font-size: 0.9375rem;
-            display: block;
-        }
-
-        .dashboard-card p {
-            margin-bottom: 1.25rem;
-        }
-
-        /* ========== RESPONSIVE ========== */
-        @media (max-width: 992px) {
-            header h1 { font-size: 2rem; }
-            .profile-image-preview { width: 160px; height: 160px; }
-            .dashboard-card { padding: 1.75rem; }
-        }
-
-        @media (max-width: 576px) {
-            header { min-height: 200px !important; }
-            header h1 { font-size: 1.75rem; }
-            .btn-custom { width: 100%; margin-right: 0 !important; }
-            .profile-image-preview { width: 140px; height: 140px; }
-        }
-
-        /* ========== ANIMACIONES ========== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .dashboard-card,
-        .card-info {
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        .col-lg-4 .dashboard-card {
-            animation-delay: 0.1s;
-        }
-
-        .card-info:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .card-info:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .col-lg-8 .dashboard-card:nth-child(1) {
-            animation-delay: 0.15s;
-        }
-
-        .col-lg-8 .dashboard-card:nth-child(2) {
-            animation-delay: 0.25s;
-        }
-
-        /* ========== DETALLES ========== */
-        .text-center .btn-custom {
-            margin-right: 0.75rem;
-            margin-bottom: 0.875rem;
-        }
-
-        .container {
-            max-width: 1200px;
-        }
-    </style>
+.col-md-4 { 
+    text-align: center; 
+}
+</style>
 
 
 
@@ -376,7 +188,7 @@
                 <!-- Perfil -->
                 <div class="col-lg-4">
                     <div class="dashboard-card text-center">
-                        <h5><i class="fas fa-image me-2"></i> Foto de Perfilxxx</h5>
+                        <h5><i class="fas fa-image me-2"></i>Foto de Perfil </h5>
                         {% if request.user.profile.image %}
                             <img src="{{ request.user.profile.image.url }}" class="profile-image-preview" alt="Perfil">
                         {% else %}
