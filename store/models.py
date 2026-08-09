@@ -21,6 +21,17 @@ class Profile(models.Model):
     country = models.CharField(max_length=200, blank=True)
     old_cart = models.CharField(max_length=5000, blank=True, null=True)
 
+    TEACHER_STATUS_CHOICES = [
+        ('none', 'No solicitado'),
+        ('pending', 'Pendiente'),
+        ('approved', 'Aprobado'),
+        ('rejected', 'Rechazado'),
+    ]
+    teacher_request_status = models.CharField(
+        max_length=10, choices=TEACHER_STATUS_CHOICES, default='none'
+    )
+    teacher_request_date = models.DateTimeField(null=True, blank=True)
+
 
     def get_profile_picture(self):
         try:
@@ -186,3 +197,32 @@ class Clase(models.Model):
     def requiere_pago(self):
         """Solo las clases avanzadas requieren pago"""
         return self.nivel == "Avanzado"
+
+
+class TeacherApplication(models.Model):
+    profile = models.OneToOneField(
+        Profile, on_delete=models.CASCADE, related_name='teacher_application'
+    )
+    full_name = models.CharField(max_length=150, verbose_name="Nombre completo")
+    profession = models.CharField(max_length=150, verbose_name="Profesión")
+    specialty = models.CharField(max_length=150, verbose_name="Materia o especialidad a enseñar")
+    experience_years = models.PositiveIntegerField(verbose_name="Años de experiencia", default=0)
+    certificate = models.FileField(upload_to='teacher_certificates', verbose_name="Certificado")
+    bio = models.TextField(max_length=1000, verbose_name="Cuéntanos sobre tu experiencia")
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Solicitud de {self.full_name} ({self.profile.user.username})"
+
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlist_items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    added_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+    def __str__(self):
+        return f'{self.user.username} - {self.product.name}'

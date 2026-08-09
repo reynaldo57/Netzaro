@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<header class="teacher-app-header">
+    <h1>Solicitud para ser Profesor</h1>
+    <p>Completa tus datos para que el equipo revise tu solicitud</p>
+</header>
+
+<section>
+<style>
+    .teacher-app-header {
+        background: #b91c1c;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 5px solid #1d3557;
+        margin-bottom: 3rem;
+        padding: 1.5rem 0;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    .teacher-app-header h1 {
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin: 0;
+    }
+    .teacher-app-header p {
+        color: white;
+        margin-top: 5px;
+    }
+    .teacher-app-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .teacher-app-card label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #475569;
+    }
+    .teacher-app-card input,
+    .teacher-app-card select,
+    .teacher-app-card textarea {
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 10px;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    .btn-primary-custom {
+        background-color: #b91c1c;
+        border: none;
+        color: white;
+        padding: 10px 25px;
+        font-weight: 700;
+        text-transform: uppercase;
+        border-radius: 6px;
+    }
+</style>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="teacher-app-card">
+                    <form method="POST" action="{% url 'request_teacher' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn-primary-custom">Enviar solicitud</button>
+                            <a href="{% url 'update_user' %}" class="btn btn-outline-secondary ms-2">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

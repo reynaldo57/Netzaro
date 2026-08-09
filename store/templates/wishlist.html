@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-center my-4">Mi lista de deseos</h2>
+<div class="product-grid d-flex flex-wrap gap-3 justify-content-center">
+  {% for item in items %}
+    <div class="card" style="width: 250px;">
+      <img class="card-img-top" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+      <div class="card-body">
+        <a href="{% url 'product' item.product.id %}">{{ item.product.name }}</a>
+        <div style="color: green;">${{ item.product.price }}</div>
+        <form method="POST" action="{% url 'toggle_wishlist' item.product.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-outline-danger mt-2">Quitar</button>
+        </form>
+      </div>
+    </div>
+  {% empty %}
+    <p>Aún no has guardado ningún curso.</p>
+  {% endfor %}
+</div>
+{% endblock %}

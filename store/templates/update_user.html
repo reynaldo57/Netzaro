@@ -227,8 +227,12 @@
                         <button type="submit" class="btn btn-primary btn-custom me-2 mb-2"><i class="fas fa-save me-1"></i> Guardar Cambios</button>
                         <a href="{% url 'my_products' %}" class="btn btn-outline-primary btn-custom me-2 mb-2"><i class="fas fa-box me-1"></i> Mis Cursos</a>
                         <a href="{% url 'update_password' %}" class="btn btn-outline-primary btn-custom me-2 mb-2"><i class="fas fa-key me-1"></i> Contraseña</a>
-                        {% if user.is_superuser %}
+                        {% if user.is_superuser or request.user.profile.teacher_request_status == 'approved' %}
                         <a href="{% url 'add_product' %}" class="btn btn-outline-primary btn-custom mb-2"><i class="fas fa-plus me-1"></i>Crea un nuevo curso</a>
+                        {% elif request.user.profile.teacher_request_status == 'pending' %}
+                        <span class="btn btn-outline-primary btn-custom mb-2 disabled">Solicitud de profesor pendiente</span>
+                        {% else %}
+                         <a href="{% url 'request_teacher' %}" class="btn btn-outline-primary btn-custom mb-2"><i class="fas fa-chalkboard-teacher me-1"></i> Quiero ser profesor</a>
                         {% endif %}
                     </div>
                 </div>

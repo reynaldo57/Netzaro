@@ -23,6 +23,7 @@
                     </ul>
                 </li>
                 <li><a class="nav-link-custom" href="{% url 'my_courses' %}">Mis Cursos</a></li>
+<li><a class="nav-link-custom" href="{% url 'wishlist' %}">Lista de Deseos</a></li>
                 {% if user.is_superuser %}
                 <li class="item-desplegable">
                     <a class="nav-link-custom">Orders</a>
@@ -30,6 +31,8 @@
                         <li><a href="{% url 'shipped_dash' %}">Shipped Orders</a></li>
                         <hr class="divisor" />
                         <li><a href="{% url 'not_shipped_dash' %}">Un-Shipped Orders</a></li>
+                        <hr class="divisor" />
+                        <li><a href="{% url 'teacher_requests_dash' %}">Solicitudes de Profesor</a></li>
                     </ul>
                 </li>
                 {% endif %}

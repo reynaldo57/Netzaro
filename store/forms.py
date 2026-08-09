@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPassw
 from django import forms
 from .models import Profile, Product, Clase
 from django.db import models
-
+from .models import Profile, Product, Clase, TeacherApplication
 
 class UserInfoForm(forms.ModelForm):
 	phone = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Phone'}), required=False)
@@ -165,3 +165,15 @@ class AddClaseForm(forms.ModelForm):
         model = Clase
         fields = ['titleClase','fileClase', 'productClase', 'bannerClase', 'descriptionClase', 'nivel', "productClase"]
 
+class TeacherApplicationForm(forms.ModelForm):
+    class Meta:
+        model = TeacherApplication
+        fields = ['full_name', 'profession', 'specialty', 'experience_years', 'certificate', 'bio']
+        widgets = {
+            'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre completo'}),
+            'profession': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Ingeniero, Licenciado...'}),
+            'specialty': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Inglés, Programación...'}),
+            'experience_years': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'certificate': forms.FileInput(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Cuéntanos tu experiencia enseñando'}),
+        }

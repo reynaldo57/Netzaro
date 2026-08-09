@@ -149,7 +149,20 @@
 </style>
 <div class="full-wrapper">
     
-
+{% if request.user.is_authenticated %}
+<form method="POST" action="{% url 'toggle_wishlist' product.id %}">
+  {% csrf_token %}
+  {% if in_wishlist %}
+    <button type="submit" class="btn btn-outline-secondary">
+      <i class="fas fa-heart-broken"></i> Quitar de la lista de deseos
+    </button>
+  {% else %}
+    <button type="submit" class="btn btn-outline-danger">
+      <i class="fas fa-heart"></i> Guardar para después
+    </button>
+  {% endif %}
+</form>
+{% endif %}
     <div class="levels-wrapper">
         <!-- Básico -->
         <div class="level-column">
@@ -214,6 +227,32 @@
                 <p class="no-classes">No hay clases avanzadas aún.</p>
             {% endif %}
         </div>
+
+
+
+        <!-- Avanzado -->
+        <div class="level-column">
+            <h3 class="level-title advanced">Clases recomendadas</h3>
+            {% if recommended_products %}
+<section class="mt-5">
+  <h4>Estudiantes también vieron</h4>
+  <div class="d-flex flex-wrap gap-3">
+    {% for rec in recommended_products %}
+      <div class="card" style="width: 220px;">
+        <img class="card-img-top" src="{{ rec.image.url }}" alt="{{ rec.name }}">
+        <div class="card-body">
+          <a href="{% url 'product' rec.id %}">{{ rec.name }}</a>
+          <div style="color: green;">${{ rec.price }}</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+        </div>
+
+
+
     </div>
 </div>
 {% endblock %}

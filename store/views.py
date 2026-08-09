@@ -1,31 +1,93 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Category, Profile, Comment, CommentResponse, Clase
+from .models import Product, Category, Profile, Comment, CommentResponse, Clase, Wishlist
 from cart.cart import Cart
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, UpdateProfileForm, CommentForm, CommentResponseForm, AddProductForm, AddClaseForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, UpdateProfileForm, CommentForm, CommentResponseForm, AddProductForm, AddClaseForm, TeacherApplicationForm
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress
 from django import forms
 from django.db.models import Q
 import json
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from django.core.paginator import Paginator
+from django.db.models import Count
 
-
-
-# Create your views here.
 def search(request):
-    if request.method == "POST":
-        searched = request.POST['searched']
-        searched = Product.objects.filter(Q(name__icontains=searched) | Q(description__icontains=searched))
-        if not searched:
-            messages.success(request, "That Product does not exist")
-            return render(request, "search.html", {})
-        else:
-            return render(request, "search.html", {'searched': searched})
-    else:
-        return render(request, "search.html", {})
+    query = request.GET.get('q', '').strip()
+    category_id = request.GET.get('category', '')
+    nivel = request.GET.get('nivel', '')
+    price_min = request.GET.get('price_min', '')
+    price_max = request.GET.get('price_max', '')
+    order = request.GET.get('order', 'relevance')
+
+    results = Product.objects.none()
+
+    if query:
+        results = Product.objects.filter(
+            Q(name__icontains=query) |
+            Q(description__icontains=query) |
+            Q(category__name__icontains=query)
+        )
+
+        if category_id:
+            results = results.filter(category_id=category_id)
+
+        if nivel:
+            results = results.filter(clases__nivel=nivel)
+
+        if price_min:
+            try:
+                results = results.filter(price__gte=float(price_min))
+            except ValueError:
+                pass
+
+        if price_max:
+            try:
+                results = results.filter(price__lte=float(price_max))
+            except ValueError:
+                pass
+
+        results = results.distinct()
+
+        results = results.annotate(
+            num_ventas=Count(
+                'orderitem',
+                filter=Q(orderitem__order__paid=True),
+                distinct=True
+            )
+        ).distinct()
+
+        order_map = {
+            'price_asc': 'price',
+            'price_desc': '-price',
+            'newest': '-created_day',
+            'name_asc': 'name',
+            'popularity': '-num_ventas',
+            # 'rating': '-avg_rating',  # activar cuando exista el modelo de calificaciones
+        }
+        if order in order_map:
+            results = results.order_by(order_map[order])
+
+    paginator = Paginator(results, 12)  # 12 cursos por página
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    if query and not results.exists():
+        messages.info(request, "No se encontraron cursos para tu búsqueda.")
+
+
+    return render(request, "search.html", {
+        'searched': page_obj,
+        'query': query,
+        'categories': Category.objects.all(),
+        'selected_category': category_id,
+        'selected_nivel': nivel,
+        'price_min': price_min,
+        'price_max': price_max,
+        'selected_order': order,
+    })
     
 def update_info(request):
     if request.user.is_authenticated:
@@ -88,6 +150,51 @@ def update_user(request):
         messages.success(request, "You must be logged in to access that page")
         return redirect('index')
 
+@login_required(login_url='login')
+def request_teacher(request):
+    profile = request.user.profile
+    if profile.teacher_request_status == 'approved':
+        messages.info(request, "Ya tienes una cuenta de profesor.")
+        return redirect('update_user')
+    if profile.teacher_request_status == 'pending':
+        messages.info(request, "Ya tienes una solicitud pendiente de revisión.")
+        return redirect('update_user')
+    application = getattr(profile, 'teacher_application', None)
+    form = TeacherApplicationForm(request.POST or None, request.FILES or None, instance=application)
+
+    if request.method == "POST" and form.is_valid():
+        application = form.save(commit=False)
+        application.profile = profile
+        application.save()
+        profile.teacher_request_status = 'pending'
+        profile.teacher_request_date = timezone.now()
+        profile.save()
+        messages.success(request, "Tu solicitud para ser profesor fue enviada.")
+        return redirect('update_user')
+
+    return render(request, 'request_teacher.html', {'form': form})
+
+
+@login_required(login_url='login')
+def teacher_requests_dash(request):
+    if not request.user.is_superuser:
+        messages.error(request, "No tienes permiso para ver esta página.")
+        return redirect('index')
+
+    if request.method == "POST":
+        profile = get_object_or_404(Profile, id=request.POST.get('profile_id'))
+        if request.POST.get('decision') == 'approve':
+            profile.teacher_request_status = 'approved'
+        else:
+            profile.teacher_request_status = 'rejected'
+        profile.save()
+        messages.success(request, "Solicitud actualizada")
+        return redirect('teacher_requests_dash')
+
+    pending_requests = Profile.objects.filter(teacher_request_status='pending').select_related('teacher_application', 'user')
+    return render(request, 'teacher_requests_dash.html', {"pending_requests": pending_requests})
+
+
 def category_summary(request):
     categories = Category.objects.all()
     return render(request, 'category_summary.html', {"categories":categories})
@@ -149,6 +256,9 @@ def product(request, pk):
 
 @login_required(login_url='login')
 def add_product(request):
+    if not (request.user.is_superuser or request.user.profile.teacher_request_status == 'approved'):
+        messages.error(request, "Necesitas una cuenta de profesor aprobada para crear cursos.")
+        return redirect('update_user')
     form = AddProductForm()
     categories = Category.objects.all()
 
@@ -236,7 +346,7 @@ def update_product(request, id):
 
 
 def index(request):
-    products = Product.objects.all()
+    products = Product.objects.all().order_by('-created_day')[:24]
     return render(request, 'index.html', {'products':products})
 
 def about(request):
@@ -348,6 +458,7 @@ def add_clase(request):
         else:
             print(formClase.errors)  # Para ver qué está fallando
 
+            
     context = {
         "formClase": formClase,
         "productClase": productClase,
@@ -365,6 +476,11 @@ def product_detail_view(request, id):
     clases_intermedio = Clase.objects.filter(productClase=product, nivel="Intermedio")
     clases_avanzado = Clase.objects.filter(productClase=product, nivel="Avanzado")
 
+    recommended_products = Product.objects.filter(
+        category=product.category
+    ).exclude(id=product.id).annotate(
+        num_ventas=Count('orderitem', filter=Q(orderitem__order__paid=True), distinct=True)
+    ).order_by('-num_ventas', '-created_day')[:4]
     # 🔥 Obtener IDs de clases pagadas por el usuario
     clases_pagadas = []
     
@@ -377,12 +493,33 @@ def product_detail_view(request, id):
         # Usuarios anónimos: obtener desde sesión
         clases_pagadas = request.session.get('clases_pagadas', [])
 
+    in_wishlist = False
+    if request.user.is_authenticated:
+        in_wishlist = Wishlist.objects.filter(user=request.user, product=product).exists()
     context = {
         "product": product,
         "clases_basico": clases_basico,
         "clases_intermedio": clases_intermedio,
         "clases_avanzado": clases_avanzado,
-        "clases_pagadas": clases_pagadas,  # 👈 agregado
+        "clases_pagadas": clases_pagadas,
+        "recommended_products": recommended_products,
+        "in_wishlist": in_wishlist,
     }
     return render(request, 'product_detail.html', context)
 
+
+@login_required(login_url='login')
+def toggle_wishlist(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
+    if not created:
+        item.delete()
+        messages.success(request, "Curso quitado de tu lista de deseos")
+    else:
+        messages.success(request, "Curso guardado en tu lista de deseos")
+    return redirect(request.META.get('HTTP_REFERER', 'index'))
+
+@login_required(login_url='login')
+def wishlist_view(request):
+    items = Wishlist.objects.filter(user=request.user).select_related('product')
+    return render(request, 'wishlist.html', {'items': items})

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-4">
+    <h1>Solicitudes de Profesor</h1>
+    <table class="table table-bordered table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Nombre completo</th>
+                <th>Profesión</th>
+                <th>Especialidad</th>
+                <th>Experiencia</th>
+                <th>Certificado</th>
+                <th>Sobre él/ella</th>
+                <th>Fecha de solicitud</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for profile in pending_requests %}
+            <tr>
+                <td>{{ profile.user.username }}</td>
+                {% with application=profile.teacher_application %}
+                <td>{{ application.full_name|default:"—" }}</td>
+                <td>{{ application.profession|default:"—" }}</td>
+                <td>{{ application.specialty|default:"—" }}</td>
+                <td>{{ application.experience_years|default:"—" }} años</td>
+                <td>
+                    {% if application.certificate %}
+                    <a href="{{ application.certificate.url }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Ver certificado</a>
+                    {% else %}
+                    —
+                    {% endif %}
+                </td>
+                <td style="max-width: 250px; white-space: pre-wrap;">{{ application.bio|default:"—" }}</td>
+                {% endwith %}
+                <td>{{ profile.teacher_request_date }}</td>
+                <td>
+                    <form method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="profile_id" value="{{ profile.id }}">
+                        <button type="submit" name="decision" value="approve" class="btn btn-success btn-sm">Aprobar</button>
+                        <button type="submit" name="decision" value="reject" class="btn btn-danger btn-sm">Rechazar</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="9">No hay solicitudes pendientes.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

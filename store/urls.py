@@ -16,14 +16,16 @@ urlpatterns = [
     path('category_summary/', views.category_summary, name='category_summary'),
     path('search/', views.search, name='search'),
     path('add_product/', views.add_product, name='add_product'),
-
+    path('request_teacher/', views.request_teacher, name='request_teacher'),
+    path('teacher_requests/', views.teacher_requests_dash, name='teacher_requests_dash'),
     path('my_products/', views.my_products, name='my_products'),
     path('update_product/<int:id>/', views.update_product, name='update_product'),
     path('user_information/<str:username>/', views.view_user_information, name='user_information'),
 
     path('add_clase/', views.add_clase, name='add_clase'),
     path('product/<int:id>/detail/', views.product_detail_view, name='product_detail'),
-    
+    path('wishlist/toggle/<int:product_id>/', views.toggle_wishlist, name='toggle_wishlist'),
+    path('wishlist/', views.wishlist_view, name='wishlist'),
 
 
 ]
