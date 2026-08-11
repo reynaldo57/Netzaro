@@ -208,18 +208,20 @@
                         <h4 class="class-title">{{ clase.titleClase }}</h4>
                         <p class="class-description">{{ clase.descriptionClase }}</p>
                         
-                        {% if user.is_authenticated %}
-                            {% if clase.id|stringformat:"s" in clases_pagadas %}
-                                <a href="{{ clase.fileClase.url }}" class="download-button" download>Descargar PDF</a>
-                            {% else %}
-                                <form method="POST" action="{% url 'izipay_checkout_clase' clase.id %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="download-button">Pagar $2 por PDF</button>
-                                </form>
-                            {% endif %}
-                        {% else %}
-                            <a href="{% url 'login' %}" class="download-button">Inicia sesión para comprar</a>
-                        {% endif %}
+                        {% if clase.es_preview %}
+    <a href="{{ clase.fileClase.url }}" class="download-button" download>Vista previa</a>
+{% elif user.is_authenticated %}
+    {% if clase.id|stringformat:"s" in clases_pagadas %}
+        <a href="{{ clase.fileClase.url }}" class="download-button" download>Descargar PDF</a>
+    {% else %}
+        <form method="POST" action="{% url 'izipay_checkout_clase' clase.id %}">
+            {% csrf_token %}
+            <button type="submit" class="download-button">Pagar $2 por PDF</button>
+        </form>
+    {% endif %}
+{% else %}
+    <a href="{% url 'login' %}" class="download-button">Inicia sesión para comprar</a>
+{% endif %}
                         
                     </div>
                 {% endfor %}

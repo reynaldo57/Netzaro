@@ -202,15 +202,7 @@ textarea {
                 <p class="error-text">{{ formClase.nivel.errors }}</p>
             </div>
 
-            <div class="form-group">
-                <label>Curso asociado</label>
-                <select name="productClase" class="input-field">
-                    {% for product in products %}
-                        <option value="{{ product.id }}">{{ product.name }}</option>
-                    {% endfor %}
-                </select>
-                <p class="error-text">{{ formClase.productClase.errors }}</p>
-            </div>
+            <input type="hidden" name="productClase" value="{{ productClase.id }}">
 
             <div class="form-row">
                 <div class="form-group half">

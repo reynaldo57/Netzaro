@@ -217,6 +217,12 @@ def category(request,foo):
 def product(request, pk):
     product = get_object_or_404(Product, id=pk)
     comments = Comment.objects.filter(product=product)
+    curriculum = [
+        ('Básico', Clase.objects.filter(productClase=product, nivel='Basico')),
+        ('Intermedio', Clase.objects.filter(productClase=product, nivel='Intermedio')),
+        ('Avanzado', Clase.objects.filter(productClase=product, nivel='Avanzado')),
+    ]
+    instructor_courses_count = Product.objects.filter(user=product.user).count()
 
     # Matrícula (crear)
     if request.method == 'POST' and 'comment_form' in request.POST:
@@ -249,6 +255,8 @@ def product(request, pk):
         'form': form,
         'comments': comments,
         'response_form': response_form,
+        'curriculum': curriculum,
+        'instructor_courses_count': instructor_courses_count,
     })
 
 

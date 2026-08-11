@@ -172,7 +172,48 @@
 
   <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.video.errors }}</p>
 </div>
+<!-- Lo que aprenderás -->
+<div class="form-group" style="margin-bottom: 20px;">
+  <label for="learning_points" style="color: #333; font-weight: 500;"><i class="fas fa-list-check" style="color: #32d113;"></i> Lo que aprenderás</label>
+  <textarea name="learning_points" class="input-field"
+    style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;"
+    rows="4">{{ form.instance.learning_points }}</textarea>
+  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.learning_points.errors }}</p>
+</div>
 
+<!-- Requisitos previos -->
+<div class="form-group" style="margin-bottom: 20px;">
+  <label for="requirements" style="color: #333; font-weight: 500;"><i class="fas fa-clipboard-check" style="color: #d32f2f;"></i> Requisitos previos</label>
+  <textarea name="requirements" class="input-field"
+    style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;"
+    rows="3">{{ form.instance.requirements }}</textarea>
+  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.requirements.errors }}</p>
+</div>
+
+<!-- Dirigido a -->
+<div class="form-group" style="margin-bottom: 20px;">
+  <label for="target_audience" style="color: #333; font-weight: 500;"><i class="fas fa-users" style="color: #32d113;"></i> Dirigido a</label>
+  <textarea name="target_audience" class="input-field"
+    style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;"
+    rows="3">{{ form.instance.target_audience }}</textarea>
+  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.target_audience.errors }}</p>
+</div>
+
+<!-- Idioma y Duración -->
+<div class="general-form-group" style="display: flex; gap: 20px; margin-bottom: 20px;">
+  <div class="form-group" style="flex: 1;">
+    <label for="language" style="color: #333; font-weight: 500;"><i class="fas fa-language" style="color: #d32f2f;"></i> Idioma</label>
+    <input type="text" name="language" class="input-field" value="{{ form.instance.language }}"
+      style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;">
+    <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.language.errors }}</p>
+  </div>
+  <div class="form-group" style="flex: 1;">
+    <label for="duration_minutes" style="color: #333; font-weight: 500;"><i class="fas fa-clock" style="color: #32d113;"></i> Duración total (minutos)</label>
+    <input type="number" name="duration_minutes" class="input-field" min="0" value="{{ form.instance.duration_minutes }}"
+      style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;">
+    <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.duration_minutes.errors }}</p>
+  </div>
+</div>
       </div>
 
       <!-- Botón enviar -->

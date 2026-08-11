@@ -233,6 +233,63 @@
     <h3>{{ product.name }}</h3>
     <p><strong>Por:</strong> {{ product.user.username }}</p>
     <p>{{ product.description }}</p>
+
+
+    <div class="course-meta d-flex flex-wrap gap-3 my-3">
+  <span><i class="bi bi-clock"></i> {{ product.duration_display }}</span>
+  <span><i class="bi bi-play-circle"></i> {{ product.total_lessons }} lecciones</span>
+  <span><i class="bi bi-translate"></i> {{ product.language }}</span>
+  <span><i class="bi bi-people"></i> {{ product.students_count }} estudiantes inscritos</span>
+</div>
+
+<div class="rating-summary mb-3">
+  {% for i in "12345" %}
+    {% if forloop.counter <= product.average_rating_rounded %}★{% else %}☆{% endif %}
+  {% endfor %}
+  <strong>{{ product.average_rating|floatformat:1 }}</strong>
+  <span class="text-muted">({{ product.rating_count }} reseñas </span>
+</div>
+
+{% if product.learning_points_list %}
+<div class="learning-points mb-3">
+  <h5>Lo que aprenderás</h5>
+  <ul class="list-unstyled">
+    {% for point in product.learning_points_list %}
+      <li><i class="bi bi-check2-circle text-success"></i> {{ point }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if product.requirements_list %}
+<div class="requirements mb-3">
+  <h5>Requisitos previos</h5>
+  <ul>
+    {% for r in product.requirements_list %}<li>{{ r }}</li>{% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if product.target_audience_list %}
+<div class="target-audience mb-3">
+  <h5>Dirigido a</h5>
+  <ul>
+    {% for a in product.target_audience_list %}<li>{{ a }}</li>{% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<div class="instructor-card d-flex align-items-center gap-3 mb-3 p-3 border rounded">
+  <img src="{{ product.user.profile.get_profile_picture }}" alt="{{ product.user.username }}"
+       style="width:64px;height:64px;object-fit:cover;border-radius:50%;">
+  <div>
+    <strong>{{ product.user.get_full_name|default:product.user.username }}</strong>
+    <p class="mb-0 text-muted small">{{ product.user.profile.about_me }}</p>
+    <span class="small">{{ instructor_courses_count }} curso{{ instructor_courses_count|pluralize }}</span>
+  </div>
+</div>
+
+
     <p><strong>Método de pago:</strong> {{ product.pay_method }}</p>
 
 {% if product.is_sale and product.sale_price %}
@@ -262,6 +319,45 @@
   </div>
 </div>
 
+
+<div class="curriculum my-4 mx-4">
+  <h4>Contenido del curso</h4>
+  <div class="accordion" id="curriculumAccordion">
+    {% for nivel_nombre, clases in curriculum %}
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#nivel-{{ forloop.counter }}">
+            {{ nivel_nombre }} ({{ clases|length }} clases)
+          </button>
+        </h2>
+        <div id="nivel-{{ forloop.counter }}" class="accordion-collapse collapse"
+             data-bs-parent="#curriculumAccordion">
+          <ul class="list-group list-group-flush">
+            {% for clase in clases %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ clase.titleClase }}
+                {% if clase.es_preview %}
+                  <a href="{{ clase.fileClase.url }}" class="badge bg-success text-decoration-none">
+                    <i class="bi bi-play-fill"></i> Vista previa gratis
+                  </a>
+                {% elif not clase.requiere_pago %}
+                  <span class="badge bg-secondary"><i class="bi bi-unlock"></i> Incluida</span>
+                {% else %}
+                  <span class="badge bg-light text-dark"><i class="bi bi-lock"></i> Bloqueada</span>
+                {% endif %}
+              </li>
+            {% empty %}
+              <li class="list-group-item text-muted">Aún no hay clases en este nivel.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
 <!-- Comentarios -->
 <div class="comments">
   <h2><i class="bi bi-chat-dots-fill"></i> Comentarios</h2>
@@ -280,6 +376,18 @@
   </div>
 
   {% for comment in comments %}
+
+  <div class="card-comment">
+  <h6>{{ comment.name }} <small class="text-muted">• {{ comment.created_date|timesince }} atrás</small></h6>
+  {% if comment.rating %}
+    <div class="text-warning">
+      {% for i in "12345" %}
+        {% if forloop.counter <= comment.rating %}★{% else %}☆{% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+
   <div class="card-comment">
     <h6>{{ comment.name }} <small class="text-muted">• {{ comment.created_date|timesince }} atrás</small></h6>
     <p>{{ comment.text }}</p>

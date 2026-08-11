@@ -121,10 +121,17 @@ from django import forms
 from .models import Comment, CommentResponse
 
 class CommentForm(forms.ModelForm):
-    class Meta:
-        model = Comment
-        fields = ['name', 'email', 'text']
-        widgets = {
+	rating = forms.ChoiceField(
+        choices=[(i, f'{i} ⭐') for i in range(5, 0, -1)],
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=False,
+        label="Calificación"
+		)
+
+	class Meta:
+		model = Comment
+		fields = ['name', 'email', 'rating', 'text']
+		widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tu nombre'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Tu correo'}),
             'text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': '¿Por qué te interesa esta clase?', 'rows': 3}),
@@ -148,22 +155,26 @@ class AddProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = (
-            "name",
-            "category",
-            "image",
-            "description",
-            "pay_method",
-            "price",
-            "video",
-            'is_sale',
-            'sale_price',
+            "name", "category", "image", "description", "pay_method",
+            "price", "video", 'is_sale', 'sale_price',
+            'learning_points', 'requirements', 'target_audience',
+            'duration_minutes',
         )
+        widgets = {
+            'learning_points': forms.Textarea(attrs={
+                'class': 'form-control', 'rows': 4,
+                'placeholder': 'Un punto por línea. Ej:\nDominarás Python desde cero\nCrearás tu primer proyecto real'
+            }),
+            'requirements': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Un requisito por línea'}),
+            'target_audience': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Un público por línea'}),
+            'duration_minutes': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+        }
 
 class AddClaseForm(forms.ModelForm):
     
     class Meta:
         model = Clase
-        fields = ['titleClase','fileClase', 'productClase', 'bannerClase', 'descriptionClase', 'nivel', "productClase"]
+        fields = ['titleClase','fileClase', 'productClase', 'bannerClase', 'descriptionClase', 'nivel', "productClase", "es_preview"]
 
 class TeacherApplicationForm(forms.ModelForm):
     class Meta:

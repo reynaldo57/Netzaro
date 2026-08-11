@@ -84,6 +84,65 @@ class Product(models.Model):
     video = models.FileField(upload_to="video", null=True)
     created_day = models.DateTimeField(default=timezone.now)
 
+    learning_points = models.TextField(
+        blank=True, default='',
+        verbose_name="Lo que aprenderás",
+        help_text="Un punto por línea"
+    )
+    requirements = models.TextField(
+        blank=True, default='',
+        verbose_name="Requisitos previos",
+        help_text="Un requisito por línea"
+    )
+    target_audience = models.TextField(
+        blank=True, default='',
+        verbose_name="Dirigido a",
+        help_text="Un público por línea"
+    )
+    language = models.CharField(
+        max_length=50, blank=True, default='Español',
+        verbose_name="Idioma"
+    )
+    duration_minutes = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Duración total (minutos)"
+    )
+
+    # --- Helpers para la plantilla ---
+    def learning_points_list(self):
+        return [p.strip() for p in self.learning_points.splitlines() if p.strip()]
+
+    def requirements_list(self):
+        return [r.strip() for r in self.requirements.splitlines() if r.strip()]
+
+    def target_audience_list(self):
+        return [a.strip() for a in self.target_audience.splitlines() if a.strip()]
+
+    def total_lessons(self):
+        return self.clases.count()
+
+    def duration_display(self):
+        h, m = divmod(self.duration_minutes, 60)
+        return f"{h}h {m}min" if h else f"{m}min"
+
+    def students_count(self):
+        from payment.models import OrderItem
+        return OrderItem.objects.filter(
+            product=self, order__paid=True
+        ).values('user').distinct().count()
+
+    def average_rating(self):
+        from django.db.models import Avg
+        return self.product_comment.filter(
+            rating__isnull=False
+        ).aggregate(avg=Avg('rating'))['avg'] or 0
+
+    def average_rating_rounded(self):
+        return round(self.average_rating())
+
+    def rating_count(self):
+        return self.product_comment.filter(rating__isnull=False).count()
+
 
     def __str__(self):
         return self.name
@@ -125,6 +184,11 @@ class Comment(models.Model):
     time_final = models.DateTimeField(null=True)  # Nuevo campo 'time_final'
     topic = models.CharField(max_length=200, null=True)  # Nuevo campo 'topic'
     created_date = models.DateTimeField(auto_now_add=True)
+    rating = models.PositiveSmallIntegerField(
+        null=True, blank=True,
+        choices=[(i, str(i)) for i in range(1, 6)],
+        verbose_name="Calificación"
+    )
 
     class Meta:
         ordering = ['-created_date']  # 🔥 Esto asegura el orden DESC en toda la app
@@ -170,6 +234,11 @@ class Clase(models.Model):
         related_name='clases_pagadas', 
         blank=True,
         help_text="Usuarios que han pagado por esta clase"
+    )
+    es_preview = models.BooleanField(
+        default=False,
+        verbose_name="Vista previa gratuita",
+        help_text="Si está marcado, cualquier visitante puede verla sin comprar"
     )
 
     def __str__(self) -> str:

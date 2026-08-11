@@ -162,6 +162,41 @@
 
       </div>
 
+      <!-- Lo que aprenderás -->
+<div class="form-group" style="margin-bottom: 20px;">
+  <label for="learning_points" style="color: #333; font-weight: 500;"><i class="fas fa-list-check" style="color: #32d113;"></i> Lo que aprenderás</label>
+  <textarea name="learning_points" class="input-field"
+    style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;"
+    rows="4" placeholder="Un punto por línea. Ej:&#10;Dominarás Python desde cero&#10;Crearás tu primer proyecto real"></textarea>
+  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.learning_points.errors }}</p>
+</div>
+
+<!-- Requisitos previos -->
+<div class="form-group" style="margin-bottom: 20px;">
+  <label for="requirements" style="color: #333; font-weight: 500;"><i class="fas fa-clipboard-check" style="color: #d32f2f;"></i> Requisitos previos</label>
+  <textarea name="requirements" class="input-field"
+    style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;"
+    rows="3" placeholder="Un requisito por línea"></textarea>
+  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.requirements.errors }}</p>
+</div>
+
+<!-- Dirigido a -->
+<div class="form-group" style="margin-bottom: 20px;">
+  <label for="target_audience" style="color: #333; font-weight: 500;"><i class="fas fa-users" style="color: #32d113;"></i> Dirigido a</label>
+  <textarea name="target_audience" class="input-field"
+    style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;"
+    rows="3" placeholder="Un público por línea"></textarea>
+  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.target_audience.errors }}</p>
+</div>
+
+<!-- Duración -->
+<div class="form-group" style="margin-bottom: 20px;">
+  <label for="duration_minutes" style="color: #333; font-weight: 500;"><i class="fas fa-clock" style="color: #32d113;"></i> Duración total (minutos)</label>
+  <input type="number" name="duration_minutes" class="input-field" min="0" value="0"
+    style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;">
+  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.duration_minutes.errors }}</p>
+</div>
+
       <!-- Botón enviar -->
       <input type="submit" value="Submit Course" 
         class="submit-btn" 
