@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPassw
 from django import forms
 from .models import Profile, Product, Clase
 from django.db import models
-from .models import Profile, Product, Clase, TeacherApplication
+from .models import Profile, Product, Clase, Modulo, TeacherApplication
 
 class UserInfoForm(forms.ModelForm):
 	phone = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Phone'}), required=False)
@@ -174,7 +174,15 @@ class AddClaseForm(forms.ModelForm):
     
     class Meta:
         model = Clase
-        fields = ['titleClase','fileClase', 'productClase', 'bannerClase', 'descriptionClase', 'nivel', "productClase", "es_preview"]
+        fields = ['titleClase','fileClase', 'bannerClase', 'descriptionClase', 'nivel', "productClase", "modulo", "es_preview", "materialClase"]
+
+    def __init__(self, *args, **kwargs):
+        product = kwargs.pop('product', None)
+        super().__init__(*args, **kwargs)
+        if product:
+            self.fields['modulo'].queryset = Modulo.objects.filter(product=product)
+        else:
+            self.fields['modulo'].queryset = Modulo.objects.none()
 
 class TeacherApplicationForm(forms.ModelForm):
     class Meta:
@@ -187,4 +195,13 @@ class TeacherApplicationForm(forms.ModelForm):
             'experience_years': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
             'certificate': forms.FileInput(attrs={'class': 'form-control'}),
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Cuéntanos tu experiencia enseñando'}),
+        }
+
+class ModuloForm(forms.ModelForm):
+    class Meta:
+        model = Modulo
+        fields = ['titulo', 'orden']
+        widgets = {
+            'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Introducción'}),
+            'orden': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
         }

@@ -27,5 +27,10 @@ urlpatterns = [
     path('wishlist/toggle/<int:product_id>/', views.toggle_wishlist, name='toggle_wishlist'),
     path('wishlist/', views.wishlist_view, name='wishlist'),
 
+    path('clase/<int:clase_id>/', views.ver_clase, name='ver_clase'),
+    path('clase/<int:clase_id>/completar/', views.toggle_leccion_completada, name='toggle_leccion_completada'),
+    path('product/<int:product_id>/continuar/', views.continuar_curso, name='continuar_curso'),
+    path('product/<int:product_id>/add_modulo/', views.add_modulo, name='add_modulo'),
 
+    
 ]

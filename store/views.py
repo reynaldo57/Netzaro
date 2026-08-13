@@ -14,6 +14,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Count
+from .models import Product, Category, Profile, Comment, CommentResponse, Clase, Wishlist, Modulo, Progreso, LeccionCompletada
+import os
+from django.conf import settings
+from django.http import HttpResponse
+from .forms import ModuloForm  # agrégalo al import existente de forms
 
 def search(request):
     query = request.GET.get('q', '').strip()
@@ -218,9 +223,8 @@ def product(request, pk):
     product = get_object_or_404(Product, id=pk)
     comments = Comment.objects.filter(product=product)
     curriculum = [
-        ('Básico', Clase.objects.filter(productClase=product, nivel='Basico')),
-        ('Intermedio', Clase.objects.filter(productClase=product, nivel='Intermedio')),
-        ('Avanzado', Clase.objects.filter(productClase=product, nivel='Avanzado')),
+    ('Versión gratuita', Clase.objects.filter(productClase=product, nivel='Gratis')), 
+    ('Versión de pago', Clase.objects.filter(productClase=product, nivel='Pago')),
     ]
     instructor_courses_count = Product.objects.filter(user=product.user).count()
 
@@ -451,10 +455,10 @@ def add_clase(request):
         return redirect('index')
 
     # Asegúrate de pasar el `productClase` al formulario en la inicialización
-    formClase = AddClaseForm(initial={'productClase': productClase})
+    formClase = AddClaseForm(initial={'productClase': productClase}, product=productClase)
 
     if request.method == "POST":
-        formClase = AddClaseForm(request.POST, request.FILES)
+        formClase = AddClaseForm(request.POST, request.FILES, product=productClase)
         if formClase.is_valid():
             clase = formClase.save(commit=False)
             clase.user = request.user  # Asignar usuario
@@ -471,6 +475,7 @@ def add_clase(request):
         "formClase": formClase,
         "productClase": productClase,
         "products": products,
+        "modulos": Modulo.objects.filter(product=productClase),
     }
     return render(request, 'add_clase.html', context)
 
@@ -480,9 +485,8 @@ def add_clase(request):
 def product_detail_view(request, id):
     product = get_object_or_404(Product, id=id)
 
-    clases_basico = Clase.objects.filter(productClase=product, nivel="Basico")
-    clases_intermedio = Clase.objects.filter(productClase=product, nivel="Intermedio")
-    clases_avanzado = Clase.objects.filter(productClase=product, nivel="Avanzado")
+    clases_gratis = Clase.objects.filter(productClase=product, nivel="Gratis")
+    clases_pago   = Clase.objects.filter(productClase=product, nivel="Pago")
 
     recommended_products = Product.objects.filter(
         category=product.category
@@ -506,9 +510,8 @@ def product_detail_view(request, id):
         in_wishlist = Wishlist.objects.filter(user=request.user, product=product).exists()
     context = {
         "product": product,
-        "clases_basico": clases_basico,
-        "clases_intermedio": clases_intermedio,
-        "clases_avanzado": clases_avanzado,
+        "clases_gratis": clases_gratis,
+        "clases_pago": clases_pago,
         "clases_pagadas": clases_pagadas,
         "recommended_products": recommended_products,
         "in_wishlist": in_wishlist,
@@ -531,3 +534,94 @@ def toggle_wishlist(request, product_id):
 def wishlist_view(request):
     items = Wishlist.objects.filter(user=request.user).select_related('product')
     return render(request, 'wishlist.html', {'items': items})
+
+@login_required(login_url='login')
+def ver_clase(request, clase_id):
+    clase = get_object_or_404(Clase, id=clase_id)
+    product = clase.productClase
+
+    if not clase.acceso_permitido(request.user):
+        messages.error(request, "No tienes acceso a esta clase todavía.")
+        return redirect('product_detail', id=product.id)
+
+    # Guarda/actualiza el punto de avance ("continuar donde lo dejaste")
+    Progreso.objects.update_or_create(
+        user=request.user, product=product, defaults={'clase': clase}
+    )
+
+    modulos = Modulo.objects.filter(product=product).prefetch_related('clases')
+    sin_modulo = Clase.objects.filter(productClase=product, modulo__isnull=True)
+
+    completadas_ids = set(
+        LeccionCompletada.objects.filter(user=request.user, clase__productClase=product)
+        .values_list('clase_id', flat=True)
+    )
+
+    todas_las_clases = list(Clase.objects.filter(productClase=product).order_by('modulo__orden', 'id'))
+    idx = todas_las_clases.index(clase)
+    anterior = todas_las_clases[idx - 1] if idx > 0 else None
+    siguiente = todas_las_clases[idx + 1] if idx < len(todas_las_clases) - 1 else None
+
+    context = {
+        "product": product,
+        "clase": clase,
+        "modulos": modulos,
+        "sin_modulo": sin_modulo,
+        "completadas_ids": completadas_ids,
+        "es_completada": clase.id in completadas_ids,
+        "anterior": anterior,
+        "siguiente": siguiente,
+        "porcentaje": product.porcentaje_completado(request.user),
+    }
+    return render(request, 'ver_clase.html', context)
+
+
+@login_required(login_url='login')
+def toggle_leccion_completada(request, clase_id):
+    clase = get_object_or_404(Clase, id=clase_id)
+    obj, created = LeccionCompletada.objects.get_or_create(user=request.user, clase=clase)
+    if not created:
+        obj.delete()
+        messages.success(request, "Lección desmarcada")
+    else:
+        messages.success(request, "¡Lección completada!")
+    return redirect('ver_clase', clase_id=clase.id)
+
+
+@login_required(login_url='login')
+def continuar_curso(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    progreso = Progreso.objects.filter(user=request.user, product=product).first()
+    if progreso:
+        return redirect('ver_clase', clase_id=progreso.clase.id)
+
+    primera = Clase.objects.filter(productClase=product).order_by('modulo__orden', 'id').first()
+    if primera:
+        return redirect('ver_clase', clase_id=primera.id)
+
+    messages.info(request, "Este curso todavía no tiene clases.")
+    return redirect('product_detail', id=product.id)
+
+def service_worker(request):
+    sw_path = os.path.join(settings.BASE_DIR, 'static', 'js', 'sw.js')
+    with open(sw_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    return HttpResponse(content, content_type='application/javascript')
+
+@login_required(login_url='login')
+def add_modulo(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if product.user != request.user:
+        messages.error(request, "No tienes permiso para agregar módulos a este curso.")
+        return redirect('index')
+
+    form = ModuloForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        modulo = form.save(commit=False)
+        modulo.product = product
+        modulo.save()
+        messages.success(request, "Módulo agregado")
+        return redirect('add_modulo', product_id=product.id)
+
+    modulos = Modulo.objects.filter(product=product)
+    return render(request, 'add_modulo.html', {'form': form, 'product': product, 'modulos': modulos})

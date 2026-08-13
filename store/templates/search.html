@@ -191,9 +191,8 @@
   <form method="GET" action="{% url 'search' %}" class="search-form">
     <select name="nivel">
   <option value="">Todos los niveles</option>
-  <option value="Basico" {% if selected_nivel == "Basico" %}selected{% endif %}>Básico</option>
-  <option value="Intermedio" {% if selected_nivel == "Intermedio" %}selected{% endif %}>Intermedio</option>
-  <option value="Avanzado" {% if selected_nivel == "Avanzado" %}selected{% endif %}>Avanzado</option>
+  <option value="Gratis" {% if selected_nivel == "Gratis" %}selected{% endif %}>Versión gratuita</option>
+  <option value="Pago" {% if selected_nivel == "Pago" %}selected{% endif %}>Versión de pago</option>
 </select>
 
 <input type="number" name="price_min" value="{{ price_min }}" placeholder="Precio mín." min="0" step="0.01" style="width:110px;">

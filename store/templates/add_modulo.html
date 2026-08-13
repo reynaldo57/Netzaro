@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Módulos de "{{ product.name }}"</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Agregar módulo</button>
+  </form>
+
+  <hr>
+  <ul>
+    {% for m in modulos %}
+      <li>{{ m.orden }}. {{ m.titulo }} ({{ m.total_clases }} clases)</li>
+    {% empty %}
+      <li>Todavía no hay módulos.</li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'add_clase' %}?productClase={{ product.id }}" class="btn btn-outline-secondary">Ir a agregar clases →</a>
+</div>
+{% endblock %}

@@ -526,6 +526,26 @@ def izipay_checkout(request, order_id):
     print(token)
     return render(request, 'checkout_izipay.html', {'token': token, 'publickey': keys['PUBLIC_KEY']})
 
+
+@login_required
+def comprar_curso_izipay(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    price = product.sale_price if product.is_sale else product.price
+
+    order = Order.objects.create(
+        user=request.user,
+        full_name=request.user.get_full_name() or request.user.username,
+        email=request.user.email,
+        shipping_address="",
+        amount_paid=price,
+    )
+    OrderItem.objects.create(
+        order=order, product=product, user=request.user, quantity=1, price=price,
+    )
+    return izipay_checkout(request, order.id)
+
+
+
 @csrf_exempt
 def izipay_result(request):
     if not request.POST: 

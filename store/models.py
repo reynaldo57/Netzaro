@@ -152,6 +152,17 @@ class Product(models.Model):
             return
         for clase in self.clases.all():
             clase.marcar_como_pagada(user)
+
+    def porcentaje_completado(self, user):
+            if not user.is_authenticated:
+                return 0
+            total = self.total_lessons()
+            if total == 0:
+                return 0
+            completadas = LeccionCompletada.objects.filter(
+                user=user, clase__productClase=self
+            ).count()
+            return round((completadas / total) * 100)
     
 class Order(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -219,12 +230,17 @@ class Clase(models.Model):
     fileClase = models.FileField(upload_to='files', verbose_name="Archivo")
     bannerClase = models.ImageField(upload_to='clase_banners')
     descriptionClase = models.CharField(max_length=450)
+    materialClase = models.FileField(
+    upload_to='materiales',
+    null=True, blank=True,
+    verbose_name="Material descargable (opcional)"
+)
     
-    nivel = models.CharField(  # 🔥 Campo para Nivel
-        max_length=20,
-        choices=[("Basico", "Básico"), ("Intermedio", "Intermedio"), ("Avanzado", "Avanzado")],
-        default="Basico"
-    )
+    nivel = models.CharField(
+    max_length=20,
+    choices=[("Gratis", "Versión gratuita"), ("Pago", "Versión de pago")],
+    default="Gratis"
+)
 
     class_date = models.DateField(auto_now_add=True)
 
@@ -239,6 +255,11 @@ class Clase(models.Model):
         default=False,
         verbose_name="Vista previa gratuita",
         help_text="Si está marcado, cualquier visitante puede verla sin comprar"
+    )
+
+    modulo = models.ForeignKey(
+        'Modulo', related_name='clases', on_delete=models.SET_NULL,
+        null=True, blank=True
     )
 
     def __str__(self) -> str:
@@ -264,8 +285,32 @@ class Clase(models.Model):
     
     # 🔥 Método para saber si requiere pago
     def requiere_pago(self):
-        """Solo las clases avanzadas requieren pago"""
-        return self.nivel == "Avanzado"
+        """Solo las clases de pago requieren pago"""
+        return self.nivel == "Pago"
+    
+
+    def extension(self):
+        return self.fileClase.name.split('.')[-1].lower() if self.fileClase else ''
+
+    def tipo_contenido(self):
+        ext = self.extension()
+        if ext in ('mp4', 'webm', 'ogg', 'mov'):
+            return 'video'
+        if ext == 'pdf':
+            return 'pdf'
+        if ext in ('jpg', 'jpeg', 'png', 'gif', 'webp'):
+            return 'imagen'
+        if ext in ('ppt', 'pptx', 'key', 'odp'):
+            return 'slides'
+        return 'otro'
+
+    def acceso_permitido(self, user):
+        """Reutiliza tu lógica actual de pago/preview para decidir si se puede reproducir."""
+        if self.es_preview:
+            return True
+        if user.is_authenticated and self.usuario_ha_pagado(user):
+            return True
+        return not self.requiere_pago()
 
 
 class TeacherApplication(models.Model):
@@ -295,3 +340,48 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f'{self.user.username} - {self.product.name}'
+
+
+class Modulo(models.Model):
+    product = models.ForeignKey(Product, related_name='modulos', on_delete=models.CASCADE)
+    titulo = models.CharField(max_length=150)
+    orden = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['orden', 'id']
+
+    def __str__(self):
+        return f"{self.product.name} - {self.titulo}"
+
+    def total_clases(self):
+        return self.clases.count()
+
+
+# --- Progreso: "continuar donde lo dejaste" ---
+class Progreso(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='progresos')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='progresos')
+    clase = models.ForeignKey('Clase', on_delete=models.CASCADE)
+    actualizado = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+    def __str__(self):
+        return f"{self.user.username} -> {self.clase.titleClase}"
+
+
+# --- Lecciones completadas: checklist de avance ---
+class LeccionCompletada(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lecciones_completadas')
+    clase = models.ForeignKey('Clase', on_delete=models.CASCADE, related_name='completada_por')
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'clase')
+
+    def __str__(self):
+        return f"{self.user.username} completó {self.clase.titleClase}"
+
+
+    

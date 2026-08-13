@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from . import settings
 from django.conf.urls.static import static
+from store import views as store_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('sw.js', store_views.service_worker, name='service_worker'),
     path('', include('store.urls')),
     path('cart/', include('cart.urls')),
     path('payment/', include('payment.urls'))

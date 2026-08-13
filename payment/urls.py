@@ -19,4 +19,5 @@ urlpatterns = [
 
     path('izipay/checkout/<int:clase_id>/', views.izipay_checkout_clase, name='izipay_checkout_clase'),
     path('izipay/result/', views.izipay_result_clase, name='izipay_result_clase'),
+    path('comprar_curso/<int:product_id>/', views.comprar_curso_izipay, name='comprar_curso_izipay'),
 ]
