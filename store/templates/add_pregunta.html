@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Preguntas de "{{ quiz.titulo }}"</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <h5>Opciones (marca la(s) correcta(s))</h5>
+    {{ formset.management_form }}
+    {% for opcion_form in formset %}
+      <div class="d-flex align-items-center gap-2 mb-2">
+        {{ opcion_form.texto }}
+        <label class="form-check-label">
+          {{ opcion_form.es_correcta }} Correcta
+        </label>
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Agregar pregunta</button>
+  </form>
+
+  <hr>
+   <ol class="list-group list-group-numbered">
+    {% for pregunta in preguntas %}
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div>
+          {{ pregunta.texto }}
+          <ul>
+            {% for opcion in pregunta.opciones.all %}
+              <li>{{ opcion.texto }} {% if opcion.es_correcta %}✔{% endif %}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <form method="POST" action="{% url 'eliminar_pregunta' pregunta.id %}"
+              onsubmit="return confirm('¿Eliminar esta pregunta?');">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+        </form>
+      </li>
+    {% empty %}
+      <li class="list-group-item">Todavía no hay preguntas.</li>
+    {% endfor %}
+  </ol>
+  
+  <a href="{% url 'add_quiz' quiz.product.id %}" class="btn btn-outline-secondary">← Volver a evaluaciones</a>
+</div>
+{% endblock %}

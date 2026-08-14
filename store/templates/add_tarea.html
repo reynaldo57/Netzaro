@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Tareas de "{{ product.name }}"</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Agregar tarea</button>
+  </form>
+
+  <hr>
+   <ul class="list-group">
+    {% for tarea in tareas %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>{{ tarea.titulo }} {% if tarea.fecha_limite %}(vence: {{ tarea.fecha_limite }}){% endif %}</span>
+        <form method="POST" action="{% url 'eliminar_tarea' tarea.id %}"
+              onsubmit="return confirm('¿Eliminar esta tarea? Se perderán las entregas de los estudiantes.');">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+        </form>
+      </li>
+    {% empty %}
+      <li class="list-group-item">Todavía no hay tareas.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

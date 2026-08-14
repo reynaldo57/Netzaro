@@ -105,6 +105,28 @@
         </div>
       </div>
     {% endif %}
+{% if quizzes or tareas %}
+      <div class="accordion-modulo">
+        <div class="accordion-header" onclick="this.nextElementSibling.classList.toggle('open')">
+          Evaluaciones y tareas
+        </div>
+        <div class="accordion-body open">
+          {% for quiz in quizzes %}
+            <a href="{% url 'tomar_quiz' quiz.id %}" class="leccion-item">📝 {{ quiz.titulo }}</a>
+          {% endfor %}
+          {% for tarea in tareas %}
+            <a href="{% url 'entregar_tarea' tarea.id %}" class="leccion-item">📤 {{ tarea.titulo }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if certificado_disponible %}
+      <div class="p-3">
+        <a href="{% url 'generar_certificado' product.id %}" class="btn btn-success w-100">🎓 Obtener certificado</a>
+      </div>
+    {% endif %}
+
   </div>
 </div>
 

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5 text-center">
+  <h2>Resultado: {{ intento.quiz.titulo }}</h2>
+  <p class="display-4 {% if intento.aprobado %}text-success{% else %}text-danger{% endif %}">{{ intento.puntaje }}%</p>
+  {% if intento.aprobado %}
+    <p class="text-success">¡Aprobaste la evaluación!</p>
+  {% else %}
+    <p class="text-danger">No alcanzaste la nota mínima ({{ intento.quiz.nota_minima_aprobatoria }}%). Puedes volver a intentarlo.</p>
+    <a href="{% url 'tomar_quiz' intento.quiz.id %}" class="btn btn-outline-danger">Reintentar</a>
+  {% endif %}
+  <div class="mt-3">
+    <a href="{% url 'continuar_curso' intento.quiz.product.id %}" class="btn btn-link">Volver al curso</a>
+  </div>
+</div>
+{% endblock %}

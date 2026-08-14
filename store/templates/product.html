@@ -303,8 +303,10 @@
 
     
     <div class="btn-group-custom">
-      {% if user.is_superuser %}
+      {% if product.user == user %}
       <a href="{% url 'add_clase' %}?productClase={{ product.id }}" class="btn-custom btn-custom-outline"><i class="bi bi-plus-circle"></i>Agregar Clase</a>
+      <a href="{% url 'add_quiz' product.id %}" class="btn-custom btn-custom-outline"><i class="bi bi-patch-question"></i>Evaluaciones</a>
+      <a href="{% url 'add_tarea' product.id %}" class="btn-custom btn-custom-outline"><i class="bi bi-clipboard-check"></i>Tareas</a>
       {% endif %}
       <a href="{% url 'product_detail' product.id %}" class="btn-custom btn-custom-danger"><i class="bi bi-download"></i> Descargar las clases</a>
     </div>

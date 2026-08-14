@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+  <h2>Entregas — {{ product.name }}</h2>
+  <table class="table align-middle">
+    <thead>
+      <tr><th>Estudiante</th><th>Tarea</th><th>Archivo</th><th>Comentario</th><th>Estado</th><th>Feedback</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for entrega in entregas %}
+      <tr>
+        <td>{{ entrega.user.username }}</td>
+        <td>{{ entrega.tarea.titulo }}</td>
+        <td>{% if entrega.archivo %}<a href="{{ entrega.archivo.url }}" target="_blank">Ver archivo</a>{% endif %}</td>
+        <td>{{ entrega.comentario }}</td>
+        <form method="POST" action="{% url 'calificar_entrega' entrega.id %}" class="d-flex">
+        {% csrf_token %}
+        <td>
+            <select name="estado" class="form-select form-select-sm">
+              <option value="pendiente" {% if entrega.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+              <option value="aprobada" {% if entrega.estado == 'aprobada' %}selected{% endif %}>Aprobada</option>
+              <option value="rechazada" {% if entrega.estado == 'rechazada' %}selected{% endif %}>Necesita cambios</option>
+            </select>
+        </td>
+        <td>
+            <input type="text" name="feedback_docente" class="form-control form-control-sm" value="{{ entrega.feedback_docente }}" placeholder="Feedback">
+        </td>
+        <td>
+            <button type="submit" class="btn btn-sm btn-outline-success">Guardar</button>
+        </td>
+        </form>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7">Todavía no hay entregas.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

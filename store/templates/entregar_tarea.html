@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4" style="max-width:700px;">
+  <h2>{{ tarea.titulo }}</h2>
+  <p>{{ tarea.descripcion|linebreaks }}</p>
+  {% if tarea.fecha_limite %}<p class="text-muted">Fecha límite: {{ tarea.fecha_limite }}</p>{% endif %}
+
+  {% if entrega %}
+    <div class="alert {% if entrega.estado == 'aprobada' %}alert-success{% elif entrega.estado == 'rechazada' %}alert-danger{% else %}alert-warning{% endif %}">
+      Estado actual: {{ entrega.get_estado_display }}
+      {% if entrega.feedback_docente %}<br><strong>Feedback:</strong> {{ entrega.feedback_docente }}{% endif %}
+    </div>
+  {% endif %}
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-custom-danger">
+      {% if entrega %}Volver a entregar{% else %}Entregar tarea{% endif %}
+    </button>
+  </form>
+</div>
+{% endblock %}

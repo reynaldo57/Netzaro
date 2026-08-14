@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPassw
 from django import forms
 from .models import Profile, Product, Clase
 from django.db import models
-from .models import Profile, Product, Clase, Modulo, TeacherApplication
+from .models import Profile, Product, Clase, Modulo, TeacherApplication, EntregaTarea, Quiz, Pregunta, Opcion, Tarea
 
 class UserInfoForm(forms.ModelForm):
 	phone = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Phone'}), required=False)
@@ -204,4 +204,63 @@ class ModuloForm(forms.ModelForm):
         widgets = {
             'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Introducción'}),
             'orden': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+        }
+
+class EntregaTareaForm(forms.ModelForm):
+    class Meta:
+        model = EntregaTarea
+        fields = ('archivo', 'comentario')
+        widgets = {
+            'archivo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'comentario': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Comentario (opcional)'}),
+        }
+
+
+class RevisionEntregaForm(forms.ModelForm):
+    class Meta:
+        model = EntregaTarea
+        fields = ('estado', 'feedback_docente')
+        widgets = {
+            'estado': forms.Select(attrs={'class': 'form-select'}),
+            'feedback_docente': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+
+
+class QuizForm(forms.ModelForm):
+    class Meta:
+        model = Quiz
+        fields = ('titulo', 'nota_minima_aprobatoria')
+        widgets = {
+            'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título del quiz'}),
+            'nota_minima_aprobatoria': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 100}),
+        }
+
+
+class PreguntaForm(forms.ModelForm):
+    class Meta:
+        model = Pregunta
+        fields = ('texto', 'orden')
+        widgets = {
+            'texto': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enunciado de la pregunta'}),
+            'orden': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+        }
+
+
+OpcionFormSet = forms.inlineformset_factory(
+    Pregunta, Opcion, fields=('texto', 'es_correcta'), extra=4, min_num=2, validate_min=True,
+    widgets={
+        'texto': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Opción de respuesta'}),
+        'es_correcta': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+    }
+)
+
+
+class TareaForm(forms.ModelForm):
+    class Meta:
+        model = Tarea
+        fields = ('titulo', 'descripcion', 'fecha_limite')
+        widgets = {
+            'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título de la tarea'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'fecha_limite': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }

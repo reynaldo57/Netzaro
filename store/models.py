@@ -163,6 +163,24 @@ class Product(models.Model):
                 user=user, clase__productClase=self
             ).count()
             return round((completadas / total) * 100)
+
+    def usuario_matriculado(self, user):
+        if not user.is_authenticated:
+            return False
+        from payment.models import OrderItem
+        return OrderItem.objects.filter(
+            product=self, order__user=user, order__paid=True
+        ).exists()
+
+    def certificado_disponible(self, user):
+        if not user.is_authenticated:
+            return False
+        if self.porcentaje_completado(user) < 100:
+            return False
+        for quiz in self.quizzes.all():
+            if not quiz.intentos.filter(user=user, aprobado=True).exists():
+                return False
+        return True
     
 class Order(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -384,4 +402,106 @@ class LeccionCompletada(models.Model):
         return f"{self.user.username} completó {self.clase.titleClase}"
 
 
-    
+
+
+# --- Quizzes / exámenes con calificación ---
+class Quiz(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='quizzes')
+    titulo = models.CharField(max_length=200)
+    nota_minima_aprobatoria = models.PositiveSmallIntegerField(
+        default=60, verbose_name="Nota mínima para aprobar (%)"
+    )
+
+    def __str__(self):
+        return f"{self.titulo} ({self.product.name})"
+
+    def total_preguntas(self):
+        return self.preguntas.count()
+
+
+class Pregunta(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='preguntas')
+    texto = models.CharField(max_length=500)
+    orden = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['orden', 'id']
+
+    def __str__(self):
+        return self.texto
+
+
+class Opcion(models.Model):
+    pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE, related_name='opciones')
+    texto = models.CharField(max_length=300)
+    es_correcta = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.texto
+
+
+class IntentoQuiz(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='intentos_quiz')
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='intentos')
+    puntaje = models.PositiveSmallIntegerField(default=0, verbose_name="Puntaje (%)")
+    aprobado = models.BooleanField(default=False)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-fecha']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.quiz.titulo} ({self.puntaje}%)"
+
+
+# --- Tareas / ejercicios entregables ---
+class Tarea(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='tareas')
+    titulo = models.CharField(max_length=200)
+    descripcion = models.TextField(blank=True, default='')
+    fecha_limite = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.titulo} ({self.product.name})"
+
+
+class EntregaTarea(models.Model):
+    ESTADO_CHOICES = [
+        ('pendiente', 'Pendiente de revisión'),
+        ('aprobada', 'Aprobada'),
+        ('rechazada', 'Necesita cambios'),
+    ]
+    tarea = models.ForeignKey(Tarea, on_delete=models.CASCADE, related_name='entregas')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='entregas_tarea')
+    archivo = models.FileField(upload_to='entregas_tareas', null=True, blank=True)
+    comentario = models.TextField(blank=True, default='', verbose_name="Comentario del estudiante")
+    estado = models.CharField(max_length=10, choices=ESTADO_CHOICES, default='pendiente')
+    feedback_docente = models.TextField(blank=True, default='', verbose_name="Retroalimentación del docente")
+    fecha_entrega = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('tarea', 'user')
+        ordering = ['-fecha_entrega']
+
+    def __str__(self):
+        return f"{self.user.username} -> {self.tarea.titulo}"
+
+
+# --- Certificado de finalización ---
+class Certificado(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='certificados')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='certificados')
+    codigo = models.CharField(max_length=40, unique=True, editable=False)
+    fecha_emision = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+    def save(self, *args, **kwargs):
+        if not self.codigo:
+            import uuid
+            self.codigo = uuid.uuid4().hex[:12].upper()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Certificado {self.codigo} - {self.user.username} - {self.product.name}"

@@ -31,6 +31,17 @@ urlpatterns = [
     path('clase/<int:clase_id>/completar/', views.toggle_leccion_completada, name='toggle_leccion_completada'),
     path('product/<int:product_id>/continuar/', views.continuar_curso, name='continuar_curso'),
     path('product/<int:product_id>/add_modulo/', views.add_modulo, name='add_modulo'),
-
-    
+    path('quiz/<int:quiz_id>/', views.tomar_quiz, name='tomar_quiz'),
+    path('quiz/resultado/<int:intento_id>/', views.resultado_quiz, name='resultado_quiz'),
+    path('tarea/<int:tarea_id>/', views.entregar_tarea, name='entregar_tarea'),
+    path('product/<int:product_id>/entregas/', views.revisar_entregas, name='revisar_entregas'),
+    path('entrega/<int:entrega_id>/calificar/', views.calificar_entrega, name='calificar_entrega'),
+    path('product/<int:product_id>/certificado/', views.generar_certificado, name='generar_certificado'),
+    path('certificado/verificar/<str:codigo>/', views.verificar_certificado, name='verificar_certificado'),
+    path('product/<int:product_id>/add_quiz/', views.add_quiz, name='add_quiz'),
+    path('quiz/<int:quiz_id>/add_pregunta/', views.add_pregunta, name='add_pregunta'),
+    path('product/<int:product_id>/add_tarea/', views.add_tarea, name='add_tarea'),
+    path('quiz/<int:quiz_id>/eliminar/', views.eliminar_quiz, name='eliminar_quiz'),
+    path('pregunta/<int:pregunta_id>/eliminar/', views.eliminar_pregunta, name='eliminar_pregunta'),
+    path('tarea/<int:tarea_id>/eliminar/', views.eliminar_tarea, name='eliminar_tarea'),
 ]

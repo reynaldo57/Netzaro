@@ -14,11 +14,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Count
-from .models import Product, Category, Profile, Comment, CommentResponse, Clase, Wishlist, Modulo, Progreso, LeccionCompletada
+from .models import (Product, Category, Profile, Comment, CommentResponse, Clase, Wishlist, Modulo, Progreso, LeccionCompletada, Quiz, Pregunta, IntentoQuiz, Tarea, EntregaTarea, Certificado)
 import os
 from django.conf import settings
 from django.http import HttpResponse
-from .forms import ModuloForm  # agrégalo al import existente de forms
+from .forms import ModuloForm, EntregaTareaForm, RevisionEntregaForm, QuizForm, PreguntaForm, OpcionFormSet, TareaForm
 
 def search(request):
     query = request.GET.get('q', '').strip()
@@ -572,6 +572,9 @@ def ver_clase(request, clase_id):
         "anterior": anterior,
         "siguiente": siguiente,
         "porcentaje": product.porcentaje_completado(request.user),
+        "quizzes": product.quizzes.all(),
+        "tareas": product.tareas.all(),
+        "certificado_disponible": product.certificado_disponible(request.user),
     }
     return render(request, 'ver_clase.html', context)
 
@@ -625,3 +628,216 @@ def add_modulo(request, product_id):
 
     modulos = Modulo.objects.filter(product=product)
     return render(request, 'add_modulo.html', {'form': form, 'product': product, 'modulos': modulos})
+
+@login_required(login_url='login')
+def tomar_quiz(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    product = quiz.product
+
+    if not product.usuario_matriculado(request.user):
+        messages.error(request, "Debes comprar el curso para rendir esta evaluación.")
+        return redirect('product_detail', id=product.id)
+
+    preguntas = quiz.preguntas.prefetch_related('opciones')
+
+    if request.method == 'POST':
+        total = preguntas.count()
+        correctas = 0
+        for pregunta in preguntas:
+            opcion_id = request.POST.get(f'pregunta_{pregunta.id}')
+            if opcion_id and pregunta.opciones.filter(id=opcion_id, es_correcta=True).exists():
+                correctas += 1
+        puntaje = round((correctas / total) * 100) if total else 0
+        intento = IntentoQuiz.objects.create(
+            user=request.user, quiz=quiz, puntaje=puntaje,
+            aprobado=puntaje >= quiz.nota_minima_aprobatoria
+        )
+        return redirect('resultado_quiz', intento_id=intento.id)
+
+    return render(request, 'tomar_quiz.html', {'quiz': quiz, 'preguntas': preguntas, 'product': product})
+
+
+@login_required(login_url='login')
+def resultado_quiz(request, intento_id):
+    intento = get_object_or_404(IntentoQuiz, id=intento_id, user=request.user)
+    return render(request, 'resultado_quiz.html', {'intento': intento})
+
+
+@login_required(login_url='login')
+def entregar_tarea(request, tarea_id):
+    tarea = get_object_or_404(Tarea, id=tarea_id)
+    product = tarea.product
+
+    if not product.usuario_matriculado(request.user):
+        messages.error(request, "Debes comprar el curso para entregar esta tarea.")
+        return redirect('product_detail', id=product.id)
+
+    entrega = EntregaTarea.objects.filter(tarea=tarea, user=request.user).first()
+
+    if request.method == 'POST':
+        form = EntregaTareaForm(request.POST, request.FILES, instance=entrega)
+        if form.is_valid():
+            nueva_entrega = form.save(commit=False)
+            nueva_entrega.tarea = tarea
+            nueva_entrega.user = request.user
+            nueva_entrega.estado = 'pendiente'
+            nueva_entrega.feedback_docente = ''
+            nueva_entrega.save()
+            messages.success(request, "Tarea entregada correctamente.")
+            return redirect('entregar_tarea', tarea_id=tarea.id)
+    else:
+        form = EntregaTareaForm(instance=entrega)
+
+    return render(request, 'entregar_tarea.html', {
+        'tarea': tarea, 'form': form, 'entrega': entrega, 'product': product,
+    })
+
+
+@login_required(login_url='login')
+def revisar_entregas(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if product.user != request.user:
+        messages.error(request, "No tienes permiso para revisar las entregas de este curso.")
+        return redirect('index')
+
+    entregas = EntregaTarea.objects.filter(tarea__product=product).select_related('tarea', 'user')
+    return render(request, 'revisar_entregas.html', {'product': product, 'entregas': entregas})
+
+
+@login_required(login_url='login')
+def calificar_entrega(request, entrega_id):
+    entrega = get_object_or_404(EntregaTarea, id=entrega_id)
+    if entrega.tarea.product.user != request.user:
+        messages.error(request, "No tienes permiso para calificar esta entrega.")
+        return redirect('index')
+
+    if request.method == 'POST':
+        form = RevisionEntregaForm(request.POST, instance=entrega)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Entrega calificada.")
+    return redirect('revisar_entregas', product_id=entrega.tarea.product.id)
+
+
+@login_required(login_url='login')
+def generar_certificado(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    if not product.certificado_disponible(request.user):
+        messages.error(request, "Todavía no cumples los requisitos para obtener el certificado de este curso.")
+        return redirect('continuar_curso', product_id=product.id)
+
+    certificado, _ = Certificado.objects.get_or_create(user=request.user, product=product)
+    return render(request, 'certificado.html', {'certificado': certificado})
+
+
+def verificar_certificado(request, codigo):
+    certificado = Certificado.objects.filter(codigo=codigo).first()
+    return render(request, 'verificar_certificado.html', {'certificado': certificado, 'codigo': codigo})
+
+
+@login_required(login_url='login')
+def add_quiz(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if product.user != request.user:
+        messages.error(request, "No tienes permiso para agregar evaluaciones a este curso.")
+        return redirect('index')
+
+    form = QuizForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        quiz = form.save(commit=False)
+        quiz.product = product
+        quiz.save()
+        messages.success(request, "Quiz creado. Ahora agrega sus preguntas.")
+        return redirect('add_pregunta', quiz_id=quiz.id)
+
+    quizzes = Quiz.objects.filter(product=product)
+    return render(request, 'add_quiz.html', {'form': form, 'product': product, 'quizzes': quizzes})
+
+
+@login_required(login_url='login')
+def add_pregunta(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    if quiz.product.user != request.user:
+        messages.error(request, "No tienes permiso para editar este quiz.")
+        return redirect('index')
+
+    form = PreguntaForm(request.POST or None)
+    formset = OpcionFormSet(request.POST or None, prefix='opciones')
+
+    if request.method == "POST" and form.is_valid() and formset.is_valid():
+        pregunta = form.save(commit=False)
+        pregunta.quiz = quiz
+        pregunta.save()
+        formset.instance = pregunta
+        formset.save()
+        messages.success(request, "Pregunta agregada")
+        return redirect('add_pregunta', quiz_id=quiz.id)
+
+    preguntas = quiz.preguntas.prefetch_related('opciones')
+    return render(request, 'add_pregunta.html', {
+        'form': form, 'formset': formset, 'quiz': quiz, 'preguntas': preguntas,
+    })
+
+
+@login_required(login_url='login')
+def add_tarea(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if product.user != request.user:
+        messages.error(request, "No tienes permiso para agregar tareas a este curso.")
+        return redirect('index')
+
+    form = TareaForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        tarea = form.save(commit=False)
+        tarea.product = product
+        tarea.save()
+        messages.success(request, "Tarea agregada")
+        return redirect('add_tarea', product_id=product.id)
+
+    tareas = Tarea.objects.filter(product=product)
+    return render(request, 'add_tarea.html', {'form': form, 'product': product, 'tareas': tareas})
+
+@login_required(login_url='login')
+def eliminar_quiz(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    if quiz.product.user != request.user:
+        messages.error(request, "No tienes permiso para eliminar este quiz.")
+        return redirect('index')
+    if request.method != 'POST':
+        return redirect('add_quiz', product_id=quiz.product.id)
+
+    product_id = quiz.product.id
+    quiz.delete()
+    messages.success(request, "Quiz eliminado.")
+    return redirect('add_quiz', product_id=product_id)
+
+
+@login_required(login_url='login')
+def eliminar_pregunta(request, pregunta_id):
+    pregunta = get_object_or_404(Pregunta, id=pregunta_id)
+    if pregunta.quiz.product.user != request.user:
+        messages.error(request, "No tienes permiso para eliminar esta pregunta.")
+        return redirect('index')
+    if request.method != 'POST':
+        return redirect('add_pregunta', quiz_id=pregunta.quiz.id)
+
+    quiz_id = pregunta.quiz.id
+    pregunta.delete()
+    messages.success(request, "Pregunta eliminada.")
+    return redirect('add_pregunta', quiz_id=quiz_id)
+
+
+@login_required(login_url='login')
+def eliminar_tarea(request, tarea_id):
+    tarea = get_object_or_404(Tarea, id=tarea_id)
+    if tarea.product.user != request.user:
+        messages.error(request, "No tienes permiso para eliminar esta tarea.")
+        return redirect('index')
+    if request.method != 'POST':
+        return redirect('add_tarea', product_id=tarea.product.id)
+
+    product_id = tarea.product.id
+    tarea.delete()
+    messages.success(request, "Tarea eliminada.")
+    return redirect('add_tarea', product_id=product_id)

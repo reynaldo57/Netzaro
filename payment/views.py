@@ -4,7 +4,7 @@ from payment.forms import ShippingForm, PaymentForm
 from payment.models import ShippingAddress, Order, OrderItem
 from django.contrib.auth.models import User
 from django.contrib import messages
-from store.models import Product, Profile, Clase
+from store.models import Product, Profile, Clase, LeccionCompletada
 import datetime
 #import some paypal stuff
 from django.urls import reverse
@@ -112,7 +112,22 @@ def my_courses(request):
     ).values_list('product_id', flat=True)
     products = Product.objects.filter(id__in=product_ids).distinct()
 
-    return render(request, "payment/my_courses.html", {"products": products})
+    cursos = [
+        {
+            'product': product,
+            'porcentaje': product.porcentaje_completado(request.user),
+        }
+        for product in products
+    ]
+
+    actividad_reciente = LeccionCompletada.objects.filter(
+        user=request.user
+    ).select_related('clase', 'clase__productClase').order_by('-fecha')[:10]
+
+    return render(request, "payment/my_courses.html", {
+        "cursos": cursos,
+        "actividad_reciente": actividad_reciente,
+    })
 
 def proccess_order(request):
     if request.POST:

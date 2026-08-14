@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  .certificado-box {
+    max-width: 900px; margin: 3rem auto; padding: 4rem; text-align: center;
+    border: 10px solid #e67e22; background: #fffdf8;
+  }
+  @media print { .no-print { display:none; } }
+</style>
+<div class="certificado-box">
+  <h4 class="text-muted">CERTIFICADO DE FINALIZACIÓN</h4>
+  <h1 class="my-4">{{ certificado.user.get_full_name|default:certificado.user.username }}</h1>
+  <p>ha completado satisfactoriamente el curso</p>
+  <h2 class="my-3">{{ certificado.product.name }}</h2>
+  <p class="text-muted">Emitido el {{ certificado.fecha_emision|date:"d/m/Y" }}</p>
+  <p class="text-muted">Código de verificación: <strong>{{ certificado.codigo }}</strong></p>
+</div>
+<div class="text-center no-print mb-4">
+  <button onclick="window.print()" class="btn btn-custom-danger">Imprimir / Guardar como PDF</button>
+</div>
+{% endblock %}

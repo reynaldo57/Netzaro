@@ -1,0 +1,12 @@
+<div class="container py-5" style="max-width:600px;">
+  <h2>Verificación de certificado</h2>
+  {% if certificado %}
+    <div class="alert alert-success">
+      <p><strong>{{ certificado.user.get_full_name|default:certificado.user.username }}</strong> completó el curso <strong>{{ certificado.product.name }}</strong>.</p>
+      <p>Emitido el {{ certificado.fecha_emision|date:"d/m/Y" }}.</p>
+    </div>
+  {% else %}
+    <div class="alert alert-danger">El código "{{ codigo }}" no corresponde a ningún certificado emitido.</div>
+  {% endif %}
+</div>
+{% endblock %}
