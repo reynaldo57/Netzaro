@@ -545,7 +545,7 @@ def izipay_checkout(request, order_id):
 @login_required
 def comprar_curso_izipay(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    price = product.sale_price if product.is_sale else product.price
+    price = product.precio_acceso_completo()
 
     order = Order.objects.create(
         user=request.user,

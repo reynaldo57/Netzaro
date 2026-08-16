@@ -347,6 +347,17 @@
                         <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" />
                         <div class="card-body p-3">
                             <h5 class="fw-bold">{{ product.name }}</h5>
+
+                            {% if product.rating_count %}
+                            <div class="rating-mini small text-warning mb-1">
+                              {% for i in "12345" %}
+                                {% if forloop.counter <= product.average_rating_rounded %}★{% else %}☆{% endif %}
+                              {% endfor %}
+                              <span class="text-muted">{{ product.average_rating|floatformat:1 }} ({{ product.rating_count }})</span>
+                            </div>
+                            {% endif %}
+
+                            
                             {% if product.is_sale %}
                                 <p class="mb-1">
                                     <strike class="text-muted">{{ product.price }}</strike> 

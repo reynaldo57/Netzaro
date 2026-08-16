@@ -208,7 +208,9 @@
         {% else %}
             <form method="POST" action="{% url 'comprar_curso_izipay' product.id %}">
                 {% csrf_token %}
-                <button type="submit" class="download-button">Comprar acceso a todas    las clases de pago</button>
+                <button type="submit" class="download-button">
+                    Comprar acceso a todas las clases de pago — ${{ product.precio_acceso_completo }}
+                </button>
             </form>
         {% endif %}
     {% else %}

@@ -124,17 +124,15 @@ class CommentForm(forms.ModelForm):
 	rating = forms.ChoiceField(
         choices=[(i, f'{i} ⭐') for i in range(5, 0, -1)],
         widget=forms.Select(attrs={'class': 'form-control'}),
-        required=False,
+        required=True,
         label="Calificación"
 		)
 
 	class Meta:
 		model = Comment
-		fields = ['name', 'email', 'rating', 'text']
+		fields = ['rating', 'text']
 		widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tu nombre'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Tu correo'}),
-            'text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': '¿Por qué te interesa esta clase?', 'rows': 3}),
+            'text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': '¿Qué te pareció el curso?', 'rows': 3}),
         }
 
 class CommentResponseForm(forms.ModelForm):
@@ -143,7 +141,7 @@ class CommentResponseForm(forms.ModelForm):
         fields = ['responder_name', 'response_text']
         widgets = {
             'responder_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tu nombre'}),
-            'response_text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': '¿Qué te motivó a matricularte?', 'rows': 2}),
+            'response_text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Responde a esta reseña', 'rows': 2}),
         }
 
 
@@ -156,7 +154,7 @@ class AddProductForm(forms.ModelForm):
         model = Product
         fields = (
             "name", "category", "image", "description", "pay_method",
-            "price", "video", 'is_sale', 'sale_price',
+            "price", "video", 'is_sale', 'sale_price', 'full_access_price',
             'learning_points', 'requirements', 'target_audience',
             'duration_minutes',
         )
@@ -168,6 +166,7 @@ class AddProductForm(forms.ModelForm):
             'requirements': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Un requisito por línea'}),
             'target_audience': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Un público por línea'}),
             'duration_minutes': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'full_access_price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': 0}),
         }
 
 class AddClaseForm(forms.ModelForm):

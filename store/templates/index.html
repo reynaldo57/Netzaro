@@ -750,6 +750,18 @@ url('/static/assets/tec.jpg') center/cover no-repeat;
                     <div class="card-body">
                         <a href="{% url 'product' product.id %}">{{ product.name }}</a><br>
                         <a class="text-dark fw-bold" href="{% url 'user_information' product.user.username %}">{{ product.user.username }}</a><br>
+
+
+                        {% if product.rating_count %}
+                        <div class="rating-mini small text-warning">
+                          {% for i in "12345" %}
+                            {% if forloop.counter <= product.average_rating_rounded %}★{% else %}☆{% endif %}
+                          {% endfor %}
+                          <span class="text-muted">{{ product.average_rating|floatformat:1 }} ({{ product.rating_count }})</span>
+                        </div>
+                        {% endif %}
+
+                        
                         {% if product.is_sale and product.sale_price %}
                             <div class="text-warning small my-2">💥 Oferta</div>
                             <strike>${{ product.price }}</strike> &nbsp; <span style="color: green;">${{ product.sale_price }}</span>

@@ -227,24 +227,32 @@ def product(request, pk):
     ('Versión de pago', Clase.objects.filter(productClase=product, nivel='Pago')),
     ]
     instructor_courses_count = Product.objects.filter(user=product.user).count()
+    can_review = request.user.is_authenticated and product.usuario_matriculado(request.user)
 
-    # Matrícula (crear)
+    # Reseña (crear) — solo estudiantes matriculados (compra confirmada)
     if request.method == 'POST' and 'comment_form' in request.POST:
+        if not request.user.is_authenticated:
+            messages.error(request, "Inicia sesión para dejar una reseña.")
+            return redirect('login')
+        if not product.usuario_matriculado(request.user):
+            messages.error(request, "Solo los estudiantes matriculados pueden dejar una reseña.")
+            return redirect('product', pk=pk)
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.product = product
-            if request.user.is_authenticated:
-                comment.user = request.user
+            comment.user = request.user
+            comment.name = request.user.get_full_name() or request.user.username
+            comment.email = request.user.email
             comment.save()
             return redirect('product',pk=pk)
     else:
         form = CommentForm()
 
-    # Respuesta a matrícula
+    # Respuesta a reseña
     if request.method == 'POST' and 'respuesta_form' in request.POST:
         comment_id = request.POST.get('comment_id')
-        comment_obj = get_object_or_404(Comment, id=comment_id)
+        comment_obj = get_object_or_404(Comment, id=comment_id, product=product)
         response_form = CommentResponseForm(request.POST)
         if response_form.is_valid():
             response = response_form.save(commit=False)
@@ -261,8 +269,8 @@ def product(request, pk):
         'response_form': response_form,
         'curriculum': curriculum,
         'instructor_courses_count': instructor_courses_count,
-    })
-
+        'can_review': can_review,
+    }) 
 
 
 

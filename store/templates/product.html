@@ -360,13 +360,17 @@
 </div>
 
 
-<!-- Comentarios -->
-<div class="comments">
-  <h2><i class="bi bi-chat-dots-fill"></i> Comentarios</h2>
 
+
+
+<!-- Reseñas -->
+<div class="comments">
+  <h2><i class="bi bi-chat-dots-fill"></i> Reseñas y calificaciones</h2>
+
+  {% if can_review %}
   <div class="card shadow-sm mb-4">
     <div class="card-body">
-      <h5 class="text-danger"><i class="bi bi-pencil-square"></i> Escribe tu comentario</h5>
+      <h5 class="text-danger"><i class="bi bi-pencil-square"></i> Escribe tu reseña</h5>
       <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
@@ -376,22 +380,29 @@
       </form>
     </div>
   </div>
-
-  {% for comment in comments %}
-
-  <div class="card-comment">
-  <h6>{{ comment.name }} <small class="text-muted">• {{ comment.created_date|timesince }} atrás</small></h6>
-  {% if comment.rating %}
-    <div class="text-warning">
-      {% for i in "12345" %}
-        {% if forloop.counter <= comment.rating %}★{% else %}☆{% endif %}
-      {% endfor %}
-    </div>
+  {% elif user.is_authenticated %}
+  <div class="alert alert-info">Debes comprar este curso para poder dejar una reseña.</div>
+  {% else %}
+  <div class="alert alert-info">
+    <a href="{% url 'login' %}?next={{ request.path }}">Inicia sesión</a> para dejar tu reseña.
+  </div>
   {% endif %}
 
-
+  {% for comment in comments %}
   <div class="card-comment">
-    <h6>{{ comment.name }} <small class="text-muted">• {{ comment.created_date|timesince }} atrás</small></h6>
+    <h6>
+      {{ comment.name }} <small class="text-muted">• {{ comment.created_date|timesince }} atrás</small>
+      {% if comment.is_verified_purchase %}
+        <span class="badge bg-success"><i class="bi bi-patch-check-fill"></i> Compra verificada</span>
+      {% endif %}
+    </h6>
+    {% if comment.rating %}
+      <div class="text-warning">
+        {% for i in "12345" %}
+          {% if forloop.counter <= comment.rating %}★{% else %}☆{% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
     <p>{{ comment.text }}</p>
 
     <button class="btn btn-sm btn-outline-danger" data-bs-toggle="collapse" data-bs-target="#reply{{ comment.id }}">
@@ -417,9 +428,11 @@
     {% endfor %}
   </div>
   {% empty %}
-  <p class="text-muted">Aún no hay comentarios. ¡Sé el primero!</p>
+  <p class="text-muted">Aún no hay reseñas. ¡Sé el primero en dejar la tuya!</p>
   {% endfor %}
 </div>
+
+
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>

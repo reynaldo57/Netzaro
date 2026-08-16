@@ -80,6 +80,11 @@ class Product(models.Model):
     image = models.ImageField(upload_to='uploads/product')
     is_sale = models.BooleanField(default=False)
     sale_price = models.DecimalField(default=0, decimal_places=2, max_digits=6, null=True, blank=True)
+    full_access_price = models.DecimalField(
+        default=0, decimal_places=2, max_digits=6, null=True, blank=True,
+        verbose_name="Precio de acceso a todas las clases de pago",
+        help_text="Si lo dejas vacío, se usará el precio normal del curso"
+    )
     pay_method = models.CharField(max_length=250, null=True)
     video = models.FileField(upload_to="video", null=True)
     created_day = models.DateTimeField(default=timezone.now)
@@ -124,6 +129,9 @@ class Product(models.Model):
     def duration_display(self):
         h, m = divmod(self.duration_minutes, 60)
         return f"{h}h {m}min" if h else f"{m}min"
+
+    def precio_acceso_completo(self):
+        return self.full_access_price if self.full_access_price else self.price
 
     def students_count(self):
         from payment.models import OrderItem
@@ -224,6 +232,14 @@ class Comment(models.Model):
 
     def __str__(self) -> str:
         return self.text
+
+    def is_verified_purchase(self):
+        if not self.user_id:
+            return False
+        from payment.models import OrderItem
+        return OrderItem.objects.filter(
+            product=self.product, order__user=self.user, order__paid=True
+        ).exists()
     
 
 class CommentResponse(models.Model):
