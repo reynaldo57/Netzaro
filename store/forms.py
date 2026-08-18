@@ -4,6 +4,7 @@ from django import forms
 from .models import Profile, Product, Clase
 from django.db import models
 from .models import Profile, Product, Clase, Modulo, TeacherApplication, EntregaTarea, Quiz, Pregunta, Opcion, Tarea
+from .models import Coupon
 
 class UserInfoForm(forms.ModelForm):
 	phone = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Phone'}), required=False)
@@ -61,32 +62,38 @@ class UpdateUserForm(UserChangeForm):
 		self.fields['username'].help_text = '<span class="form-text style="color: white;"><small>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small></span>'
 
 class UpdateProfileForm(forms.ModelForm):
-	paypal_email = forms.CharField(label="PayPal Email", max_length=100, required=True, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}))
-	about_me = forms.CharField(
+    paypal_email = forms.CharField(label="PayPal Email", max_length=100, required=True, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}))
+    yape_plin_number = forms.CharField(
+        label="Número Yape/Plin",
+        max_length=15,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: 987654321'})
+    )
+    about_me = forms.CharField(
         label="Sobre ti",
         max_length=350,
         required=False,
         widget=forms.Textarea(attrs={
             'class': 'form-control',
             'placeholder': 'Cuéntanos algo sobre ti',
-            'rows': 3,  # Controla la altura
-            'style': 'resize:none;'  # Opcional: evita que el usuario lo estire
+            'rows': 3,
+            'style': 'resize:none;'
         })
     )
-	class Meta:
-		
-		model = Profile
-		fields = ['paypal_email', 'about_me','image',]
-		widgets = {
+
+    class Meta:
+        model = Profile
+        fields = ['paypal_email', 'about_me', 'image', 'yape_plin_number']
+        widgets = {
             'image': forms.FileInput(attrs={
                 'class': 'form-control shadow-sm p-3 rounded-3 border-1',
                 'style': 'max-width: 100%; height: auto;',
             }),
         }
 
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		self.fields['image'].label = ""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['image'].label = ""
 
 
 class SignUpForm(UserCreationForm):
@@ -140,7 +147,6 @@ class CommentResponseForm(forms.ModelForm):
         model = CommentResponse
         fields = ['responder_name', 'response_text']
         widgets = {
-            'responder_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tu nombre'}),
             'response_text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Responde a esta reseña', 'rows': 2}),
         }
 
@@ -262,4 +268,17 @@ class TareaForm(forms.ModelForm):
             'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título de la tarea'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'fecha_limite': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        }
+
+
+class CouponForm(forms.ModelForm):
+    class Meta:
+        model = Coupon
+        fields = ('code', 'discount_percent', 'valid_until', 'max_uses', 'active')
+        widgets = {
+            'code': forms.TextInput(attrs={'class': 'form-control text-uppercase', 'placeholder': 'Ej: VERANO20'}),
+            'discount_percent': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'max': 100}),
+            'valid_until': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'max_uses': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
+            'active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

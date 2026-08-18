@@ -175,38 +175,20 @@
 <div class="section-title text-success">🛒 Tu Pedido</div>
 
 <div class="row g-3">
-  {% for product in cart_products %}
-    <div class="col-12">
-      <div class="card border-0 shadow-sm rounded-4 p-3 bg-white d-flex flex-md-row flex-column align-items-center justify-content-between">
-        <div class="d-flex align-items-center gap-3">
-          <div style="width: 60px; height: 60px; background-color: #e5f4fd; border-radius: 12px;" class="d-flex align-items-center justify-content-center">
-            <span style="font-size: 2rem;">📦</span>
-          </div>
-          <div>
-            <h5 class="mb-1">{{ product.name }}</h5>
-            <small class="text-muted">
-              {% if product.is_sale %}
-                <strong class="text-success">${{ product.sale_price }}</strong>
-              {% else %}
-                <strong class="text-primary">${{ product.price }}</strong>
-              {% endif %}
-            </small>
-          </div>
-        </div>
-
-        <div class="text-center mt-2 mt-md-0">
-          <span class="text-muted">Cantidad:</span><br>
-          <span class="fw-semibold">
-            {% for key, value in quantities.items %}
-              {% if key == product.id|slugify %}
-                {{ value }}
-              {% endif %}
-            {% endfor %}
-          </span>
-        </div>
-      </div>
-    </div>
-  {% endfor %}
+  {% for line in lines %}
+  <div class="d-flex justify-content-between">
+  <strong>{{ line.product.name }}</strong>
+  <span>
+      {% if line.discounted %}
+        <del class="text-muted">${{ line.base_price }}</del> ${{ line.final_price }}
+      {% else %}
+        ${{ line.final_price }}
+      {% endif %}
+  </span>
+  </div>
+  <small>Cantidad: {{ line.quantity }}</small>
+<hr>
+{% endfor %}
 
   <!-- Total -->
   <div class="col-12">

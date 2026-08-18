@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .cart import Cart
 from store.models import Product
 from django.http import JsonResponse
@@ -11,7 +11,25 @@ def cart_summary(request):
     cart_products = cart.get_prods
     quantities = cart.get_quants
     totals = cart.cart_total()
-    return render(request, "cart_summary.html", {"cart_products":cart_products, "quantities": quantities, "totals": totals})
+    coupon = cart.get_coupon()
+    return render(request, "cart_summary.html", {"cart_products":cart_products, "quantities": quantities, "totals": totals, "coupon": coupon,})
+
+def cart_apply_coupon(request):
+    cart = Cart(request)
+    if request.method == 'POST':
+        coupon = cart.apply_coupon(request.POST.get('coupon_code'))
+        if coupon:
+            messages.success(request, f'Cupón "{coupon.code}" aplicado: -{coupon.discount_percent}% en "{coupon.product.name}"')
+        else:
+            messages.error(request, "Cupón inválido, vencido o agotado")
+    return redirect('cart_summary')
+
+
+def cart_remove_coupon(request):
+    cart = Cart(request)
+    cart.remove_coupon()
+    messages.success(request, "Cupón removido")
+    return redirect('cart_summary')
 
 def cart_add(request):
     cart = Cart(request)

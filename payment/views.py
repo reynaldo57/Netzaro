@@ -241,6 +241,8 @@ def billing_info(request):
         cart_products = cart.get_prods
         quantities = cart.get_quants
         totals = cart.cart_total()
+        coupon = cart.get_coupon()
+        lines, _ = _cart_lines(cart)
 
         #Create a session with Shipping Info
         my_shipping = request.POST
@@ -289,17 +291,7 @@ def billing_info(request):
             messages.error(request, "No puedes pagar productos de diferentes vendedores en un solo pago.")
             return redirect('cart_summary')
 
-        # Obtener correo PayPal del dueño del producto
-        first_product = product_list[0]
-        user = first_product.user
-        try:
-            profile = Profile.objects.get(user=user)
-            paypal_email = profile.paypal_email
-        except Profile.DoesNotExist:
-            paypal_email = None
-
-        if not paypal_email:
-            paypal_email = settings.PAYPAL_RECEIVER_EMAIL  # fallback
+        paypal_email = settings.PAYPAL_RECEIVER_EMAIL
 
 
 
@@ -348,6 +340,9 @@ def billing_info(request):
                     price = product.sale_price
                 else:
                     price = product.price
+                if coupon and coupon.product_id == product.id:
+                    price = coupon.precio_con_descuento(price)
+
 
                 #Get cuantity
                 for key,value in quantities().items():
@@ -375,6 +370,8 @@ def billing_info(request):
                 "billing_form": billing_form,
                 "metodo_pago": metodo_pago,       # <-- NUEVO
                 "order": create_order,
+                "coupon": coupon,
+                "lines": lines,
                 })
 
         else:
@@ -397,12 +394,13 @@ def billing_info(request):
                     price = product.sale_price
                 else:
                     price = product.price
-
+                if coupon and coupon.product_id == product.id:
+                    price = coupon.precio_con_descuento(price)
                 #Get cuantity
                 for key,value in quantities().items():
                     if int(key) == product.id:
                         #Create order item
-                        create_order_item = OrderItem(order_id=order_id, product_id=product_id, quantity=value, price=price)
+                        create_order_item = OrderItem(order_id=order_id, product_id=product_id, user=user, quantity=value, price=price)
                         create_order_item.save()
 
             #NOt logged In
@@ -416,12 +414,29 @@ def billing_info(request):
                 "shipping_info": request.POST, 
                 "billing_form": billing_form,
                 "metodo_pago": metodo_pago,       # <-- NUEVO
-                "order": create_order  
+                "order": create_order,
+                "coupon": coupon,
+                "lines": lines,
             })
 
     else:
         messages.success(request, "Access Denied")
         return redirect('index')
+
+def _cart_lines(cart):
+    coupon = cart.get_coupon()
+    quantities = cart.get_quants()
+    lines = []
+    for product in cart.get_prods():
+        base_price = product.sale_price if product.is_sale else product.price
+        final_price = coupon.precio_con_descuento(base_price) if (coupon and coupon.product_id == product.id) else base_price
+        qty = quantities.get(str(product.id), 1)
+        lines.append({
+            'product': product, 'base_price': base_price,
+            'final_price': final_price, 'quantity': qty,
+            'discounted': coupon is not None and coupon.product_id == product.id,
+        })
+    return lines, coupon
 
 def checkout(request):
     #Get the cart
@@ -429,6 +444,7 @@ def checkout(request):
     cart_products = cart.get_prods
     quantities = cart.get_quants
     totals = cart.cart_total()
+    lines, coupon = _cart_lines(cart)
 
     if request.user.is_authenticated:
         #checkout as logged in usser
@@ -436,12 +452,11 @@ def checkout(request):
         shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
         #Shipping Form
         shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
-        return render(request, "payment/checkout.html", {"cart_products":cart_products, "quantities": quantities, "totals": totals, "shipping_form": shipping_form})
+        return render(request, "payment/checkout.html", {"cart_products":cart_products, "quantities": quantities, "totals": totals, "shipping_form": shipping_form, "coupon": coupon, "lines": lines})
     else:
         #checkout as guest
         shipping_form = ShippingForm(request.POST or None)
-        return render(request, "payment/checkout.html", {"cart_products":cart_products, "quantities": quantities, "totals": totals, "shipping_form": shipping_form})
-
+        return render(request, "payment/checkout.html", {"cart_products":cart_products, "quantities": quantities, "totals": totals, "shipping_form": shipping_form, "coupon": coupon, "lines": lines})
 
 def payment_success(request):
     #Delete the browse cart
@@ -462,39 +477,6 @@ def payment_success(request):
 
 def payment_failed(request):
     return render(request, "payment/payment_failed.html")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -704,3 +686,140 @@ def checkHash(response, key):
     answer = response['kr-answer'].encode('utf-8')
     calculateHash = hmac.new(key.encode('utf-8'), answer, hashlib.sha256).hexdigest()
     return calculateHash == response['kr-hash']
+
+@login_required
+def comprar_curso_paypal(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    price = product.precio_acceso_completo()
+
+    paypal_email = settings.PAYPAL_RECEIVER_EMAIL
+
+    my_Invoice = str(uuid.uuid4())
+
+    order = Order.objects.create(
+        user=request.user,
+        full_name=request.user.get_full_name() or request.user.username,
+        email=request.user.email,
+        shipping_address="",
+        amount_paid=price,
+        invoice=my_Invoice,  # necesario: el IPN de PayPal busca la orden por este campo
+    )
+    OrderItem.objects.create(
+        order=order, product=product, user=request.user, quantity=1, price=price,
+    )
+
+    host = request.get_host()
+    paypal_dict = {
+        'business': paypal_email,
+        'amount': price,
+        'item_name': product.name,
+        'no_shipping': '2',
+        'invoice': my_Invoice,
+        'currency_code': 'USD',
+        'notify_url': 'https://{}{}'.format(host, reverse("paypal-ipn")),
+        'return_url': 'https://{}{}'.format(host, reverse("payment_success")),
+        'cancel_return': 'https://{}{}'.format(host, reverse("payment_failed")),
+    }
+    paypal_form = PayPalPaymentsForm(initial=paypal_dict)
+
+    return render(request, 'payment/comprar_curso_paypal.html', {
+        'paypal_form': paypal_form, 'product': product, 'price': price,
+    })
+
+@login_required
+def platform_commission_dash(request):
+    if not request.user.is_superuser:
+        messages.error(request, "No tienes permiso para ver esta página.")
+        return redirect('index')
+
+    from django.db.models import Sum
+    items = OrderItem.objects.filter(order__paid=True)
+    total_recaudado = items.aggregate(s=Sum('price'))['s'] or 0
+    total_comision = items.aggregate(s=Sum('platform_commission'))['s'] or 0
+    total_pendiente = items.filter(paid_out=False).aggregate(s=Sum('instructor_earning'))['s'] or 0
+
+    por_profesor = items.filter(paid_out=False).values('product__user__username').annotate(
+        pendiente=Sum('instructor_earning'),
+    ).order_by('-pendiente')
+
+    return render(request, 'payment/platform_commission_dash.html', {
+        'total_recaudado': total_recaudado,
+        'total_comision': total_comision,
+        'total_pendiente': total_pendiente,
+        'por_profesor': por_profesor,
+    })
+
+
+@login_required
+def generar_planilla_pago(request):
+    if not request.user.is_superuser:
+        messages.error(request, "No tienes permiso para ver esta página.")
+        return redirect('index')
+
+    from django.db.models import Sum
+
+    items_pendientes = OrderItem.objects.filter(order__paid=True, paid_out=False)
+
+    resumen = items_pendientes.values(
+        'product__user__id', 'product__user__username',
+        'product__user__first_name', 'product__user__last_name',
+        'product__user__profile__yape_plin_number',
+    ).annotate(monto=Sum('instructor_earning')).order_by('-monto')
+
+    if request.method == 'POST':
+        return _descargar_planilla_yape_plin(items_pendientes)
+
+    return render(request, 'payment/generar_planilla_pago.html', {'resumen': resumen})
+
+def _descargar_planilla_yape_plin(items_pendientes):
+    from openpyxl import Workbook
+    from openpyxl.styles import Font
+    from django.http import HttpResponse
+    from django.utils import timezone
+
+    por_profesor = {}
+    for item in items_pendientes.select_related('product__user__profile'):
+        profesor = item.product.user
+        if profesor.id not in por_profesor:
+            por_profesor[profesor.id] = {
+                'nombre': profesor.get_full_name() or profesor.username,
+                'celular': getattr(profesor.profile, 'yape_plin_number', ''),
+                'monto': 0,
+                'item_ids': [],
+            }
+        por_profesor[profesor.id]['monto'] += item.instructor_earning
+        por_profesor[profesor.id]['item_ids'].append(item.id)
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Pago Yape-Plin"
+    ws.append(["Profesor", "Celular (Yape/Plin)", "Monto a pagar (S/.)", "Glosa"])
+    for cell in ws[1]:
+        cell.font = Font(bold=True)
+
+    ids_incluidos = []
+    for data in por_profesor.values():
+        ws.append([
+            data['nombre'],
+            data['celular'] or "SIN NÚMERO REGISTRADO",
+            float(data['monto']),
+            "Pago Netzaro - cursos vendidos",
+        ])
+        ids_incluidos.extend(data['item_ids'])
+
+    ws.column_dimensions['A'].width = 30
+    ws.column_dimensions['B'].width = 20
+    ws.column_dimensions['C'].width = 18
+    ws.column_dimensions['D'].width = 30
+
+    OrderItem.objects.filter(id__in=ids_incluidos).update(
+        paid_out=True, paid_out_date=timezone.now()
+    )
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    filename = f"planilla_pago_{timezone.now().strftime('%Y%m%d_%H%M')}.xlsx"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    wb.save(response)
+    return response

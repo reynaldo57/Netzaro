@@ -90,6 +90,7 @@ def grant_course_access_on_payment(sender, instance, **kwargs):
         for item in instance.orderitem_set.select_related('product'):
             item.product.grant_access(instance.user)
             
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
@@ -97,6 +98,21 @@ class OrderItem(models.Model):
 
     quantity = models.PositiveBigIntegerField(default=1)
     price = models.DecimalField(max_digits=7, decimal_places=2)
+
+    platform_commission = models.DecimalField(max_digits=7, decimal_places=2, default=0, editable=False)
+    instructor_earning = models.DecimalField(max_digits=7, decimal_places=2, default=0, editable=False)
+
+    paid_out = models.BooleanField(default=False, verbose_name="Ya liquidado al profesor")
+    paid_out_date = models.DateTimeField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            from django.conf import settings
+            from decimal import Decimal
+            porcentaje = Decimal(str(settings.PLATFORM_COMMISSION_PERCENT))
+            self.platform_commission = (self.price * porcentaje / Decimal('100')).quantize(Decimal('0.01'))
+            self.instructor_earning = self.price - self.platform_commission
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'Order Item - {str(self.id)}'

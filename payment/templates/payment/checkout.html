@@ -88,27 +88,22 @@
             <div class="card mb-4 shadow">
                 <div class="card-header text-white bg-danger">Resumen del pedido</div>
                 <div class="card-body">
-                              {% for product in cart_products %}
-                                <div class="d-flex justify-content-between">
-                                <strong>{{ product.name }}</strong>
-                            <span>
-                                    {% if product.is_sale %}
-                                        ${{ product.sale_price}}
-                                    {% else %}
-                                        ${{product.price}}
-                                    {% endif %}
-                                </span>
-                                 </div>
-                        <small>Cantidad: 
-                                    {% for key, value in quantities.items %}
-                                        {% if key == product.id|slugify %}
-                                          {{value}}
-                                        {% endif %}
-                                    {% endfor %}
-                                </small>
-                        <hr>
-                              {% endfor %}
                               
+                    
+                              {% for line in lines %}
+                              <div class="d-flex justify-content-between">
+                              <strong>{{ line.product.name }}</strong>
+                              <span>
+                                  {% if line.discounted %}
+                                    <del class="text-muted">${{ line.base_price }}</del> ${{ line.final_price }}
+                                  {% else %}
+                                    ${{ line.final_price }}
+                                  {% endif %}
+                              </span>
+                              </div>
+                              <small>Cantidad: {{ line.quantity }}</small>
+                            <hr>
+                            {% endfor %}
                               <h5 class="text-end">Total: ${{ totals }}</h5>
                               <div class="text-end">
                               <a href="{% url 'cart_summary' %}" class="btn btn-outline-danger btn-sm">Actualizar carrito</a>

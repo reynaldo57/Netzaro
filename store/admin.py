@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     Category, Customer, Product, Order, Profile, Comment, CommentResponse, Clase,
-    Quiz, Pregunta, Opcion, IntentoQuiz, Tarea, EntregaTarea, Certificado,
+    Quiz, Pregunta, Opcion, IntentoQuiz, Tarea, EntregaTarea, Certificado, Coupon,
 )
 from django.contrib.auth.models import User
 
@@ -101,3 +101,10 @@ class EntregaTareaAdmin(admin.ModelAdmin):
 class CertificadoAdmin(admin.ModelAdmin):
     list_display = ('codigo', 'user', 'product', 'fecha_emision')
     readonly_fields = ('codigo', 'fecha_emision')
+
+
+@admin.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    list_display = ('code', 'product', 'discount_percent', 'active', 'times_used', 'valid_until')
+    list_filter = ('active', 'product')
+    search_fields = ('code',)

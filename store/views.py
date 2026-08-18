@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Category, Profile, Comment, CommentResponse, Clase, Wishlist
+from .models import (Product, Category, Profile, Comment, CommentResponse, Clase, Wishlist, Modulo, Progreso, LeccionCompletada, Quiz, Pregunta, IntentoQuiz, Tarea, EntregaTarea, Certificado, Coupon)
 from cart.cart import Cart
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -14,11 +14,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Count
-from .models import (Product, Category, Profile, Comment, CommentResponse, Clase, Wishlist, Modulo, Progreso, LeccionCompletada, Quiz, Pregunta, IntentoQuiz, Tarea, EntregaTarea, Certificado)
+
 import os
 from django.conf import settings
 from django.http import HttpResponse
-from .forms import ModuloForm, EntregaTareaForm, RevisionEntregaForm, QuizForm, PreguntaForm, OpcionFormSet, TareaForm
+from .forms import ModuloForm, EntregaTareaForm, RevisionEntregaForm, QuizForm, PreguntaForm, OpcionFormSet, TareaForm, CouponForm
 
 def search(request):
     query = request.GET.get('q', '').strip()
@@ -228,6 +228,9 @@ def product(request, pk):
     ]
     instructor_courses_count = Product.objects.filter(user=product.user).count()
     can_review = request.user.is_authenticated and product.usuario_matriculado(request.user)
+    is_instructor = request.user.is_authenticated and (
+        request.user == product.user or request.user.is_superuser
+    )
 
     # Reseña (crear) — solo estudiantes matriculados (compra confirmada)
     if request.method == 'POST' and 'comment_form' in request.POST:
@@ -245,20 +248,25 @@ def product(request, pk):
             comment.name = request.user.get_full_name() or request.user.username
             comment.email = request.user.email
             comment.save()
-            return redirect('product',pk=pk)
+            return redirect('product', pk=pk)
     else:
         form = CommentForm()
-
-    # Respuesta a reseña
+        
+    # Respuesta a reseña — solo el instructor dueño del curso (o superusuario)
     if request.method == 'POST' and 'respuesta_form' in request.POST:
+        if not is_instructor:
+            messages.error(request, "Solo el instructor del curso puede responder reseñas.")
+            return redirect('product', pk=pk)
         comment_id = request.POST.get('comment_id')
         comment_obj = get_object_or_404(Comment, id=comment_id, product=product)
         response_form = CommentResponseForm(request.POST)
         if response_form.is_valid():
             response = response_form.save(commit=False)
             response.comment = comment_obj
+            response.responder_name = request.user.get_full_name() or request.user.username
             response.save()
-            return redirect('product',pk=pk)
+            messages.success(request, "Respuesta publicada.")
+            return redirect('product', pk=pk)
     else:
         response_form = CommentResponseForm()
 
@@ -270,7 +278,8 @@ def product(request, pk):
         'curriculum': curriculum,
         'instructor_courses_count': instructor_courses_count,
         'can_review': can_review,
-    }) 
+        'is_instructor': is_instructor,
+    })
 
 
 
@@ -516,6 +525,14 @@ def product_detail_view(request, id):
     in_wishlist = False
     if request.user.is_authenticated:
         in_wishlist = Wishlist.objects.filter(user=request.user, product=product).exists()
+
+    from payment.models import OrderItem
+    acceso_completo_comprado = False
+    if request.user.is_authenticated:
+        acceso_completo_comprado = OrderItem.objects.filter(
+            product=product, user=request.user, order__paid=True
+        ).exists()
+
     context = {
         "product": product,
         "clases_gratis": clases_gratis,
@@ -523,6 +540,7 @@ def product_detail_view(request, id):
         "clases_pagadas": clases_pagadas,
         "recommended_products": recommended_products,
         "in_wishlist": in_wishlist,
+        "acceso_completo_comprado": acceso_completo_comprado,
     }
     return render(request, 'product_detail.html', context)
 
@@ -849,3 +867,72 @@ def eliminar_tarea(request, tarea_id):
     tarea.delete()
     messages.success(request, "Tarea eliminada.")
     return redirect('add_tarea', product_id=product_id)
+
+@login_required(login_url='login')
+def instructor_dashboard(request):
+    if not (request.user.is_superuser or request.user.profile.teacher_request_status == 'approved'):
+        messages.error(request, "Necesitas una cuenta de profesor aprobada para ver el panel de analítica.")
+        return redirect('update_user')
+
+    from django.db.models import Sum
+    from payment.models import OrderItem
+
+    productos = Product.objects.filter(user=request.user).order_by('-created_day')
+
+    data = []
+    total_ingresos = 0
+    total_inscritos = 0
+    for product in productos:
+        items_pagados = OrderItem.objects.filter(product=product, order__paid=True)
+        ingresos = items_pagados.aggregate(suma=Sum('price'))['suma'] or 0
+        inscritos = items_pagados.values('user').distinct().count()
+        total_ingresos += ingresos
+        total_inscritos += inscritos
+        data.append({
+            'product': product,
+            'ingresos': ingresos,
+            'inscritos': inscritos,
+            'rating': product.average_rating(),
+            'rating_count': product.rating_count(),
+        })
+
+    context = {
+        'data': data,
+        'total_ingresos': total_ingresos,
+        'total_inscritos': total_inscritos,
+    }
+    return render(request, 'instructor_dashboard.html', context)
+
+@login_required(login_url='login')
+def manage_coupons(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if product.user != request.user and not request.user.is_superuser:
+        messages.error(request, "No tienes permiso para gestionar cupones de este curso.")
+        return redirect('index')
+
+    form = CouponForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        coupon = form.save(commit=False)
+        coupon.product = product
+        coupon.code = coupon.code.upper()
+        coupon.save()
+        messages.success(request, "Cupón creado")
+        return redirect('manage_coupons', product_id=product.id)
+
+    coupons = Coupon.objects.filter(product=product).order_by('-created_date')
+    return render(request, 'manage_coupons.html', {'form': form, 'product': product, 'coupons': coupons})
+
+
+@login_required(login_url='login')
+def eliminar_coupon(request, coupon_id):
+    coupon = get_object_or_404(Coupon, id=coupon_id)
+    if coupon.product.user != request.user and not request.user.is_superuser:
+        messages.error(request, "No tienes permiso para eliminar este cupón.")
+        return redirect('index')
+    if request.method != 'POST':
+        return redirect('manage_coupons', product_id=coupon.product.id)
+
+    product_id = coupon.product.id
+    coupon.delete()
+    messages.success(request, "Cupón eliminado.")
+    return redirect('manage_coupons', product_id=product_id)

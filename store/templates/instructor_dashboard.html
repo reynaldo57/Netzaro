@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="fw-bold mb-4"><i class="bi bi-bar-chart-fill"></i> Panel de analítica</h2>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <div class="p-4 border rounded shadow-sm bg-white">
+        <div class="text-muted small">Ingresos totales</div>
+        <div class="fs-3 fw-bold text-success">${{ total_ingresos }}</div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="p-4 border rounded shadow-sm bg-white">
+        <div class="text-muted small">Estudiantes inscritos (todos tus cursos)</div>
+        <div class="fs-3 fw-bold text-primary">{{ total_inscritos }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table align-middle bg-white shadow-sm rounded">
+      <thead>
+        <tr>
+          <th>Curso</th>
+          <th>Inscritos</th>
+          <th>Ingresos</th>
+          <th>Calificación</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in data %}
+        <tr>
+          <td>
+            <img src="{{ row.product.image.url }}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;" class="me-2">
+            {{ row.product.name }}
+          </td>
+          <td>{{ row.inscritos }}</td>
+          <td>${{ row.ingresos }}</td>
+          <td>{{ row.rating|floatformat:1 }} ★ ({{ row.rating_count }})</td>
+          <td>
+            <a href="{% url 'manage_coupons' row.product.id %}" class="btn btn-sm btn-outline-primary">Cupones</a>
+            <a href="{% url 'product' row.product.id %}" class="btn btn-sm btn-outline-secondary">Ver</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center text-muted py-4">Aún no tienes cursos.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

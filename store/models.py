@@ -13,6 +13,11 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='uploads/product', default='profile_images/default.jpg')
     date_modified = models.DateTimeField(User, auto_now=True)
     phone = models.CharField(max_length=200, blank=True)
+    yape_plin_number = models.CharField(
+        max_length=15, blank=True,
+        verbose_name="Número Yape/Plin",
+        help_text="Celular asociado a tu Yape o Plin, para recibir tus pagos"
+    )
     address1 = models.CharField(max_length=200, blank=True)
     address2 = models.CharField(max_length=200, blank=True)
     city = models.CharField(max_length=200, blank=True)
@@ -521,3 +526,34 @@ class Certificado(models.Model):
 
     def __str__(self):
         return f"Certificado {self.codigo} - {self.user.username} - {self.product.name}"
+
+
+class Coupon(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='coupons')
+    code = models.CharField(max_length=30, unique=True, verbose_name="Código")
+    discount_percent = models.PositiveSmallIntegerField(
+        verbose_name="Descuento (%)",
+        help_text="Porcentaje de descuento, de 1 a 100"
+    )
+    active = models.BooleanField(default=True)
+    valid_until = models.DateField(null=True, blank=True, verbose_name="Válido hasta (opcional)")
+    max_uses = models.PositiveIntegerField(null=True, blank=True, verbose_name="Usos máximos (opcional)")
+    times_used = models.PositiveIntegerField(default=0)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.code} - {self.product.name} (-{self.discount_percent}%)"
+
+    def es_valido(self):
+        if not self.active:
+            return False
+        if self.valid_until and self.valid_until < timezone.now().date():
+            return False
+        if self.max_uses and self.times_used >= self.max_uses:
+            return False
+        return True
+
+    def precio_con_descuento(self, precio_base):
+        from decimal import Decimal
+        descuento = precio_base * Decimal(self.discount_percent) / Decimal(100)
+        return (precio_base - descuento).quantize(Decimal('0.01'))

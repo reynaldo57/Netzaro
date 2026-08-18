@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="fw-bold mb-4"><i class="bi bi-ticket-perforated-fill"></i> Cupones — {{ product.name }}</h2>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5>Nuevo cupón</h5>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Crear cupón</button>
+      </form>
+    </div>
+  </div>
+
+  <table class="table bg-white shadow-sm rounded">
+    <thead>
+      <tr>
+        <th>Código</th><th>Descuento</th><th>Usos</th><th>Válido hasta</th><th>Activo</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for coupon in coupons %}
+      <tr>
+        <td>{{ coupon.code }}</td>
+        <td>{{ coupon.discount_percent }}%</td>
+        <td>{{ coupon.times_used }}{% if coupon.max_uses %} / {{ coupon.max_uses }}{% endif %}</td>
+        <td>{{ coupon.valid_until|default:"Sin límite" }}</td>
+        <td>{% if coupon.es_valido %}<span class="badge bg-success">Vigente</span>{% else %}<span class="badge bg-secondary">Inactivo</span>{% endif %}</td>
+        <td>
+          <form method="post" action="{% url 'eliminar_coupon' coupon.id %}" onsubmit="return confirm('¿Eliminar este cupón?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="text-center text-muted py-4">Aún no hay cupones para este curso.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5 text-center">
+  <h2 class="mb-3">Comprar acceso completo — {{ product.name }}</h2>
+  <p class="lead">Total a pagar: ${{ price }}</p>
+  <div class="card shadow-sm p-4 mx-auto" style="max-width: 400px;">
+    {{ paypal_form.render }}
+  </div>
+</div>
+{% endblock %}

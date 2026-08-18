@@ -26,8 +26,8 @@ SECRET_KEY = '9%^t2q1!z&7b%a1flg#^s5@x$w)8=lu+fdml9+v#%f1ew8w0p('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['c8a1-38-25-57-65.ngrok-free.app', '127.0.0.1', 'netzaro.pythonanywhere.com']
-CSRF_TRUSTED_ORIGINS = ['https://c8a1-38-25-57-65.ngrok-free.app']
+ALLOWED_HOSTS = ['952a-38-25-22-129.ngrok-free.app', '127.0.0.1', 'netzaro.pythonanywhere.com']
+CSRF_TRUSTED_ORIGINS = ['https://952a-38-25-22-129.ngrok-free.app']
 
 
 # Application definition
@@ -148,3 +148,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 PAYPAL_TEST = True
 PAYPAL_RECEIVER_EMAIL = 'herrera1930@hotmail.com' #bussinees sandbox account
 
+PLATFORM_COMMISSION_PERCENT = 10

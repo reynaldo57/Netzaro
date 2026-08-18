@@ -54,15 +54,45 @@ class Cart():
         products = Product.objects.filter(id__in=product_ids)
         quantities = self.cart
         total = 0
+        coupon = self.get_coupon()
         for key, value in quantities.items():
             key = int(key)
             for product in products:
                 if product.id == key:
                     if product.is_sale:
-                        total = total + (product.sale_price * value)
+                        price = product.sale_price
                     else:
-                        total = total + (product.price * value)
+                        price = product.price
+                    if coupon and coupon.product_id == product.id:
+                        price = coupon.precio_con_descuento(price)
+                    total = total + (price * value)
         return total
+
+    def apply_coupon(self, code):
+        from store.models import Coupon
+        code = (code or '').strip()
+        if not code:
+            return None
+        coupon = Coupon.objects.filter(code__iexact=code).first()
+        if not coupon or not coupon.es_valido():
+            return None
+        self.session['coupon_code'] = coupon.code
+        self.session.modified = True
+        return coupon
+
+    def get_coupon(self):
+        from store.models import Coupon
+        code = self.session.get('coupon_code')
+        if not code:
+            return None
+        coupon = Coupon.objects.filter(code__iexact=code).first()
+        if coupon and coupon.es_valido() and str(coupon.product_id) in self.cart:
+            return coupon
+        return None
+
+    def remove_coupon(self):
+        self.session.pop('coupon_code', None)
+        self.session.modified = True
 
     def __len__(self):
         return len(self.cart)

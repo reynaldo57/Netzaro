@@ -44,4 +44,7 @@ urlpatterns = [
     path('quiz/<int:quiz_id>/eliminar/', views.eliminar_quiz, name='eliminar_quiz'),
     path('pregunta/<int:pregunta_id>/eliminar/', views.eliminar_pregunta, name='eliminar_pregunta'),
     path('tarea/<int:tarea_id>/eliminar/', views.eliminar_tarea, name='eliminar_tarea'),
+    path('instructor_dashboard/', views.instructor_dashboard, name='instructor_dashboard'),
+    path('product/<int:product_id>/coupons/', views.manage_coupons, name='manage_coupons'),
+    path('coupon/<int:coupon_id>/eliminar/', views.eliminar_coupon, name='eliminar_coupon'),
 ]
