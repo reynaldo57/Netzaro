@@ -1,0 +1,75 @@
+:root {
+    --rojo: #dc2626;
+    --rojo-hover: #b91c1c;
+    --azul: #1e40af;
+    --azul-claro: #3b82f6;
+    --azul-dark: #1d3557;
+    --amarillo: #f4ac12;
+    --naranja: #e85d19;
+    --gris-oscuro: #1e293b;
+    --gris: #64748b;
+    --gris-claro: #f1f5f9;
+    --blanco: #ffffff;
+    --bg-dark-hero: #0d1322;
+    --gradient-brand: linear-gradient(135deg, var(--amarillo) 0%, var(--naranja) 45%, var(--rojo) 100%);
+    --radius: 12px;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+    --shadow-md: 0 10px 25px -5px rgba(15,23,42,0.12);
+    --shadow-lg: 0 15px 50px rgba(0,0,0,0.12);
+
+    /* ===== Fondo oscuro global (mismos tonos que ya usaban las secciones "hero" oscuras del sitio) ===== */
+    --page-bg: #0d1322;
+    --surface-bg: #1a2436;
+    --surface-bg-alt: #232f47;
+    --border-soft: #2c3a56;
+    --text-strong: #f1f5f9;
+    --text-body: #cbd5e1;
+    --text-muted-soft: #94a3b8;
+}
+
+/* Tipografía única para todo el sitio (sustituye la pila por defecto de Bootstrap). */
+html {
+    font-size: 18px; /* base de 16px -> 18px: todo lo definido en rem crece en proporción */
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--page-bg);
+    color: var(--text-body);
+}
+
+/* ===== Red de seguridad para páginas sin hoja de estilos propia:
+   evita que las tarjetas/tablas/formularios de Bootstrap por defecto
+   se queden blancos sobre el nuevo fondo oscuro. Las páginas con su
+   propio CSS (antares-*, uu-*, cr-*, etc.) tienen selectores más
+   específicos y siguen mandando sobre estas reglas. ===== */
+.card,
+.bg-white {
+    background-color: var(--surface-bg) !important;
+    color: var(--text-body);
+    border-color: var(--border-soft) !important;
+}
+
+.table {
+    color: var(--text-body);
+    --bs-table-color: var(--text-body);
+    --bs-table-bg: transparent;
+    --bs-table-border-color: var(--border-soft);
+    --bs-table-striped-color: var(--text-body);
+    --bs-table-striped-bg: var(--surface-bg-alt);
+    --bs-table-hover-color: var(--text-body);
+    --bs-table-hover-bg: var(--surface-bg-alt);
+}
+
+.form-control,
+.form-select {
+    background-color: var(--surface-bg-alt);
+    color: var(--text-strong);
+    border-color: var(--border-soft);
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--surface-bg-alt);
+    color: var(--text-strong);
+}

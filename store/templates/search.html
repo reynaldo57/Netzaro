@@ -1,286 +1,125 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/catalog.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<style>
-:root {
-  /* CORRECCIÓN: Colores reales basados en los nombres de tus variables */
-  --linkedin-blue: #0a66c2;        /* Azul LinkedIn Principal (Buscador y Botones) */
-  --linkedin-light-blue: #eef3f8;  /* Gris Azulado Claro (Fondos y Hovers) */
-  --linkedin-dark-blue: #004182;   /* Azul Oscuro (Títulos y hovers de botones) */
-  --neutral-gray: #f3f2ef;         /* Fondo neutral */
-  --color-oferta: #b91c1c;         /* Rojo de acción (Solo para destacar ofertas) */
-}
+<div class="antares-catalog">
 
-/* Sección de búsqueda */
-.search-section {
-  background-color: var(--linkedin-blue);
-  color: white;
-  padding: 2rem 1rem;
-  text-align: center;
-  border-bottom: 4px solid var(--linkedin-dark-blue);
-}
+    <!-- HERO CON BUSCADOR -->
+    <div class="catalog-hero">
+        <h2>Encuentra tu curso ideal</h2>
+        <p>Filtra por categoría, nivel, precio y orden para encontrar exactamente lo que buscas.</p>
 
-.search-section h2 {
-  color: white;
-  margin-bottom: 1rem;
-}
+        <form method="GET" action="{% url 'search' %}">
+            <div class="hero-search-box">
+                <input type="text" name="q" value="{{ query }}" placeholder="¿Qué quieres aprender hoy?" required>
+                <button type="submit"><i class="fas fa-magnifying-glass me-1"></i> Buscar</button>
+            </div>
 
-.search-form {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
+            <div class="hero-filter-bar">
+                <select name="category">
+                    <option value="">Todas las categorías</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
 
-.search-form input {
-  padding: 0.8rem 1rem;
-  border: none;
-  border-radius: 8px;
-  width: 320px;
-  max-width: 90%;
-  outline: none;
-}
+                <select name="nivel">
+                    <option value="">Todos los niveles</option>
+                    <option value="Gratis" {% if selected_nivel == "Gratis" %}selected{% endif %}>Versión gratuita</option>
+                    <option value="Pago" {% if selected_nivel == "Pago" %}selected{% endif %}>Versión de pago</option>
+                </select>
 
-.search-form button {
-  background-color: white;
-  color: var(--linkedin-blue);
-  border: none;
-  padding: 0.8rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-  font-weight: bold;
-}
+                <input type="number" name="price_min" value="{{ price_min }}" placeholder="Precio mín." min="0" step="0.01">
+                <input type="number" name="price_max" value="{{ price_max }}" placeholder="Precio máx." min="0" step="0.01">
 
-.search-form button:hover {
-  background-color: var(--linkedin-light-blue);
-}
+                <select name="order">
+                    <option value="popularity" {% if selected_order == "popularity" %}selected{% endif %}>Más populares</option>
+                    <option value="relevance" {% if selected_order == "relevance" %}selected{% endif %}>Relevancia</option>
+                    <option value="newest" {% if selected_order == "newest" %}selected{% endif %}>Más nuevos</option>
+                    <option value="price_asc" {% if selected_order == "price_asc" %}selected{% endif %}>Precio: menor a mayor</option>
+                    <option value="price_desc" {% if selected_order == "price_desc" %}selected{% endif %}>Precio: mayor a menor</option>
+                </select>
 
-/* Contenedor responsivo */
-.product-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-  padding: 3rem 2rem;
-}
+                <button type="submit"><i class="fas fa-filter me-1"></i> Aplicar filtros</button>
+            </div>
+        </form>
+    </div>
 
-/* Tarjetas de productos */
-.product-card {
-  background-color: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-  position: relative;
-  max-width: 300px;
-  flex: 1 1 250px;
-}
+    <div class="main-container">
 
-.product-card:hover {
-  transform: translateY(-5px);
-}
+        {% if query %}
+        <h3 class="section-title">Resultados para "{{ query }}"</h3>
 
-.product-card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
-
-.product-info {
-  padding: 1.2rem;
-}
-
-.product-info h3 {
-  color: var(--linkedin-blue);
-  font-size: 1.1rem;
-  margin: 0.5rem 0;
-}
-
-.description {
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  color: #555;
-}
-
-.price {
-  font-size: 1rem;
-  margin-bottom: 1rem;
-}
-
-.original-price {
-  text-decoration: line-through;
-  color: #999;
-  margin-right: 0.5rem;
-}
-
-.sale-price {
-  color: var(--linkedin-dark-blue);
-  font-weight: bold;
-}
-
-.btn-view {
-  display: inline-block;
-  background-color: var(--linkedin-blue);
-  color: #fff;
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-.btn-view:hover {
-  background-color: var(--linkedin-dark-blue);
-}
-
-/* Cinta de oferta */
-.ribbon {
-  background: var(--linkedin-light-blue);
-  color: var(--linkedin-dark-blue);
-  padding: 0.4rem 0.8rem;
-  position: absolute;
-  top: 10px;
-  left: -10px;
-  transform: rotate(-10deg);
-  font-weight: bold;
-  font-size: 0.75rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-/* Tarjetas informativas */
-.info-section {
-  background-color: var(--neutral-gray);
-  padding: 2rem;
-}
-
-.info-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  justify-content: center;
-}
-
-.info-card {
-  background: white;
-  border-radius: 8px;
-  padding: 1.5rem;
-  text-align: center;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-  max-width: 280px;
-  flex: 1 1 250px;
-}
-
-.info-card i {
-  font-size: 2rem;
-  color: var(--linkedin-blue);
-  margin-bottom: 1rem;
-}
-
-.info-card h4 {
-  margin-bottom: 0.5rem;
-  color: var(--linkedin-dark-blue);
-}
-</style>
-
-<!-- Buscador -->
-<div class="search-section">
-  <h2><i class="fas fa-search"></i> Encuentra tu curso ideal</h2>
-  <form method="GET" action="{% url 'search' %}" class="search-form">
-    <select name="nivel">
-  <option value="">Todos los niveles</option>
-  <option value="Gratis" {% if selected_nivel == "Gratis" %}selected{% endif %}>Versión gratuita</option>
-  <option value="Pago" {% if selected_nivel == "Pago" %}selected{% endif %}>Versión de pago</option>
-</select>
-
-<input type="number" name="price_min" value="{{ price_min }}" placeholder="Precio mín." min="0" step="0.01" style="width:110px;">
-<input type="number" name="price_max" value="{{ price_max }}" placeholder="Precio máx." min="0" step="0.01" style="width:110px;">
-
-    <input type="text" name="q" value="{{ query }}" placeholder="¿Qué quieres aprender hoy?" required>
-
-    <select name="category">
-      <option value="">Todas las categorías</option>
-      {% for cat in categories %}
-        <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>
-          {{ cat.name }}
-        </option>
-      {% endfor %}
-    </select>
-
-    <select name="order">
-      <option value="popularity" {% if selected_order == "popularity" %}selected{% endif %}>Más populares</option>
-      <option value="relevance" {% if selected_order == "relevance" %}selected{% endif %}>Relevancia</option>
-      <option value="newest" {% if selected_order == "newest" %}selected{% endif %}>Más nuevos</option>
-      <option value="price_asc" {% if selected_order == "price_asc" %}selected{% endif %}>Precio: menor a mayor</option>
-      <option value="price_desc" {% if selected_order == "price_desc" %}selected{% endif %}>Precio: mayor a menor</option>
-    </select>
-
-    <button type="submit"><i class="fas fa-magic"></i> Buscar</button>
-  </form>
-</div>
-
-<!-- Resultados -->
-{% if query %}
-  {% if not searched %}
-    <p style="text-align:center; margin-top:2rem; color: #555;">No se encontraron resultados para tu búsqueda.</p>
-  {% endif %}
-
-  <div class="product-grid">
-    {% for product in searched %}
-    <div class="product-card {% if product.is_sale %}on-sale{% endif %}">
-      {% if product.is_sale %}
-      <div class="ribbon">Oferta</div>
-      {% endif %}
-      <img src="{{ product.image.url }}" alt="{{ product.name }}">
-      <div class="product-info">
-        <h3>{{ product.name }}</h3>
-        <p class="description">{{ product.description|truncatechars:100 }}</p>
-        <div class="price">
-          {% if product.is_sale %}
-          <span class="original-price">${{ product.price }}</span>
-          <span class="sale-price">${{ product.sale_price }}</span>
-          {% else %}
-          <span class="sale-price">${{ product.price }}</span>
-          {% endif %}
+        <div class="courses-grid-5col">
+            {% for product in searched %}
+            <div class="original-card">
+                <img src="{{ product.image.url }}" class="card-thumb-original" alt="{{ product.name }}">
+                <div class="card-info-original">
+                    <span class="category-label-original">{{ product.category.name }}</span>
+                    <a href="{% url 'product' product.id %}" class="card-title-original">{{ product.name }}</a>
+                    <div class="card-meta-original">
+                        <span><i class="fa-regular fa-clock me-1" style="color: var(--antares-blue);"></i> {{ product.duration_display }}</span>
+                        <span class="price-tag-original">
+                            {% if product.is_sale and product.sale_price %}${{ product.sale_price }}{% else %}${{ product.price }}{% endif %}
+                        </span>
+                    </div>
+                    <a href="{% url 'product' product.id %}" class="btn-ver-curso-original">Ver Curso</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="catalog-empty">No se encontraron resultados para tu búsqueda.</div>
+            {% endfor %}
         </div>
-        <a href="{% url 'product' product.id %}" class="btn-view">Ver Curso</a>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-  {% if searched.paginator.num_pages > 1 %}
-  <div style="display:flex; justify-content:center; gap:0.5rem; padding-bottom:2rem;">
-    {% if searched.has_previous %}
-      <a href="?q={{ query }}&category={{ selected_category }}&nivel={{ selected_nivel }}&price_min={{ price_min }}&price_max={{ price_max }}&order={{ selected_order }}&page={{ searched.previous_page_number }}">« Anterior</a>
-    {% endif %}
-    <span>Página {{ searched.number }} de {{ searched.paginator.num_pages }}</span>
-    {% if searched.has_next %}
-      <a href="?q={{ query }}&category={{ selected_category }}&nivel={{ selected_nivel }}&price_min={{ price_min }}&price_max={{ price_max }}&order={{ selected_order }}&page={{ searched.next_page_number }}">Siguiente »</a>
-    {% endif %}
-  </div>
-  {% endif %}
-{% endif %}
 
-<!-- Siempre visibles: Tarjetas informativas -->
-<div class="info-section">
-  <div class="info-grid">
-    <div class="info-card">
-      <i class="fas fa-lightbulb"></i>
-      <h4>Aprende de Expertos</h4>
-      <p>Todos nuestros cursos están dictados por profesionales con experiencia en la industria.</p>
+        {% if searched.paginator.num_pages > 1 %}
+        <div class="catalog-pagination">
+            {% if searched.has_previous %}
+            <a href="?q={{ query }}&category={{ selected_category }}&nivel={{ selected_nivel }}&price_min={{ price_min }}&price_max={{ price_max }}&order={{ selected_order }}&page={{ searched.previous_page_number }}">« Anterior</a>
+            {% endif %}
+            <span>Página {{ searched.number }} de {{ searched.paginator.num_pages }}</span>
+            {% if searched.has_next %}
+            <a href="?q={{ query }}&category={{ selected_category }}&nivel={{ selected_nivel }}&price_min={{ price_min }}&price_max={{ price_max }}&order={{ selected_order }}&page={{ searched.next_page_number }}">Siguiente »</a>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <!-- POR QUÉ ELEGIRNOS -->
+        <div class="why-choose-section">
+            <h3 class="section-title">¿Por qué elegir ANTARES?</h3>
+
+            <div class="features-grid">
+                <div class="feature-card-original">
+                    <div class="feature-icon-box">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h5>Aprende de Expertos</h5>
+                    <p>Todos nuestros cursos están dictados por profesionales con experiencia en la industria.</p>
+                </div>
+
+                <div class="feature-card-original">
+                    <div class="feature-icon-box" style="background-color: #fff7ed; color: var(--antares-orange);">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h5>Comunidad Activa</h5>
+                    <p>Conéctate con estudiantes y profesionales de todo el mundo.</p>
+                </div>
+
+                <div class="feature-card-original">
+                    <div class="feature-icon-box" style="background-color: #f0fdf4; color: #16a34a;">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h5>Certificación</h5>
+                    <p>Recibe un certificado al completar tu curso para potenciar tu perfil profesional.</p>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <div class="info-card">
-      <i class="fas fa-user-friends"></i>
-      <h4>Comunidad Activa</h4>
-      <p>Conéctate con estudiantes y profesionales de todo el mundo.</p>
-    </div>
-    <div class="info-card">
-      <i class="fas fa-certificate"></i>
-      <h4>Certificación</h4>
-      <p>Recibe un certificado al completar tu curso para potenciar tu perfil profesional.</p>
-    </div>
-  </div>
 </div>
 {% endblock %}

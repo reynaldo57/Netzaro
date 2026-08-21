@@ -1,133 +1,207 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ver_clase.css' %}">
+{% endblock %}
+
 {% block content %}
-<style>
-  .lesson-layout { display:flex; gap:1.5rem; padding:1.5rem; align-items:flex-start; }
-  .player-col { flex:3; min-width:0; }
-  .sidebar-col { flex:1; min-width:300px; background:#fff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,.06); max-height:80vh; overflow-y:auto; }
-  .player-box video, .player-box iframe, .player-box img { width:100%; border-radius:10px; background:#000; }
-  .player-box iframe { height:70vh; border:none; }
-  .progress-bar-wrap { background:#e2e8f0; border-radius:20px; height:10px; margin:.5rem 0 1rem; }
-  .progress-bar-fill { background:#27ae60; height:100%; border-radius:20px; transition:width .3s; }
-  .accordion-modulo { border-bottom:1px solid #e2e8f0; }
-  .accordion-header { padding:.9rem 1rem; font-weight:600; cursor:pointer; display:flex; justify-content:space-between; }
-  .accordion-body { display:none; padding:0 1rem .5rem; }
-  .accordion-body.open { display:block; }
-  .leccion-item { display:flex; align-items:center; gap:.5rem; padding:.5rem 0; text-decoration:none; color:#333; }
-  .leccion-item.active { color:#b91c1c; font-weight:600; }
-  .leccion-item .check { width:18px; height:18px; border-radius:50%; border:2px solid #bbb; display:inline-block; }
-  .leccion-item .check.done { background:#27ae60; border-color:#27ae60; }
-  .nav-buttons { display:flex; justify-content:space-between; margin-top:1rem; }
-</style>
+<div class="vc-page">
 
-<div class="lesson-layout">
-  <div class="player-col">
-    <h2>{{ clase.titleClase }}</h2>
-    <p class="text-muted">{{ clase.descriptionClase }}</p>
+  <!-- Header del tema activo -->
+  <div class="vc-header">
+    <div>
+      <div class="vc-badge-row">
+        <span class="vc-badge-modulo">{% if clase.modulo %}{{ clase.modulo.titulo }}{% else %}{{ product.name }}{% endif %}</span>
+        <span class="vc-badge-nivel">• {{ clase.nivel }}</span>
+      </div>
+      <h1 class="vc-title">{{ clase.titleClase }}</h1>
+      <p class="vc-subtitle">{{ clase.descriptionClase }}</p>
+    </div>
 
-    <div class="progress-bar-wrap">
-  <div class="progress-bar-fill" data-percent="{{ porcentaje }}"></div>
+    <div class="vc-progress-card">
+      <div class="vc-progress-top">
+        <span class="label">Progreso del curso</span>
+        <span class="value">{{ porcentaje }}%</span>
+      </div>
+      <div class="vc-progress-track">
+        <div class="vc-progress-fill" data-percent="{{ porcentaje }}"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vc-grid">
+
+    <!-- Columna izquierda: reproductor y controles -->
+    <div>
+      <div class="vc-player-card">
+        <div class="vc-player-box">
+          {% if clase.tipo_contenido == 'video' %}
+            <video controls preload="metadata" id="lesson-media" src="{{ clase.fileClase.url }}"></video>
+          {% elif clase.tipo_contenido == 'pdf' %}
+            <iframe src="{{ clase.fileClase.url }}#toolbar=1"></iframe>
+          {% elif clase.tipo_contenido == 'imagen' %}
+            <img src="{{ clase.fileClase.url }}" alt="{{ clase.titleClase }}">
+          {% else %}
+            <div class="vc-player-empty">
+              <p>Vista previa no disponible para este tipo de archivo.</p>
+              <a href="{{ clase.fileClase.url }}" download>Descargar archivo</a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="vc-actions">
+        <div class="vc-actions-left">
+          <form method="POST" action="{% url 'toggle_leccion_completada' clase.id %}">
+            {% csrf_token %}
+            <button type="submit" class="vc-btn vc-btn-success">
+              <i class="fa-solid fa-circle-check"></i>
+              {% if es_completada %}Completada{% else %}Marcar como completada{% endif %}
+            </button>
+          </form>
+
+          <button id="offline-btn" type="button" class="vc-btn"
+                  data-url="{{ clase.fileClase.url }}" data-id="clase-{{ clase.id }}">
+            <i class="fa-solid fa-cloud-arrow-down vc-icon-sky"></i> Descargar para offline
+          </button>
+
+          {% if clase.materialClase %}
+            <a href="{{ clase.materialClase.url }}" download class="vc-btn">
+              <i class="fa-solid fa-paperclip vc-icon-amber"></i> Materiales a usar
+            </a>
+          {% endif %}
+        </div>
+
+        {% if anterior %}
+          <a href="{% url 'ver_clase' anterior.id %}" class="vc-btn-prev">
+            <i class="fa-solid fa-chevron-left"></i> Anterior
+          </a>
+        {% endif %}
+
+        {% if siguiente %}
+          <a href="{% url 'ver_clase' siguiente.id %}" class="vc-btn vc-btn-next">
+            <span>Siguiente</span> <i class="fa-solid fa-chevron-right"></i>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Columna derecha: temario -->
+    <div class="vc-sidebar">
+      <div class="vc-card-light">
+
+        <div>
+          <div class="vc-section-head" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.75rem;">
+            <span class="vc-section-label">Contenido del curso</span>
+            <span class="vc-section-count">{{ modulos|length }} módulo{{ modulos|length|pluralize }}</span>
+          </div>
+
+          {% for modulo in modulos %}
+            <div class="vc-modulo">
+              <div class="vc-modulo-header" onclick="this.nextElementSibling.classList.toggle('is-open')">
+                <span>{{ modulo.titulo }}</span>
+                <span class="count">{{ modulo.total_clases }} lecciones</span>
+              </div>
+              <ul class="vc-leccion-list {% if modulo.id == clase.modulo_id %}is-open{% endif %}">
+                {% for c in modulo.clases.all %}
+                  <li>
+                    <a href="{% url 'ver_clase' c.id %}" class="vc-leccion-item {% if c.id == clase.id %}is-active{% endif %}">
+                      {% if c.id == clase.id %}
+                        <i class="fa-solid fa-circle-play"></i>
+                      {% else %}
+                        <span class="vc-check-dot {% if c.id in completadas_ids %}is-done{% endif %}"></span>
+                      {% endif %}
+                      <span class="vc-leccion-name">{{ c.titleClase }}</span>
+                      {% if c.id == clase.id %}<span class="vc-tag-live">En curso</span>{% endif %}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endfor %}
+
+          {% if sin_modulo %}
+            <div class="vc-modulo">
+              <div class="vc-modulo-header" onclick="this.nextElementSibling.classList.toggle('is-open')">
+                <span>Otras clases</span>
+                <span class="count">{{ sin_modulo|length }} lecciones</span>
+              </div>
+              <ul class="vc-leccion-list is-open">
+                {% for c in sin_modulo %}
+                  <li>
+                    <a href="{% url 'ver_clase' c.id %}" class="vc-leccion-item {% if c.id == clase.id %}is-active{% endif %}">
+                      {% if c.id == clase.id %}
+                        <i class="fa-solid fa-circle-play"></i>
+                      {% else %}
+                        <span class="vc-check-dot {% if c.id in completadas_ids %}is-done{% endif %}"></span>
+                      {% endif %}
+                      <span class="vc-leccion-name">{{ c.titleClase }}</span>
+                      {% if c.id == clase.id %}<span class="vc-tag-live">En curso</span>{% endif %}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+
+        {% if quizzes or tareas %}
+          <hr class="vc-divider">
+          <div>
+            <span class="vc-section-label">Evaluaciones y tareas</span>
+            <ul class="vc-leccion-list is-open" style="margin-top:.75rem;">
+              {% for quiz in quizzes %}
+                <li>
+                  <a href="{% url 'tomar_quiz' quiz.id %}" class="vc-leccion-item">
+                    <span class="vc-eval-icon amber"><i class="fa-solid fa-file-pen"></i></span>
+                    <span>
+                      <p class="vc-eval-title">{{ quiz.titulo }}</p>
+                      <span class="vc-eval-sub">Cuestionario interactivo</span>
+                    </span>
+                  </a>
+                </li>
+              {% endfor %}
+              {% for tarea in tareas %}
+                <li>
+                  <a href="{% url 'entregar_tarea' tarea.id %}" class="vc-leccion-item">
+                    <span class="vc-eval-icon indigo"><i class="fa-solid fa-book-bookmark"></i></span>
+                    <span>
+                      <p class="vc-eval-title">{{ tarea.titulo }}</p>
+                      <span class="vc-eval-sub">Tarea práctica</span>
+                    </span>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+      </div>
+
+      <div class="vc-help-banner">
+        <div class="vc-help-icon"><i class="fa-solid fa-comments"></i></div>
+        <div>
+          <span class="vc-help-eyebrow">¿Dudas sobre el tema?</span>
+          <p class="vc-help-title">Consulta la comunidad</p>
+          <p class="vc-help-text">Resuelve tus preguntas sobre <em>{{ clase.titleClase }}</em> con el profesor y otros estudiantes.</p>
+        </div>
+      </div>
+
+      {% if certificado_disponible %}
+        <a href="{% url 'generar_certificado' product.id %}" class="vc-cert-btn">
+          <i class="fa-solid fa-graduation-cap"></i> Obtener certificado
+        </a>
+      {% endif %}
+
+    </div>
+
+  </div>
 </div>
+
 <script>
-  document.querySelectorAll('.progress-bar-fill').forEach(el => {
+  document.querySelectorAll('.vc-progress-fill').forEach(function (el) {
     el.style.width = el.dataset.percent + '%';
   });
 </script>
-    <small>{{ porcentaje }}% del curso completado</small>
-
-    <div class="player-box mt-3">
-      {% if clase.tipo_contenido == 'video' %}
-        <video controls preload="metadata" id="lesson-media" src="{{ clase.fileClase.url }}"></video>
-      {% elif clase.tipo_contenido == 'pdf' %}
-        <iframe src="{{ clase.fileClase.url }}#toolbar=1"></iframe>
-      {% elif clase.tipo_contenido == 'imagen' %}
-        <img src="{{ clase.fileClase.url }}" alt="{{ clase.titleClase }}">
-      {% else %}
-        <p>Vista previa no disponible para este tipo de archivo.</p>
-        <a href="{{ clase.fileClase.url }}" download class="btn btn-outline-secondary">Descargar archivo</a>
-      {% endif %}
-    </div>
-
-    <div class="d-flex gap-2 mt-3">
-      <form method="POST" action="{% url 'toggle_leccion_completada' clase.id %}">
-        {% csrf_token %}
-        <button type="submit" class="btn {% if es_completada %}btn-success{% else %}btn-outline-success{% endif %}">
-          {% if es_completada %}✔ Completada{% else %}Marcar como completada{% endif %}
-        </button>
-      </form>
-
-      <button id="offline-btn" type="button" class="btn btn-outline-primary"
-              data-url="{{ clase.fileClase.url }}" data-id="clase-{{ clase.id }}">
-        Descargar para offline
-      </button>
-      {% if clase.materialClase %}
-        <a href="{{ clase.materialClase.url }}" download class="btn     btn-outline-dark">
-          📎 Materiales a usar
-        </a>
-      {% endif %}
-    </div>
-
-    <div class="nav-buttons">
-      {% if anterior %}<a href="{% url 'ver_clase' anterior.id %}" class="btn btn-light">← Anterior</a>{% else %}<span></span>{% endif %}
-      {% if siguiente %}<a href="{% url 'ver_clase' siguiente.id %}" class="btn btn-primary">Siguiente →</a>{% endif %}
-    </div>
-  </div>
-
-  <div class="sidebar-col">
-    {% for modulo in modulos %}
-      <div class="accordion-modulo">
-        <div class="accordion-header" onclick="this.nextElementSibling.classList.toggle('open')">
-          {{ modulo.titulo }}
-          <span>{{ modulo.total_clases }} lecciones</span>
-        </div>
-        <div class="accordion-body {% if modulo.id == clase.modulo_id %}open{% endif %}">
-          {% for c in modulo.clases.all %}
-            <a href="{% url 'ver_clase' c.id %}" class="leccion-item {% if c.id == clase.id %}active{% endif %}">
-              <span class="check {% if c.id in completadas_ids %}done{% endif %}"></span>
-              {{ c.titleClase }}
-            </a>
-          {% endfor %}
-        </div>
-      </div>
-    {% endfor %}
-
-    {% if sin_modulo %}
-      <div class="accordion-modulo">
-        <div class="accordion-header" onclick="this.nextElementSibling.classList.toggle('open')">
-          Otras clases
-        </div>
-        <div class="accordion-body open">
-          {% for c in sin_modulo %}
-            <a href="{% url 'ver_clase' c.id %}" class="leccion-item {% if c.id == clase.id %}active{% endif %}">
-              <span class="check {% if c.id in completadas_ids %}done{% endif %}"></span>
-              {{ c.titleClase }}
-            </a>
-          {% endfor %}
-        </div>
-      </div>
-    {% endif %}
-{% if quizzes or tareas %}
-      <div class="accordion-modulo">
-        <div class="accordion-header" onclick="this.nextElementSibling.classList.toggle('open')">
-          Evaluaciones y tareas
-        </div>
-        <div class="accordion-body open">
-          {% for quiz in quizzes %}
-            <a href="{% url 'tomar_quiz' quiz.id %}" class="leccion-item">📝 {{ quiz.titulo }}</a>
-          {% endfor %}
-          {% for tarea in tareas %}
-            <a href="{% url 'entregar_tarea' tarea.id %}" class="leccion-item">📤 {{ tarea.titulo }}</a>
-          {% endfor %}
-        </div>
-      </div>
-    {% endif %}
-
-    {% if certificado_disponible %}
-      <div class="p-3">
-        <a href="{% url 'generar_certificado' product.id %}" class="btn btn-success w-100">🎓 Obtener certificado</a>
-      </div>
-    {% endif %}
-
-  </div>
-</div>
-
 {% endblock %}

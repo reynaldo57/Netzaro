@@ -1,21 +1,175 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/wishlist.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-<h2 class="text-center my-4">Mi lista de deseos</h2>
-<div class="product-grid d-flex flex-wrap gap-3 justify-content-center">
-  {% for item in items %}
-    <div class="card" style="width: 250px;">
-      <img class="card-img-top" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
-      <div class="card-body">
-        <a href="{% url 'product' item.product.id %}">{{ item.product.name }}</a>
-        <div style="color: green;">${{ item.product.price }}</div>
-        <form method="POST" action="{% url 'toggle_wishlist' item.product.id %}">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-sm btn-outline-danger mt-2">Quitar</button>
-        </form>
-      </div>
+
+<header class="wl-hero">
+    <div class="wl-hero-content">
+        <h1>Mi Lista de Deseos</h1>
+        <p>Guarda y gestiona los cursos que deseas adquirir en el futuro.</p>
     </div>
-  {% empty %}
-    <p>Aún no has guardado ningún curso.</p>
-  {% endfor %}
-</div>
+</header>
+
+<main class="wl-container">
+    <div class="row g-4">
+
+        <!-- COLUMNA IZQUIERDA: LISTA DE ELEMENTOS -->
+        <div class="col-lg-8">
+
+            <div class="wishlist-toolbar">
+                <div class="wishlist-count">
+                    {{ items|length }} Curso{{ items|length|pluralize }} guardado{{ items|length|pluralize }} <span>en tu lista</span>
+                </div>
+            </div>
+
+            {% for item in items %}
+            <div class="wishlist-card" data-price="{% if item.product.is_sale and item.product.sale_price %}{{ item.product.sale_price }}{% else %}{{ item.product.price }}{% endif %}" data-original-price="{{ item.product.price }}">
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="wishlist-img">
+
+                <div class="wishlist-info">
+                    <div>
+                        <a href="{% url 'product' item.product.id %}" class="wishlist-title">{{ item.product.name }}</a>
+
+                        <div class="wishlist-meta">
+                            <a href="{% url 'user_information' item.product.user.username %}"><i class="fas fa-user-tie me-1"></i> {{ item.product.user.username }}</a>
+                            <span><i class="fas fa-clock me-1"></i> {{ item.product.duration_display }}</span>
+                            <span><i class="fas fa-layer-group me-1"></i> {{ item.product.category.name }}</span>
+                        </div>
+
+                        {% if item.product.rating_count %}
+                        <div class="wishlist-rating">
+                            <i class="fas fa-star"></i> {{ item.product.average_rating|floatformat:1 }}
+                            <span class="text-muted">({{ item.product.rating_count }} valoraciones)</span>
+                        </div>
+                        {% else %}
+                        <div class="wishlist-rating text-muted"><i class="fas fa-star"></i> Sin reseñas todavía</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="wishlist-price-action">
+                        <div class="price-tag">
+                            {% if item.product.is_sale and item.product.sale_price %}
+                                ${{ item.product.sale_price }} <span class="old-price">${{ item.product.price }}</span>
+                            {% else %}
+                                ${{ item.product.price }}
+                            {% endif %}
+                        </div>
+
+                        <div class="action-btns">
+                            <button type="button" class="btn-add-cart js-add-to-cart" data-id="{{ item.product.id }}">
+                                <i class="fas fa-cart-shopping me-1"></i> Añadir al carrito
+                            </button>
+                            <form method="POST" action="{% url 'toggle_wishlist' item.product.id %}" class="m-0">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-remove">
+                                    <i class="fas fa-trash-can me-1"></i> Quitar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="wl-empty">Aún no has guardado ningún curso.</div>
+            {% endfor %}
+
+        </div>
+
+        <!-- COLUMNA DERECHA: RESUMEN -->
+        {% if items %}
+        <div class="col-lg-4">
+            <div class="summary-card">
+                <div class="summary-title">
+                    <i class="fas fa-receipt me-1"></i> Resumen de tu lista
+                </div>
+
+                <div class="summary-row">
+                    <span>Cursos seleccionados:</span>
+                    <span class="fw-bold" id="wl-summary-count">{{ items|length }}</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Precio original:</span>
+                    <span id="wl-summary-original">$0.00</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Descuento aplicado:</span>
+                    <span class="text-success" id="wl-summary-discount">-$0.00</span>
+                </div>
+
+                <div class="summary-row total">
+                    <span>Total estimado:</span>
+                    <span id="wl-summary-total">$0.00</span>
+                </div>
+
+                <button type="button" class="btn-checkout-all" id="wl-checkout-all">
+                    <i class="fas fa-bolt me-1"></i> Comprar todo ahora
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    function addProductToCart(productId) {
+        return $.ajax({
+            type: 'POST',
+            url: "{% url 'cart_add' %}",
+            data: {
+                product_id: productId,
+                product_qty: 1,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            }
+        });
+    }
+
+    $(document).on('click', '.js-add-to-cart', function () {
+        const $btn = $(this);
+        addProductToCart($btn.data('id')).done(function (json) {
+            const $qty = document.getElementById('cart_quantity');
+            if ($qty) { $qty.textContent = json.qty; }
+            $btn.html('<i class="fas fa-check me-1"></i> Añadido');
+        }).fail(function (xhr) {
+            console.log(xhr.status + ': ' + xhr.responseText);
+        });
+    });
+
+    $(document).on('click', '#wl-checkout-all', function () {
+        const $btn = $(this);
+        const ids = $('.wishlist-card').map(function () { return $(this).find('.js-add-to-cart').data('id'); }).get();
+        $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> Procesando...');
+
+        const requests = ids.map(function (id) { return addProductToCart(id); });
+        $.when.apply($, requests).always(function () {
+            window.location.href = "{% url 'cart_summary' %}";
+        });
+    });
+
+    (function () {
+        let original = 0;
+        let final = 0;
+        document.querySelectorAll('.wishlist-card').forEach(function (card) {
+            original += parseFloat(card.dataset.originalPrice) || 0;
+            final += parseFloat(card.dataset.price) || 0;
+        });
+        const discount = original - final;
+        const fmt = function (n) { return '$' + n.toFixed(2); };
+
+        const elOriginal = document.getElementById('wl-summary-original');
+        const elDiscount = document.getElementById('wl-summary-discount');
+        const elTotal = document.getElementById('wl-summary-total');
+        if (elOriginal) { elOriginal.textContent = fmt(original); }
+        if (elDiscount) { elDiscount.textContent = '-' + fmt(discount); }
+        if (elTotal) { elTotal.textContent = fmt(final); }
+    })();
+</script>
 {% endblock %}

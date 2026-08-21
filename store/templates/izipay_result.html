@@ -1,508 +1,580 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Resultado de Pago</title>
+  <title>Resultado del Pago - izipay</title>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css"
-      integrity="sha384-QDSPDoVOoSWz2ypaRUidLmLYl4RyoBWI44iA5agn6jHegBxZkNqgm2eHb6yZ5bYs" crossorigin="anonymous" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-        --color-primary: #dc2626;
-        --color-secondary: #991b1b;
-        --color-success: #059669;
-        --color-error: #dc2626;
-        --color-warning: #d97706;
-        --color-bg: #f8fafc;
-        --color-text: #1e293b;
-    }
+  :root {
+      --izipay-red: #FF3843;
+      --izipay-red-hover: #E02D38;
+      --izipay-cyan: #00D1C1;
+      --izipay-cyan-dark: #00B3A5;
+      --izipay-dark: #1E232A;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-400: #94A3B8;
+      --slate-500: #64748B;
+      --slate-700: #334155;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+      --emerald-50: #ECFDF5;
+      --emerald-100: #D1FAE5;
+      --emerald-500: #10B981;
+      --emerald-700: #047857;
+      --emerald-800: #065F46;
+      --emerald-950: #022C22;
+      --rose-50: #FFF1F2;
+      --rose-100: #FFE4E6;
+      --amber-50: #FFFBEB;
+      --amber-200: #FDE68A;
+      --amber-800: #92400E;
+      --amber-900: #78350F;
+  }
 
-    
+  * { box-sizing: border-box; }
 
-    /* ========== NAVBAR ========== */
-    .navbar {
-        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%) !important;
-        padding: 1.25rem 0;
-        box-shadow: 0 4px 20px rgba(220, 38, 38, 0.2);
-        position: relative;
-        overflow: hidden;
-    }
+  body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--slate-100);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: var(--izipay-dark);
+  }
 
-    .navbar::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-        animation: float 8s ease-in-out infinite;
-    }
+  /* ========== BARRA SUPERIOR ========== */
+  .izipay-header {
+      background-color: var(--izipay-red);
+      color: #ffffff;
+      padding: 0.85rem 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  }
 
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-20px); }
-    }
+  .brand-logo-izipay {
+      font-size: 1.4rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+  }
 
-    .navbar-brand {
-        position: relative;
-        z-index: 10;
-        transition: transform 0.3s ease;
-    }
+  .brand-logo-izipay span { color: var(--izipay-cyan); }
 
-    .navbar-brand:hover {
-        transform: scale(1.05);
-    }
+  .header-status-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      backdrop-filter: blur(4px);
+  }
 
-    .navbar-brand img {
-        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
-    }
+  .header-status-pill i { color: var(--izipay-cyan); }
 
-    /* ========== CONTAINER ========== */
-    .container {
-        margin-top: 3rem;
-        animation: fadeInUp 0.8s ease;
-    }
+  /* ========== CONTENEDOR PRINCIPAL ========== */
+  .result-main {
+      flex: 1;
+      padding: 2rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
 
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+  .result-card {
+      max-width: 960px;
+      width: 100%;
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      border: 1px solid var(--slate-200);
+  }
 
-    /* ========== RESULT CARD ========== */
-    .result-form {
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-        padding: 0;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid #e5e7eb;
-    }
+  /* ========== BANNER INTERNO DE ESTADO ========== */
+  .status-banner {
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      background-color: var(--emerald-50);
+      border-bottom: 1px solid var(--emerald-100);
+  }
 
-    /* ========== STATUS HEADER ========== */
-    .status-header {
-        text-align: center;
-        padding: 3rem 2rem;
-        position: relative;
-        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-        border-bottom: 3px solid var(--color-primary);
-    }
+  .status-banner.is-error {
+      background-color: var(--rose-50);
+      border-bottom-color: var(--rose-100);
+  }
 
-    .status-header.success {
-        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-        border-bottom-color: var(--color-success);
-    }
+  .status-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+  }
 
-    .status-icon {
-        font-size: 4rem;
-        margin-bottom: 1rem;
-        animation: scaleIn 0.5s ease;
-    }
+  .status-icon-box {
+      width: 4rem;
+      height: 4rem;
+      background-color: var(--emerald-500);
+      color: #ffffff;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.7rem;
+      box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.25);
+  }
 
-    @keyframes scaleIn {
-        from {
-            opacity: 0;
-            transform: scale(0.5);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
+  .status-banner.is-error .status-icon-box {
+      background-color: var(--izipay-red);
+      box-shadow: 0 10px 15px -3px rgba(255, 56, 67, 0.25);
+  }
 
-    .status-icon.success {
-        color: var(--color-success);
-    }
+  .status-pill {
+      display: inline-block;
+      padding: 0.15rem 0.65rem;
+      background-color: var(--emerald-100);
+      color: var(--emerald-800);
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+  }
 
-    .status-icon.error {
-        color: var(--color-error);
-    }
+  .status-banner.is-error .status-pill {
+      background-color: var(--rose-100);
+      color: var(--izipay-red);
+  }
 
-    .status-header h2 {
-        font-size: 2rem;
-        font-weight: 800;
-        margin-bottom: 0.5rem;
-        letter-spacing: -0.5px;
-    }
+  .status-banner-left h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--emerald-950);
+      margin: 0;
+  }
 
-    .status-header.success h2 {
-        color: var(--color-success);
-    }
+  .status-banner.is-error .status-banner-left h1 { color: var(--izipay-dark); }
 
-    .status-header.error h2 {
-        color: var(--color-error);
-    }
+  .status-banner-left p {
+      font-size: 0.85rem;
+      color: var(--emerald-700);
+      margin: 0.2rem 0 0 0;
+  }
 
-    .status-header p {
-        color: #64748b;
-        font-size: 1.0625rem;
-        margin: 0;
-    }
+  .status-banner.is-error .status-banner-left p { color: var(--slate-500); }
 
-    /* ========== PAYMENT INFO ========== */
-    .payment-info {
-        padding: 2.5rem;
-    }
+  .status-banner-icon-deco {
+      font-size: 3rem;
+      color: var(--emerald-500);
+      opacity: 0.25;
+      flex-shrink: 0;
+  }
 
-    .info-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.25rem;
-        margin-bottom: 1rem;
-        background: #fafafa;
-        border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        transition: all 0.3s ease;
-    }
+  .status-banner.is-error .status-banner-icon-deco { color: var(--izipay-red); }
 
-    .info-row:hover {
-        background: white;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
+  /* ========== DETALLE DE TRANSACCIÓN ========== */
+  .result-body {
+      padding: 1.75rem 2rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+  }
 
-    .info-label {
-        font-weight: 600;
-        color: var(--color-text);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
+  @media (max-width: 768px) {
+      .result-body { grid-template-columns: 1fr; }
+  }
 
-    .info-label i {
-        color: var(--color-primary);
-        font-size: 1.25rem;
-    }
+  .main-column, .side-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+  }
 
-    .info-value {
-        font-weight: 700;
-        color: var(--color-primary);
-        font-size: 1.125rem;
-    }
+  /* Resumen de estado */
+  .summary-tile {
+      background-color: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+  }
 
-    /* ========== TECHNICAL DETAILS ========== */
-    .technical-section {
-        padding: 0 2.5rem 2.5rem 2.5rem;
-    }
+  .summary-tile-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+  }
 
-    details {
-        margin-bottom: 1.5rem;
-        border: 2px solid #e5e7eb;
-        border-radius: 12px;
-        overflow: hidden;
-        background: white;
-    }
+  .summary-tile-left > i {
+      color: var(--slate-400);
+      font-size: 1.2rem;
+  }
 
-    summary {
-        padding: 1.25rem 1.5rem;
-        background: #fafafa;
-        cursor: pointer;
-        font-weight: 700;
-        color: var(--color-text);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        transition: all 0.3s ease;
-        user-select: none;
-    }
+  .tile-label {
+      font-size: 0.7rem;
+      color: var(--slate-500);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin: 0 0 0.15rem 0;
+  }
 
-    summary:hover {
-        background: #f1f5f9;
-    }
+  .status-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.15rem 0.65rem;
+      border-radius: 999px;
+      background-color: rgba(0, 209, 193, 0.15);
+      color: var(--izipay-cyan-dark);
+  }
 
-    summary::after {
-        content: '▼';
-        font-size: 0.875rem;
-        color: var(--color-primary);
-        transition: transform 0.3s ease;
-    }
+  .status-badge.is-error {
+      background-color: rgba(255, 56, 67, 0.12);
+      color: var(--izipay-red);
+  }
 
-    details[open] summary::after {
-        transform: rotate(180deg);
-    }
+  .summary-tile-right { text-align: right; }
 
-    summary h2 {
-        font-size: 1.125rem;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
+  .amount-value {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--izipay-red);
+      margin: 0;
+  }
 
-    summary i {
-        color: var(--color-primary);
-        font-size: 1.25rem;
-    }
+  /* Detalles del pedido */
+  .order-details-box {
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      overflow: hidden;
+  }
 
-    pre {
-        padding: 1.5rem;
-        background: #1e293b;
-        color: #e2e8f0;
-        border-radius: 0;
-        margin: 0;
-        overflow-x: auto;
-        font-size: 0.875rem;
-        line-height: 1.6;
-        font-family: 'Courier New', monospace;
-    }
+  .order-details-header {
+      background-color: var(--slate-50);
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--slate-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  }
 
-    /* ========== WARNING BANNER ========== */
-    .warning-banner {
-        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-        border: 2px solid var(--color-warning);
-        border-radius: 12px;
-        padding: 1.25rem 1.5rem;
-        margin-bottom: 1.5rem;
-        display: flex;
-        align-items: flex-start;
-        gap: 1rem;
-    }
+  .order-details-header h2 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--slate-700);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+  }
 
-    .warning-banner i {
-        color: var(--color-warning);
-        font-size: 1.75rem;
-        flex-shrink: 0;
-    }
+  .order-details-header h2 i { color: var(--izipay-cyan); }
 
-    .warning-banner div {
-        flex: 1;
-    }
+  .order-details-header .order-ref {
+      font-size: 0.75rem;
+      color: var(--slate-500);
+      font-family: 'Courier New', monospace;
+  }
 
-    .warning-banner h3 {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #92400e;
-        margin-bottom: 0.5rem;
-    }
+  .order-details-grid {
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      font-size: 0.88rem;
+  }
 
-    .warning-banner p {
-        font-size: 0.875rem;
-        color: #78350f;
-        margin: 0;
-        line-height: 1.5;
-    }
+  .order-details-grid span.label {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--slate-500);
+  }
 
-    /* ========== ACTIONS ========== */
-    .actions {
-        padding: 0 2.5rem 2.5rem 2.5rem;
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-    }
+  .order-details-grid span.value {
+      font-weight: 700;
+      color: var(--slate-800);
+  }
 
-    .btn-custom {
-        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-        color: white;
-        border: none;
-        padding: 1rem 2.5rem;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 1.0625rem;
-        box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3);
-        transition: all 0.3s ease;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
+  .order-details-grid span.value.brand { color: var(--izipay-red); }
 
-    .btn-custom::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.3);
-        transform: translate(-50%, -50%);
-        transition: width 0.5s, height 0.5s;
-    }
+  /* Warning banner */
+  .warning-banner {
+      background-color: var(--amber-50);
+      border: 1px solid var(--amber-200);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      font-size: 0.78rem;
+      color: var(--amber-900);
+  }
 
-    .btn-custom:hover::before {
-        width: 400px;
-        height: 400px;
-    }
+  .warning-banner .warning-title {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--amber-800);
+  }
 
-    .btn-custom:hover {
-        background: linear-gradient(135deg, var(--color-secondary) 0%, #7f1d1d 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 28px rgba(220, 38, 38, 0.4);
-        color: white;
-        text-decoration: none;
-    }
+  /* Acordeones de debugging */
+  .debug-accordion {
+      border: 1px solid var(--slate-200);
+      border-radius: 10px;
+      background-color: var(--slate-50);
+      overflow: hidden;
+  }
 
-    /* ========== RESPONSIVE ========== */
-    @media (max-width: 768px) {
-        .container {
-            margin-top: 2rem;
-        }
+  .debug-accordion summary {
+      padding: 0.6rem 1rem;
+      font-weight: 700;
+      font-size: 0.78rem;
+      color: var(--slate-700);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+  }
 
-        .status-header {
-            padding: 2.5rem 1.5rem;
-        }
+  .debug-accordion summary::-webkit-details-marker { display: none; }
 
-        .status-icon {
-            font-size: 3rem;
-        }
+  .debug-accordion summary span { display: flex; align-items: center; gap: 0.5rem; }
 
-        .status-header h2 {
-            font-size: 1.5rem;
-        }
+  .debug-accordion summary i.chevron { transition: transform 0.2s; color: var(--slate-500); }
 
-        .payment-info,
-        .technical-section,
-        .actions {
-            padding: 1.5rem;
-        }
+  .debug-accordion[open] summary {
+      background-color: rgba(255, 56, 67, 0.06);
+      color: var(--izipay-red);
+  }
 
-        .info-row {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
+  .debug-accordion[open] summary i.chevron { transform: rotate(180deg); color: var(--izipay-red); }
 
-        .actions {
-            flex-direction: column;
-        }
+  .debug-accordion pre {
+      margin: 0;
+      padding: 0.75rem 1rem;
+      background-color: var(--slate-900);
+      color: var(--izipay-cyan);
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      border-top: 1px solid var(--slate-200);
+      white-space: pre-wrap;
+      word-break: break-all;
+      overflow-x: auto;
+  }
 
-        .btn-custom {
-            width: 100%;
-        }
-    }
+  /* Columna lateral */
+  .side-card {
+      background-color: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      padding: 1rem;
+  }
 
-    @media (max-width: 576px) {
-        .navbar-brand img {
-            width: 70px;
-        }
+  .side-card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--izipay-cyan-dark);
+      font-weight: 700;
+      font-size: 0.78rem;
+      margin-bottom: 0.5rem;
+  }
 
-        .result-form {
-            border-radius: 16px;
-        }
+  .side-card-title i { color: var(--izipay-cyan); }
 
-        .status-icon {
-            font-size: 2.5rem;
-        }
+  .side-card p {
+      font-size: 0.78rem;
+      color: var(--slate-500);
+      line-height: 1.5;
+      margin: 0;
+  }
 
-        .status-header h2 {
-            font-size: 1.25rem;
-        }
+  .ssl-badges {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: var(--slate-400);
+      font-size: 1.4rem;
+      margin-top: 0.35rem;
+  }
 
-        pre {
-            font-size: 0.75rem;
-            padding: 1rem;
-        }
-    }
+  .btn-volver {
+      width: 100%;
+      background-color: var(--izipay-red);
+      color: #ffffff;
+      font-weight: 700;
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      text-decoration: none;
+      box-shadow: 0 10px 15px -3px rgba(255, 56, 67, 0.25);
+      transition: background-color 0.2s;
+  }
+
+  .btn-volver:hover {
+      background-color: var(--izipay-red-hover);
+      color: #ffffff;
+  }
   </style>
 </head>
 
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="container-fluid">
-        <a href="/" class="navbar-brand mb-1">
-            <img src="https://iziweb001b.s3.amazonaws.com/webresources/img/logo.png" width="80" alt="Logo">
-        </a>
-    </div>
-  </nav>
 
-  <!-- SECCIÓN PRINCIPAL -->
-  <section class="container">
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-8">
-        <section class="result-form">
-          <!-- Status Header - Cambia la clase según el estado -->
-          <div class="status-header {% if answer.orderStatus == 'PAID' %}success{% else %}error{% endif %}">
-            <i class="bi {% if answer.orderStatus == 'PAID' %}bi-check-circle-fill success{% else %}bi-x-circle-fill error{% endif %} status-icon"></i>
-            <h2>{% if answer.orderStatus == 'PAID' %}¡Pago Exitoso!{% else %}Pago Rechazado{% endif %}</h2>
-            <p>{% if answer.orderStatus == 'PAID' %}Tu transacción se ha completado correctamente{% else %}No se pudo procesar el pago{% endif %}</p>
-          </div>
-
-          <!-- Payment Info -->
-          <div class="payment-info">
-            <div class="info-row">
-              <span class="info-label">
-                <i class="bi bi-check-circle"></i>
-                Estado
-              </span>
-              <span class="info-value">{{ answer.orderStatus }}</span>
-            </div>
-
-            <div class="info-row">
-              <span class="info-label">
-                <i class="bi bi-cash-stack"></i>
-                Monto
-              </span>
-              <span class="info-value">{{ answer.orderDetails.orderCurrency }} {{ answer.orderDetails.orderTotalAmount|floatformat:2 }}</span>
-            </div>
-
-            <div class="info-row">
-              <span class="info-label">
-                <i class="bi bi-receipt"></i>
-                Número de Orden
-              </span>
-              <span class="info-value">{{ answer.orderDetails.orderId }}</span>
-            </div>
-          </div>
-
-          <!-- Technical Details (Colapsados por defecto) -->
-          <div class="technical-section">
-            <!-- Warning Banner -->
-            <div class="warning-banner">
-              <i class="bi bi-exclamation-triangle-fill"></i>
-              <div>
-                <h3>⚠️ Información de Desarrollo</h3>
-                <p>Esta información técnica NO debería mostrarse en producción por razones de seguridad. Solo para propósitos de debugging.</p>
-              </div>
-            </div>
-
-            <details>
-              <summary>
-                <h2><i class="bi bi-server"></i> Respuesta del Servidor</h2>
-              </summary>
-              <pre>{{ postData }}</pre>
-            </details>
-
-            <details>
-              <summary>
-                <h2><i class="bi bi-code-square"></i> kr-answer (Datos Internos)</h2>
-              </summary>
-              <pre>{{ krAnswerData }}</pre>
-            </details>
-          </div>
-
-          <!-- Actions -->
-          <div class="actions">
-            <form action="/" method="get" style="margin: 0;">
-              <button type="submit" class="btn-custom">
-                <i class="bi bi-arrow-left-circle"></i> Volver al Inicio
-              </button>
-            </form>
-          </div>
-        </section>
+  <!-- BARRA SUPERIOR -->
+  <header class="izipay-header">
+      <div class="brand-logo-izipay">izi<span>pay</span></div>
+      <div class="header-status-pill">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Transacción Finalizada</span>
       </div>
-      <div class="col-md-2"></div>
-    </div>
-  </section>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="result-main">
+      <div class="result-card">
+
+          <!-- Banner interno de estado -->
+          <div class="status-banner {% if answer.orderStatus != 'PAID' %}is-error{% endif %}">
+              <div class="status-banner-left">
+                  <div class="status-icon-box">
+                      {% if answer.orderStatus == 'PAID' %}
+                      <i class="fa-solid fa-check"></i>
+                      {% else %}
+                      <i class="fa-solid fa-xmark"></i>
+                      {% endif %}
+                  </div>
+                  <div>
+                      <span class="status-pill">{% if answer.orderStatus == 'PAID' %}Confirmado{% else %}Rechazado{% endif %}</span>
+                      <h1>{% if answer.orderStatus == 'PAID' %}¡Pago Exitoso!{% else %}Pago Rechazado{% endif %}</h1>
+                      <p>{% if answer.orderStatus == 'PAID' %}Tu transacción se ha completado correctamente{% else %}No se pudo procesar el pago{% endif %}</p>
+                  </div>
+              </div>
+
+              {% if answer.orderStatus == 'PAID' %}
+              <i class="fa-solid fa-circle-check status-banner-icon-deco"></i>
+              {% else %}
+              <i class="fa-solid fa-circle-xmark status-banner-icon-deco"></i>
+              {% endif %}
+          </div>
+
+          <!-- Detalle de transacción -->
+          <div class="result-body">
+
+              <!-- Columna principal -->
+              <div class="main-column">
+
+                  <!-- Resumen del estado -->
+                  <div class="summary-tile">
+                      <div class="summary-tile-left">
+                          <i class="fa-solid fa-receipt"></i>
+                          <div>
+                              <p class="tile-label">Estado de Pago</p>
+                              <span class="status-badge {% if answer.orderStatus != 'PAID' %}is-error{% endif %}">{{ answer.orderStatus }}</span>
+                          </div>
+                      </div>
+                      <div class="summary-tile-right">
+                          <p class="tile-label">Monto Total</p>
+                          <p class="amount-value">{{ answer.orderDetails.orderCurrency }} {{ answer.orderDetails.orderTotalAmount|floatformat:2 }}</p>
+                      </div>
+                  </div>
+
+                  <!-- Detalles del pedido -->
+                  <div class="order-details-box">
+                      <div class="order-details-header">
+                          <h2><i class="fa-solid fa-credit-card"></i> Detalles del Pedido</h2>
+                          <span class="order-ref">Orden #{{ answer.orderDetails.orderId }}</span>
+                      </div>
+                      <div class="order-details-grid">
+                          <div>
+                              <span class="label">Empresa / Pasarela</span>
+                              <span class="value brand">izipay</span>
+                          </div>
+                          <div>
+                              <span class="label">Número de Orden</span>
+                              <span class="value">{{ answer.orderDetails.orderId }}</span>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Aviso de desarrollo -->
+                  <div class="warning-banner">
+                      <div class="warning-title"><i class="fa-solid fa-triangle-exclamation"></i> Información de Desarrollo</div>
+                      <p>Esta información técnica <strong>NO</strong> debería mostrarse en producción por razones de seguridad. Solo para propósitos de debugging.</p>
+                  </div>
+
+                  <!-- Acordeones de debugging -->
+                  <details class="debug-accordion">
+                      <summary>
+                          <span><i class="fa-solid fa-server"></i> Respuesta del Servidor</span>
+                          <i class="fa-solid fa-chevron-down chevron"></i>
+                      </summary>
+                      <pre>{{ postData }}</pre>
+                  </details>
+
+                  <details class="debug-accordion">
+                      <summary>
+                          <span><i class="fa-solid fa-code"></i> kr-answer (Datos Internos)</span>
+                          <i class="fa-solid fa-chevron-down chevron"></i>
+                      </summary>
+                      <pre>{{ krAnswerData }}</pre>
+                  </details>
+
+              </div>
+
+              <!-- Columna lateral -->
+              <div class="side-column">
+
+                  <div class="side-card">
+                      <div class="side-card-title"><i class="fa-solid fa-lock"></i> Procesamiento Seguro</div>
+                      <p>Operación encriptada y procesada a través de los servidores de <strong>izipay</strong>.</p>
+                  </div>
+
+                  <div class="side-card" style="text-align: center;">
+                      <p class="tile-label" style="margin-bottom: 0.5rem;">Soporte de pagos SSL</p>
+                      <div class="ssl-badges">
+                          <i class="fa-solid fa-lock"></i>
+                          <i class="fa-solid fa-shield-halved"></i>
+                          <i class="fa-regular fa-credit-card"></i>
+                      </div>
+                  </div>
+
+                  <a href="/" class="btn-volver">
+                      <i class="fa-solid fa-house"></i> Volver al Inicio
+                  </a>
+
+              </div>
+
+          </div>
+
+      </div>
+  </main>
+
 </body>
 </html>

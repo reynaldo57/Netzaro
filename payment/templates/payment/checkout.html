@@ -1,154 +1,167 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Finaliza tu Compra{% endblock title %}
+
+{% block extra_css %}
+<link href="{% static 'css/checkout.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
+<div class="antares-checkout-page">
+    <div class="container">
 
-<style>
-  body::-webkit-scrollbar {
-    display: none;
-}
-:root {
-        --color-dominante: #ffffff;    /* 60% - Blanco (Limpieza absoluta) */
-        --color-primario: #b91c1c;      /* 30% - Rojo Sangre (Poder y acción) */
-        --color-secundario: #1d3557;    /* 10% - Azul Marino (Confianza y detalle) */
-        --gris-borde: #e2e8f0;
-        --gris-fondo: #f8fafc;         /* Color neutro para suavizar fondos */
-        --texto-negro: #000000;
-    }
-    
-    /* ========== HEADER REFINADO (SIN CAMBIOS) ========== */
-    header {
-        background: var(--color-primario) !important;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-bottom: 5px solid var(--color-secundario);
-        margin-bottom: 1rem;
-        height: 100px !important;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        padding: 1rem 0 !important;
-    }
-
-    header h1 {
-        color: white !important;
-        font-weight: bold !important;
-        text-transform: uppercase;
-        margin-top: 1rem;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        letter-spacing: -0.5px;
-    }
-    header p {
-        color: white !important;
-        margin-top: 1px;
-    }
-
-</style>
-
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Header -->
-  <header>
-      <h1>Finaliza tu Compra</h1>
-      <p>Consigue lo mejor para estas ocaciones</p>
-</header>
-
-<!-- Main Content -->
-<div class="container-fluid my-5">
-    <div class="row gx-4">
-        
-        <!-- Sidebar Izquierdo -->
-        <div class="col-lg-3 mb-4">
-            <div class="card mb-3 border-info">
-                <div class="card-header bg-info text-white">Beneficios</div>
-                <div class="card-body">
-                    <ul class="list-unstyled mb-0">
-                        <li>✔️ Garantía de devolución</li>
-                        <li>✔️ Envío gratuito desde $50</li>
-                        <li>✔️ Productos verificados</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card mb-3 border-success">
-                <div class="card-header bg-success text-white">Métodos de pago</div>
-                <div class="card-body">
-                    <p>Aceptamos:</p>
-                    <ul class="list-unstyled">
-                        <li>💳 Tarjetas de crédito</li>
-                        <li>💰 Izipay</li>
-                        <li>🪙 Criptomonedas (próximamente)</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fa-solid fa-credit-card"></i> Finaliza tu compra
+            </h1>
+            <p class="page-subtitle">Consigue lo mejor para tus oportunidades de aprendizaje.</p>
         </div>
 
-        <!-- Contenido Central -->
-        <div class="col-lg-6">
-            <!-- Order Summary -->
-            <div class="card mb-4 shadow">
-                <div class="card-header text-white bg-danger">Resumen del pedido</div>
-                <div class="card-body">
-                              
-                    
-                              {% for line in lines %}
-                              <div class="d-flex justify-content-between">
-                              <strong>{{ line.product.name }}</strong>
-                              <span>
-                                  {% if line.discounted %}
-                                    <del class="text-muted">${{ line.base_price }}</del> ${{ line.final_price }}
-                                  {% else %}
-                                    ${{ line.final_price }}
-                                  {% endif %}
-                              </span>
-                              </div>
-                              <small>Cantidad: {{ line.quantity }}</small>
-                            <hr>
-                            {% endfor %}
-                              <h5 class="text-end">Total: ${{ totals }}</h5>
-                              <div class="text-end">
-                              <a href="{% url 'cart_summary' %}" class="btn btn-outline-danger btn-sm">Actualizar carrito</a>
-                            </div>
-                </div>
-            </div>
+        <div class="row g-4">
 
-            <!-- Shipping Form -->
-            <div class="card shadow">
-                <div class="card-header bg-danger text-white">Información de envío</div>
-                <div class="card-body">
-                  <form method="POST" action="{% url 'billing_info' %}">
+            <!-- INFORMACIÓN DE ENVÍO / FACTURACIÓN -->
+            <div class="col-lg-7">
+                <div class="panel-card mb-4">
+                    <h5 class="card-section-title">
+                        <span><i class="fa-solid fa-user-gear"></i> Información de envío</span>
+                    </h5>
+
+                    <form method="POST" action="{% url 'billing_info' %}">
                         {% csrf_token %}
-                        {{ shipping_form.as_p}}
-                    <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-danger me-2">Pagar con PayPal</button>
-                        <button type="submit" name="pago_metodo" value="izipay" class="btn btn-secondary" id="izipay-btn">Pagar con Izypay</button>
-                      </div>
+                        <p class="error-text">{{ shipping_form.non_field_errors }}</p>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Nombre completo</label>
+                                {{ shipping_form.shipping_full_name }}
+                                <p class="error-text">{{ shipping_form.shipping_full_name.errors }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Correo electrónico</label>
+                                {{ shipping_form.shipping_email }}
+                                <p class="error-text">{{ shipping_form.shipping_email.errors }}</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label-custom">Dirección Principal</label>
+                            {{ shipping_form.shipping_address1 }}
+                            <p class="error-text">{{ shipping_form.shipping_address1.errors }}</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label-custom">Dirección Secundaria <span class="text-muted fw-normal">(opcional)</span></label>
+                            {{ shipping_form.shipping_address2 }}
+                            <p class="error-text">{{ shipping_form.shipping_address2.errors }}</p>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Ciudad</label>
+                                {{ shipping_form.shipping_city }}
+                                <p class="error-text">{{ shipping_form.shipping_city.errors }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Estado / Región <span class="text-muted fw-normal">(opcional)</span></label>
+                                {{ shipping_form.shipping_state }}
+                                <p class="error-text">{{ shipping_form.shipping_state.errors }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label-custom">Código Postal <span class="text-muted fw-normal">(opcional)</span></label>
+                                {{ shipping_form.shipping_zipcode }}
+                                <p class="error-text">{{ shipping_form.shipping_zipcode.errors }}</p>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label-custom">País</label>
+                                {{ shipping_form.shipping_country }}
+                                <p class="error-text">{{ shipping_form.shipping_country.errors }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">Tema de estudio</label>
+                                {{ shipping_form.shipping_tema_estudio }}
+                                <p class="error-text">{{ shipping_form.shipping_tema_estudio.errors }}</p>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label-custom">{{ shipping_form.shipping_tiempo_inicio.label }}</label>
+                                {{ shipping_form.shipping_tiempo_inicio }}
+                                <p class="error-text">{{ shipping_form.shipping_tiempo_inicio.errors }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">{{ shipping_form.shipping_tiempo_fin.label }}</label>
+                                {{ shipping_form.shipping_tiempo_fin }}
+                                <p class="error-text">{{ shipping_form.shipping_tiempo_fin.errors }}</p>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn-pay-paypal btn-pay-inline">
+                                Pagar con PayPal
+                            </button>
+                            <button type="submit" name="pago_metodo" value="izipay" id="izipay-btn" class="btn-pay-izypay btn-pay-inline">
+                                Pagar con Izypay
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
-        </div>
 
-        <!-- Sidebar Derecho -->
-        <div class="col-lg-3 mb-4">
-            <div class="card mb-3 border-warning">
-                <div class="card-header bg-warning text-dark">¿Necesitas ayuda?</div>
-                <div class="card-body">
-                    <p>📞 Soporte 24/7</p>
-                    <p>✉️ soporte@tienda.com</p>
-                    <p>💬 Chat en vivo</p>
+            <!-- RESUMEN DEL PEDIDO -->
+            <div class="col-lg-5">
+                <div class="panel-card">
+                    <h5 class="card-section-title">
+                        <span><i class="fa-solid fa-basket-shopping"></i> Resumen del pedido</span>
+                        <a href="{% url 'cart_summary' %}" class="link-actualizar">Actualizar carrito</a>
+                    </h5>
+
+                    {% for line in lines %}
+                    <div class="cart-item">
+                        {% if line.product.image %}
+                        <img src="{{ line.product.image.url }}" alt="{{ line.product.name }}" class="cart-item-img">
+                        {% endif %}
+                        <div class="flex-grow-1">
+                            <h6 class="cart-item-title">{{ line.product.name }}</h6>
+                            <span class="cart-item-qty">Cantidad: {{ line.quantity }}</span>
+                        </div>
+                        <div class="cart-item-price">
+                            {% if line.discounted %}
+                            <del>${{ line.base_price }}</del>${{ line.final_price }}
+                            {% else %}
+                            ${{ line.final_price }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="order-total-row">
+                        <span class="order-total-label">Total a pagar:</span>
+                        <span class="order-total-value">${{ totals }}</span>
+                    </div>
+
+                    <div class="trust-box">
+                        <div class="trust-item">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Garantía de devolución de dinero por 30 días.</span>
+                        </div>
+                        <div class="trust-item">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>Encriptación de datos segura SSL de 256 bits.</span>
+                        </div>
+                        <div class="trust-item">
+                            <i class="fa-solid fa-headset"></i>
+                            <span>Soporte al estudiante 24/7 disponible.</span>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
-            <div class="card mb-3 border-primary">
-                <div class="card-header bg-primary text-white">Pasos del proceso</div>
-                <div class="card-body">
-                    <ol class="mb-0">
-                        <li>Revisa tu pedido</li>
-                        <li>Ingresa datos de envío</li>
-                        <li>Selecciona método de pago</li>
-                        <li>Recibe tu orden</li>
-                    </ol>
-                </div>
-            </div>
         </div>
 
     </div>

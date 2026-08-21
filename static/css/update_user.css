@@ -1,0 +1,338 @@
+:root {
+    --uu-border: var(--border-soft);
+    --uu-surface: var(--surface-bg-alt);
+    --uu-text: var(--text-strong);
+    --uu-muted: var(--text-muted-soft);
+}
+
+/* ========== HERO HEADER ========== */
+.uu-hero {
+    background: linear-gradient(180deg, var(--surface-bg-alt) 0%, var(--page-bg) 100%) !important;
+    border-bottom: 1px solid var(--uu-border);
+    padding: 1.75rem 0;
+    margin-bottom: 2rem;
+}
+
+.uu-hero-content {
+    max-width: 1350px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.uu-hero h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--text-strong) !important;
+    text-transform: none;
+}
+
+.uu-hero p {
+    color: var(--text-muted-soft) !important;
+    margin: 0.2rem 0 0;
+    font-size: 0.92rem;
+}
+
+/* ========== CONTENEDOR ========== */
+.uu-container {
+    max-width: 1350px;
+    margin: 0 auto 4rem;
+    padding: 0 1.5rem;
+}
+
+/* ========== CARDS ========== */
+.card-box {
+    background: var(--surface-bg) !important;
+    border: 1px solid var(--uu-border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.3s ease;
+}
+
+.card-box-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-strong) !important;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--uu-border);
+}
+
+.card-box-header > div {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+/* ========== ACENTOS DE COLOR (dinamismo) ========== */
+.accent-rojo { color: var(--rojo) !important; }
+.accent-naranja { color: var(--naranja) !important; }
+.accent-amarillo { color: var(--amarillo) !important; }
+.accent-azul { color: var(--azul) !important; }
+.accent-azul-claro { color: var(--azul-claro) !important; }
+.accent-azul-dark { color: var(--azul-dark) !important; }
+
+/* ========== PERFIL (VERTICAL) ========== */
+.profile-banner-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: var(--uu-surface) !important;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--uu-border);
+}
+
+.avatar-wrapper {
+    width: 130px;
+    height: 130px;
+    margin-bottom: 1rem;
+}
+
+.avatar-wrapper img {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 3px solid var(--uu-surface) !important;
+    box-shadow: 0 0 0 3px var(--naranja) !important;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-bg-alt) !important;
+    border: 3px solid var(--uu-surface) !important;
+    box-shadow: 0 0 0 3px var(--naranja) !important;
+    color: var(--text-muted-soft) !important;
+    font-size: 3rem;
+}
+
+.btn-upload-avatar {
+    background: var(--surface-bg) !important;
+    border: 1px solid var(--uu-border) !important;
+    color: var(--uu-text) !important;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: opacity 0.2s;
+}
+
+.btn-upload-avatar:hover {
+    opacity: 0.85;
+}
+
+#id_image { display: none; }
+
+/* ========== FORMULARIOS ========== */
+.card-box form p {
+    margin-bottom: 1rem;
+}
+
+.card-box label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--uu-muted) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.35rem;
+}
+
+.card-box input[type="text"],
+.card-box input[type="email"],
+.card-box input[type="password"],
+.card-box input[type="tel"],
+.card-box select,
+.card-box textarea {
+    width: 100%;
+    background-color: var(--uu-surface) !important;
+    border: 1px solid var(--uu-border) !important;
+    border-radius: 10px !important;
+    padding: 0.65rem 0.85rem !important;
+    font-size: 0.9rem !important;
+    color: var(--uu-text) !important;
+    box-sizing: border-box;
+}
+
+.card-box input:focus,
+.card-box select:focus,
+.card-box textarea:focus {
+    border-color: var(--azul-dark) !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(29, 53, 87, 0.1) !important;
+}
+
+/* ========== BOTONES DE ACCIÓN ========== */
+.uu-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.btn-save-main {
+    background: var(--gradient-brand) !important;
+    color: #ffffff !important;
+    border: none;
+    padding: 0.8rem 1.8rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.25);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.btn-save-main i { color: #ffffff !important; }
+
+.btn-save-main:hover {
+    opacity: 0.92;
+    color: #ffffff !important;
+}
+
+.btn-outline-uu {
+    border: 1px solid var(--azul-claro) !important;
+    color: var(--azul-claro) !important;
+    background: transparent !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.8rem 1.6rem;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-uu i { color: inherit !important; }
+
+.btn-outline-uu:hover {
+    background: var(--azul-dark) !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-uu.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn-outline-uu.accent-azul { border-color: var(--azul) !important; color: var(--azul) !important; }
+.btn-outline-uu.accent-azul:hover { background: var(--azul) !important; color: #ffffff !important; }
+
+.btn-outline-uu.accent-azul-claro { border-color: var(--azul-claro) !important; color: var(--azul-claro) !important; }
+.btn-outline-uu.accent-azul-claro:hover { background: var(--azul-claro) !important; color: #ffffff !important; }
+
+.btn-outline-uu.accent-naranja { border-color: var(--naranja) !important; color: var(--naranja) !important; }
+.btn-outline-uu.accent-naranja:hover { background: var(--naranja) !important; color: #ffffff !important; }
+
+.btn-outline-uu.accent-amarillo { border-color: var(--amarillo) !important; color: var(--amarillo) !important; }
+.btn-outline-uu.accent-amarillo:hover { background: var(--amarillo) !important; color: #ffffff !important; }
+
+/* ========== ESTADÍSTICAS (DERECHA) ========== */
+.stat-grid-mini {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card-item {
+    background: var(--uu-surface) !important;
+    border: 1px solid var(--uu-border);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.stat-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--surface-bg) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    border: 1px solid var(--uu-border);
+}
+
+.stat-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 20px;
+    background: rgba(232, 93, 25, 0.15) !important;
+    color: var(--naranja) !important;
+}
+
+.stat-card-value {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--uu-text) !important;
+}
+
+.stat-card-label {
+    font-size: 0.78rem;
+    color: var(--uu-muted) !important;
+    font-weight: 600;
+}
+
+.table-custom {
+    width: 100%;
+    margin: 0;
+}
+
+.table-custom th {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    color: var(--uu-muted) !important;
+    font-weight: 700;
+    padding: 0.65rem;
+    border-bottom: 1px solid var(--uu-border);
+}
+
+.table-custom td {
+    padding: 0.75rem 0.65rem;
+    font-size: 0.85rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--uu-border);
+    color: var(--uu-text) !important;
+}
+
+.uu-soon-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted-soft) !important;
+    background: var(--surface-bg-alt) !important;
+    border: 1px solid var(--uu-border);
+    border-radius: 20px;
+    padding: 0.25rem 0.7rem;
+}

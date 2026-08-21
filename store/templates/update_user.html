@@ -1,244 +1,231 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/update_user.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 
-<header>
-      <h1>Mi Panel</h1>
-      <p>Gestiona tu cuenta y productos desde aquí</p>
+<header class="uu-hero">
+    <div class="uu-hero-content">
+        <h1>Mi Panel</h1>
+        <p>Gestiona tu perfil a la izquierda y revisa tus analíticas a la derecha</p>
+    </div>
 </header>
+
 <section>
-<style>
-    :root {
-        --color-dominante: #ffffff;    /* 60% - Blanco (Limpieza absoluta) */
-        --color-primario: #b91c1c;      /* 30% - Rojo Sangre (Poder y acción) */
-        --color-secundario: #1d3557;    /* 10% - Azul Marino (Confianza y detalle) */
-        --gris-borde: #e2e8f0;
-        --texto-negro: #000000;
-    }
+    <div class="uu-container">
+        <div class="row g-4">
 
-    
+            <!-- ==========================================
+                 COLUMNA IZQUIERDA: DATOS DEL USUARIO
+                 ========================================== -->
+            <div class="col-lg-5 col-xl-4">
+                <form method="POST" action="{% url 'update_user' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
 
-    /* ========== HEADER REFINADO ========== */
-    header {
-        background: var(--color-primario) !important;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-bottom: 5px solid var(--color-secundario);
-        margin-bottom: 3rem;
-        height: 100px !important;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        padding: 1rem 0 !important;
-    }
-
-    header h1 {
-        color: white !important;
-        font-weight: bold !important;
-        text-transform: uppercase;
-        margin-top: 1rem;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        letter-spacing: -0.5px;
-    }
-    header p {
-        color: white !important;
-        margin-top: 1px;
-    }
-
-    /* ========== CARDS ELEGANTES (SIN EL WRAPPER ANTERIOR) ========== */
-    .dashboard-card {
-        background: #ffffff;
-        border: 1px solid var(--gris-borde);
-        border-radius: 10px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        transition: border-color 0.3s ease;
-    }
-
-    .dashboard-card:hover {
-        border-color: var(--color-primario);
-    }
-
-    .dashboard-card h5 {
-        color: var(--texto-negro);
-        font-weight: 700;
-        font-size: 1.1rem;
-        display: flex;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        justify-content: center; /* Centra el contenido si usas flex */
-    }
-
-    .dashboard-card h5 i {
-        color: var(--color-primario); /* Icono en Rojo */
-    }
-
-    /* ========== FOTO DE PERFIL Y BOTÓN ========== */
-    .profile-image-preview {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--color-dominante);
-    box-shadow: 0 0 0 2px var(--color-primario);
-    display: block;      /* Asegura que sea bloque */
-    margin: 0 auto 1.5rem auto; /* Centra horizontalmente y da espacio abajo */
-}
-
-    /* Botón Cambiar Foto - ROJO */
-    label[for="id_image"] {
-        background: var(--color-primario) !important;
-        color: white !important;
-        padding: 8px 18px;
-        border-radius: 5px;
-        font-weight: 600;
-        font-size: 0.85rem;
-        cursor: pointer;
-        transition: opacity 0.2s;
-    }
-
-    label[for="id_image"]:hover {
-        opacity: 0.9;
-    }
-
-    /* ========== BOTONES DE ACCIÓN ========== */
-    /* Guardar - ROJO (Acción Principal) */
-    .btn-primary {
-        background-color: var(--color-primario) !important;
-        border: none !important;
-        padding: 10px 25px !important;
-        font-weight: 700 !important;
-        text-transform: uppercase;
-    }
-
-    /* Navegación - AZUL (Sutil) */
-    .btn-outline-primary {
-        border: 1px solid var(--color-secundario) !important;
-        color: var(--color-secundario) !important;
-        background: transparent !important;
-        font-weight: 600 !important;
-    }
-
-    .btn-outline-primary:hover {
-        background: var(--color-secundario) !important;
-        color: white !important;
-    }
-
-    /* ========== INFO CARDS (Métricas) ========== */
-    .card-info {
-        border-radius: 8px;
-        border: 1px solid var(--gris-borde);
-        padding: 1rem;
-        text-align: center;
-        /* El azul aquí es un acento mínimo en el icono */
-    }
-
-    .card-info i {
-        color: var(--color-secundario);
-        font-size: 1.2rem;
-    }
-
-    .card-info h6 {
-        font-size: 0.75rem;
-        color: #64748b;
-        margin: 5px 0;
-    }
-
-    .card-info p {
-        font-weight: 800;
-        color: var(--texto-negro);
-        margin: 0;
-    }
-
-    /* ========== FORMULARIOS LIMPIOS ========== */
-    input, select, textarea {
-        border: 1px solid var(--gris-borde) !important;
-        border-radius: 6px !important;
-        padding: 10px !important;
-        background: #fcfcfc !important;
-    }
-
-    input:focus {
-        border-color: var(--color-secundario) !important; /* Azul solo al enfocar */
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1) !important;
-    }
-
-    label {
-        font-weight: 600;
-        font-size: 0.85rem;
-        color: #475569;
-    }
-
-    #id_image { display: none; }
-
-.col-md-4 { 
-    text-align: center; 
-}
-</style>
-
-
-
-
-    <div class="container">
-        <form method="POST" action="{% url 'update_user' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="row g-4">
-
-                <!-- Perfil -->
-                <div class="col-lg-4">
-                    <div class="dashboard-card text-center">
-                        <h5><i class="fas fa-image me-2"></i>Foto de Perfil </h5>
-                        {% if request.user.profile.image %}
-                            <img src="{{ request.user.profile.image.url }}" class="profile-image-preview" alt="Perfil">
-                        {% else %}
-                            <img src="/static/assets/usuario.png" class="profile-image-preview" alt="Sin imagen">
-                        {% endif %}
-                        <label for="id_image" class="btn btn-primary btn-custom text-white mt-2"><i class="fas fa-upload me-1"></i> Cambiar Foto</label>
-                        {{ profile_form.image }}
+                    <!-- Foto de Perfil -->
+                    <div class="card-box">
+                        <div class="card-box-header"><div><i class="fas fa-image accent-naranja"></i> Foto de Perfil</div></div>
+                        <div class="profile-banner-vertical">
+                            <div class="avatar-wrapper">
+                                {% if request.user.profile.image and request.user.profile.image.name != 'profile_images/default.jpg' %}
+                                    <img src="{{ request.user.profile.image.url }}" alt="Perfil">
+                                {% else %}
+                                    <div class="avatar-placeholder"><i class="fas fa-user"></i></div>
+                                {% endif %}
+                            </div>
+                            <h5 style="margin: 0 0 0.2rem 0; font-weight: 700; font-size: 1.05rem; color: var(--uu-text);">{{ request.user.username }}</h5>
+                            <p style="margin: 0 0 1rem 0; color: var(--uu-muted); font-size: 0.8rem;">JPG o PNG.</p>
+                            <label for="id_image" class="btn-upload-avatar"><i class="fas fa-upload accent-naranja"></i> Cambiar Foto</label>
+                            {{ profile_form.image }}
+                        </div>
                     </div>
 
-                    <!-- Cards informativas -->
-                    <div class="card-info mb-3">
-                        <i class="fas fa-chart-line fa-2x mb-2" style="color:var(--color-secondary);"></i>
-                        <h6>Ventas del mes</h6>
-                        <p class="mb-0">+25% respecto al mes pasado</p>
-                    </div>
-                    <div class="card-info">
-                        <i class="fas fa-users fa-2x mb-2" style="color:var(--color-secondary);"></i>
-                        <h6>Nuevos clientes</h6>
-                        <p class="mb-0">12 registrados esta semana</p>
-                    </div>
-                </div>
-
-                <!-- Datos de usuario -->
-                <div class="col-lg-8">
-                    <div class="dashboard-card">
-                        <h5><i class="fas fa-user me-2"></i> Información de Usuario</h5>
+                    <!-- Información de Usuario -->
+                    <div class="card-box">
+                        <div class="card-box-header"><div><i class="fas fa-user accent-azul"></i> Información de Usuario</div></div>
                         {{ user_form.as_p }}
                     </div>
 
-                    <div class="dashboard-card">
-                        <h5><i class="fas fa-address-card me-2"></i> Información Adicional</h5>
+                    <!-- Información Adicional -->
+                    <div class="card-box">
+                        <div class="card-box-header"><div><i class="fas fa-address-card accent-amarillo"></i> Información Adicional</div></div>
                         {{ profile_form.as_p }}
+
+                        <div class="uu-actions mt-4">
+                            <button type="submit" class="btn-save-main"><i class="fas fa-save"></i> Guardar Cambios</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="card-box">
+                    <div class="card-box-header"><div><i class="fas fa-compass accent-azul-claro"></i> Accesos Rápidos</div></div>
+                    <div class="uu-actions">
+                        <a href="{% url 'my_products' %}" class="btn-outline-uu accent-azul"><i class="fas fa-box"></i> Mis Cursos</a>
+                        <a href="{% url 'update_password' %}" class="btn-outline-uu accent-azul-claro"><i class="fas fa-key"></i> Contraseña</a>
+                        {% if user.is_superuser or request.user.profile.teacher_request_status == 'approved' %}
+                        <a href="{% url 'add_product' %}" class="btn-outline-uu accent-naranja"><i class="fas fa-plus"></i> Crea un nuevo curso</a>
+                        {% elif request.user.profile.teacher_request_status == 'pending' %}
+                        <span class="btn-outline-uu disabled">Solicitud de profesor pendiente</span>
+                        {% else %}
+                        <a href="{% url 'request_teacher' %}" class="btn-outline-uu accent-amarillo"><i class="fas fa-chalkboard-teacher"></i> Quiero ser profesor</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 COLUMNA DERECHA: DATOS ESTADÍSTICOS
+                 ========================================== -->
+            <div class="col-lg-7 col-xl-8">
+
+                <!-- TARJETAS DE MÉTRICAS CLAVE -->
+                <div class="stat-grid-mini">
+                    <div class="stat-card-item">
+                        <div class="stat-card-top">
+                            <div class="stat-card-icon"><i class="fas fa-dollar-sign accent-naranja"></i></div>
+                            <span class="stat-badge">+25%</span>
+                        </div>
+                        <div class="stat-card-value">S/ 0.00</div>
+                        <div class="stat-card-label">Ventas del Mes</div>
                     </div>
 
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary btn-custom me-2 mb-2"><i class="fas fa-save me-1"></i> Guardar Cambios</button>
-                        <a href="{% url 'my_products' %}" class="btn btn-outline-primary btn-custom me-2 mb-2"><i class="fas fa-box me-1"></i> Mis Cursos</a>
-                        <a href="{% url 'update_password' %}" class="btn btn-outline-primary btn-custom me-2 mb-2"><i class="fas fa-key me-1"></i> Contraseña</a>
-                        {% if user.is_superuser or request.user.profile.teacher_request_status == 'approved' %}
-                        <a href="{% url 'add_product' %}" class="btn btn-outline-primary btn-custom mb-2"><i class="fas fa-plus me-1"></i>Crea un nuevo curso</a>
-                        {% elif request.user.profile.teacher_request_status == 'pending' %}
-                        <span class="btn btn-outline-primary btn-custom mb-2 disabled">Solicitud de profesor pendiente</span>
-                        {% else %}
-                         <a href="{% url 'request_teacher' %}" class="btn btn-outline-primary btn-custom mb-2"><i class="fas fa-chalkboard-teacher me-1"></i> Quiero ser profesor</a>
-                        {% endif %}
+                    <div class="stat-card-item">
+                        <div class="stat-card-top">
+                            <div class="stat-card-icon"><i class="fas fa-users accent-azul"></i></div>
+                            <span class="stat-badge">+12</span>
+                        </div>
+                        <div class="stat-card-value">0</div>
+                        <div class="stat-card-label">Clientes Nuevos</div>
+                    </div>
+
+                    <div class="stat-card-item">
+                        <div class="stat-card-top">
+                            <div class="stat-card-icon"><i class="fas fa-graduation-cap accent-amarillo"></i></div>
+                            <span class="stat-badge">Activos</span>
+                        </div>
+                        <div class="stat-card-value">0</div>
+                        <div class="stat-card-label">Cursos Publicados</div>
+                    </div>
+
+                    <div class="stat-card-item">
+                        <div class="stat-card-top">
+                            <div class="stat-card-icon"><i class="fas fa-star accent-rojo"></i></div>
+                            <span class="stat-badge">--</span>
+                        </div>
+                        <div class="stat-card-value">--</div>
+                        <div class="stat-card-label">Satisfacción</div>
+                    </div>
+                </div>
+
+                <!-- GRÁFICO DE LÍNEAS: VENTAS -->
+                <div class="card-box">
+                    <div class="card-box-header">
+                        <div><i class="fas fa-chart-line accent-naranja"></i> Rendimiento de Ventas</div>
+                        <span class="uu-soon-badge">Próximamente</span>
+                    </div>
+                    <div style="height: 250px;">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- GRÁFICO CIRCULAR + TABLA -->
+                <div class="row g-3">
+                    <div class="col-md-5">
+                        <div class="card-box h-100 mb-0">
+                            <div class="card-box-header"><div><i class="fas fa-chart-pie accent-azul"></i> Fuentes</div></div>
+                            <div style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                                <canvas id="clientsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="card-box h-100 mb-0">
+                            <div class="card-box-header"><div><i class="fas fa-receipt accent-rojo"></i> Últimas Ventas</div></div>
+                            <div class="table-responsive">
+                                <table class="table table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Cliente</th>
+                                            <th>Monto</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="3" class="text-center" style="color: var(--uu-muted);">Aún no hay ventas registradas</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
             </div>
-        </form>
+
+        </div>
     </div>
 </section>
+
+<!-- INICIALIZACIÓN DE GRÁFICOS (placeholder, listo para conectar datos reales) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rojo = getComputedStyle(document.documentElement).getPropertyValue('--rojo').trim() || '#dc2626';
+        const naranja = getComputedStyle(document.documentElement).getPropertyValue('--naranja').trim() || '#e85d19';
+        const azulDark = getComputedStyle(document.documentElement).getPropertyValue('--azul-dark').trim() || '#1d3557';
+
+        const ctxSales = document.getElementById('salesChart').getContext('2d');
+        new Chart(ctxSales, {
+            type: 'line',
+            data: {
+                labels: ['Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago'],
+                datasets: [{
+                    label: 'Ventas (S/)',
+                    data: [0, 0, 0, 0, 0, 0],
+                    borderColor: naranja,
+                    backgroundColor: 'rgba(232, 93, 25, 0.08)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.35,
+                    pointRadius: 4,
+                    pointBackgroundColor: rojo
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { color: '#f1f5f9' }, ticks: { color: '#64748b', font: { size: 11 } } },
+                    x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 11 } } }
+                }
+            }
+        });
+
+        const ctxClients = document.getElementById('clientsChart').getContext('2d');
+        new Chart(ctxClients, {
+            type: 'doughnut',
+            data: {
+                labels: ['Redes', 'Web', 'Directo'],
+                datasets: [{
+                    data: [1, 1, 1],
+                    backgroundColor: [azulDark, naranja, rojo],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

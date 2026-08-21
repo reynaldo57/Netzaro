@@ -1,242 +1,118 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
+{% load static %}
+
 {% block title %}Agregar Clase{% endblock title %}
+
+{% block extra_css %}
+<link href="{% static 'css/add_product.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 
-<style>
-html, body {
-    
-    /* Si necesitas mantener el scroll funcional pero sin ver la barra visualmente, usa lo siguiente: */
-    -ms-overflow-style: none;  /* IE y Edge */
-    scrollbar-width: none;     /* Firefox */
-}
-:root {
-        --color-dominante: #ffffff;    /* 60% - Blanco (Limpieza absoluta) */
-        --color-primario: #b91c1c;      /* 30% - Rojo Sangre (Poder y acción) */
-        --color-secundario: #1d3557;    /* 10% - Azul Marino (Confianza y detalle) */
-        --gris-borde: #e2e8f0;
-        --texto-negro: #000000;
-    }
-    /* ========== HEADER REFINADO ========== */
-    header {
-        background: var(--color-primario) !important;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-bottom: 5px solid var(--color-secundario);
-        margin-bottom: 0;
-        height: 100px !important;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        padding: 1rem 0 !important;
-    }
+<div class="antares-form-page">
 
-    header h1 {
-        color: white !important;
-        font-weight: bold !important;
-        text-transform: uppercase;
-        margin-top: 1rem;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        letter-spacing: -0.5px;
-    }
-    header p {
-        color: white !important;
-        margin-top: 1px;
-    }
-    
-.form-wrapper {
-    width: 100%;
-    min-height: 100vh;
-    padding: 3rem 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    background: linear-gradient(to right, #f8fafc, #e2e8f0);
-    
-}
+    <!-- HERO -->
+    <div class="page-hero">
+        <h1><i class="fa-solid fa-clapperboard"></i> Agrega una Clase al Curso</h1>
+        <p>Aquí puedes agregar las clases que quieras para "{{ productClase.name }}"</p>
+    </div>
 
-.form-container {
-    width: 100%;
-    max-width: 900px;
-    background-color: #fff;
-    border-radius: 16px;
-    padding: 2rem 2.5rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-}
-
-.form-title {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: #2c3e50;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.input-field,
-textarea,
-select {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fafafa;
-    transition: border 0.3s;
-}
-
-.input-field:focus,
-textarea:focus,
-select:focus {
-    border-color: #8e44ad;
-    outline: none;
-    background-color: #fff;
-}
-
-textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-.error-text {
-    color: #e74c3c;
-    font-size: 0.85rem;
-    margin-top: 0.3rem;
-}
-
-.form-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.half {
-    flex: 1 1 45%;
-}
-
-.custom-file-input {
-    position: relative;
-    overflow: hidden;
-    display: inline-block;
-    width: 100%;
-}
-
-.custom-file-input input[type="file"] {
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-}
-
-.custom-file-input span {
-    display: block;
-    background-color: #44ad5b;
-    color: white;
-    padding: 0.7rem 1rem;
-    text-align: center;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    transition: background-color 0.3s;
-}
-
-.custom-file-input:hover span {
-    background-color: #732d91;
-}
-
-.submit-button {
-    display: block;
-    width: 100%;
-    padding: 0.8rem;
-    background-color: #2c3e50;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 1.5rem;
-}
-
-.submit-button:hover {
-    background-color: #1a242f;
-}
-
-</style>
-<header>
-      <h1>Agrega una clase al curso</h1>
-      <p>Aqui puedes agregar las clases que quieras</p>
-</header>
-
-<div class="form-wrapper">
+    <!-- FORMULARIO -->
     <div class="form-container">
-        <h2 class="form-title">Agregar una Clase a tu Curso</h2>
-        <form action="" method="POST" enctype="multipart/form-data">
-            {{ formclase.media }}
-            {% csrf_token %}
+        <div class="form-card">
+            <form method="POST" enctype="multipart/form-data">
+                {{ formClase.media }}
+                {% csrf_token %}
+                <input type="hidden" name="productClase" value="{{ productClase.id }}">
 
-            <div class="form-group">
-                <label>Título de la Clase</label>
-                <input type="text" name="titleClase" class="input-field" required>
-                <p class="error-text">{{ formClase.titleClase.errors }}</p>
-            </div>
-
-            <div class="form-group">
-              <label>Descripción</label>
-              <textarea name="descriptionClase" class="input-field" rows="5" required></textarea>
-              <p class="error-text">{{ formClase.descriptionClase.errors }}</p>
-            </div>
-          
-
-            <div class="form-group">
-    <label>Tipo de video</label>
-    <select name="nivel" class="input-field">
-        <option value="Gratis">Versión gratuita</option>
-        <option value="Pago">Versión de pago</option>
-    </select>
-    <p class="error-text">{{ formClase.nivel.errors }}</p>
-</div>
-
-
-
-<input type="hidden" name="productClase" value="{{ productClase.id }}">
-
-
-            <div class="form-row">
-                <div class="form-group half">
-                    <label>Banner (Imagen)</label>
-                    <div class="custom-file-input">
-                        <input type="file" name="bannerClase" class="file">
-                        <span>Seleccionar Imagen</span>
-                    </div>
-                    <p class="error-text">{{ formClase.bannerClase.errors }}</p>
+                <!-- SECCIÓN 1: INFORMACIÓN DE LA CLASE -->
+                <div class="section-header">
+                    <i class="fa-solid fa-info-circle"></i> Información de la Clase
                 </div>
 
-                <div class="form-group half">
-                    <label>Archivo (PDF, DOC, etc.)</label>
-                    <div class="custom-file-input">
-                        <input type="file" name="fileClase" class="file">
-                        <span>Seleccionar Archivo</span>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-8">
+                        <label class="form-label-custom" for="id_titleClase"><i class="fa-solid fa-heading"></i> Título de la Clase</label>
+                        <input type="text" name="titleClase" id="id_titleClase" class="form-control" placeholder="Ej: Introducción a las variables" required>
+                        <p class="error-text">{{ formClase.titleClase.errors }}</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label-custom" for="id_nivel"><i class="fa-solid fa-unlock-keyhole"></i> Tipo de Video</label>
+                        <select name="nivel" id="id_nivel" class="form-select">
+                            <option value="Gratis">Versión gratuita</option>
+                            <option value="Pago">Versión de pago</option>
+                        </select>
+                        <p class="error-text">{{ formClase.nivel.errors }}</p>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label-custom" for="id_descriptionClase"><i class="fa-solid fa-align-left"></i> Descripción</label>
+                        <textarea name="descriptionClase" id="id_descriptionClase" class="form-control" rows="4" placeholder="Resume de qué trata esta clase..." required></textarea>
+                        <p class="error-text">{{ formClase.descriptionClase.errors }}</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-group half">
-                <label>Materiales a usar (opcional)</label>
-                <div class="custom-file-input">
-                    <input type="file" name="materialClase" class="file">
-                    <span>Seleccionar Material</span>
+                <!-- SECCIÓN 2: ARCHIVOS DE LA CLASE -->
+                <div class="section-header">
+                    <i class="fa-solid fa-photo-film"></i> Archivos de la Clase
                 </div>
-                <p class="error-text">{{ formClase.materialClase.errors }}</p>
-            </div>
 
-            <button type="submit" class="submit-button">Guardar Clase</button>
-        </form>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label-custom"><i class="fa-solid fa-image"></i> Banner (Imagen)</label>
+                        <label class="dropzone-box" for="id_bannerClase">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span data-dropzone-label>Haz clic o arrastra la imagen del banner</span>
+                            <input type="file" name="bannerClase" id="id_bannerClase" class="visually-hidden" accept="image/*">
+                        </label>
+                        <p class="error-text">{{ formClase.bannerClase.errors }}</p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label-custom"><i class="fa-solid fa-file-video"></i> Archivo (Video, PDF, etc.)</label>
+                        <label class="dropzone-box" for="id_fileClase">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span data-dropzone-label>Haz clic o arrastra el archivo de la clase</span>
+                            <input type="file" name="fileClase" id="id_fileClase" class="visually-hidden">
+                        </label>
+                        <p class="error-text">{{ formClase.fileClase.errors }}</p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label-custom"><i class="fa-solid fa-paperclip"></i> Materiales a Usar (Opcional)</label>
+                        <label class="dropzone-box" for="id_materialClase">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span data-dropzone-label>Haz clic o arrastra el material de apoyo</span>
+                            <input type="file" name="materialClase" id="id_materialClase" class="visually-hidden">
+                        </label>
+                        <p class="error-text">{{ formClase.materialClase.errors }}</p>
+                    </div>
+                </div>
+
+                <!-- BOTÓN ENVIAR -->
+                <div class="mt-4 pt-2">
+                    <button type="submit" class="btn-submit-course">
+                        <i class="fa-solid fa-paper-plane me-2"></i> Guardar Clase
+                    </button>
+                </div>
+
+            </form>
+        </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.dropzone-box input[type="file"]').forEach(function (input) {
+        input.addEventListener('change', function () {
+            var label = input.closest('.dropzone-box').querySelector('[data-dropzone-label]');
+            label.textContent = input.files.length ? input.files[0].name : label.dataset.defaultText;
+        });
+        var label = input.closest('.dropzone-box').querySelector('[data-dropzone-label]');
+        label.dataset.defaultText = label.textContent;
+    });
+});
+</script>
 
 {% endblock content %}

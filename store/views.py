@@ -202,7 +202,8 @@ def teacher_requests_dash(request):
 
 def category_summary(request):
     categories = Category.objects.all()
-    return render(request, 'category_summary.html', {"categories":categories})
+    products = Product.objects.all().order_by('-created_day')
+    return render(request, 'category_summary.html', {"categories":categories, "products":products})
 
 def category(request,foo):
     #replace hypens whit spaces
@@ -212,7 +213,8 @@ def category(request,foo):
         #look up the category
         category = Category.objects.get(name=foo)
         products = Product.objects.filter(category=category)
-        return render(request, 'category.html', {'products': products, 'category':category})
+        categories = Category.objects.all()
+        return render(request, 'category.html', {'products': products, 'category':category, 'categories':categories})
     except:
         messages.success(request, ("That category Doest exist"))
         return redirect('index')

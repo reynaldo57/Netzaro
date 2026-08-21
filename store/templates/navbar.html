@@ -1,11 +1,11 @@
 <!-- Navigation-->
-<nav class="nav-principal">
+<nav class="nav-principal" id="navbarPrincipal">
     <div  class="contenedor-nav">
-        <a class="nav-logo" href="{% url 'index' %}">ReyTech</a>
+        <a class="nav-logo" href="{% url 'index' %}"><i class="bi bi-mortarboard-fill"></i> ANTARES</a>
 
         <!-- TRUCO CSS: Checkbox oculto para controlar el menú -->
         <input type="checkbox" id="menu-toggle" class="check-oculto">
-        
+
         <!-- Botón con área de clic optimizada (visible SOLO en móvil) -->
         <label for="menu-toggle" class="nav-toggle-button">
             <span class="icono-hamburguesa"></span>
@@ -15,18 +15,18 @@
             <ul class="lista-nav">
                 {% if user.is_authenticated %}
                 <li class="item-desplegable">
-                    <a class="nav-link-custom perfil-usuario">{{request.user.username}} profile</a>
+                    <a class="nav-link-custom perfil-usuario" tabindex="0">{{request.user.username}} profile</a>
                     <ul class="menu-desplegable">
                         <li><a href="{% url 'update_user' %}">User Profile</a></li>
                         <hr class="divisor" />
                         <li><a href="{% url 'update_info' %}">User Info</a></li>
                     </ul>
                 </li>
-                <li><a class="nav-link-custom" href="{% url 'my_courses' %}">Mis Cursos</a></li>
-<li><a class="nav-link-custom" href="{% url 'wishlist' %}">Lista de Deseos</a></li>
+                <li><a class="nav-link-custom {% if request.resolver_match.url_name == 'my_courses' %}activo{% endif %}" href="{% url 'my_courses' %}">Mis Cursos</a></li>
+                <li><a class="nav-link-custom {% if request.resolver_match.url_name == 'wishlist' %}activo{% endif %}" href="{% url 'wishlist' %}">Lista de Deseos</a></li>
                 {% if user.is_superuser %}
                 <li class="item-desplegable">
-                    <a class="nav-link-custom">Orders</a>
+                    <a class="nav-link-custom" tabindex="0">Orders</a>
                     <ul class="menu-desplegable">
                         <li><a href="{% url 'shipped_dash' %}">Shipped Orders</a></li>
                         <hr class="divisor" />
@@ -40,23 +40,21 @@
                 {% endif %}
                 <li><a class="nav-link-custom" href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
-                <li><a class="nav-link-custom" href="{% url 'login' %}">Login</a></li>
-                <li><a class="nav-link-custom" href="{% url 'register' %}">Register</a></li>
+                <li><a class="nav-link-custom {% if request.resolver_match.url_name == 'login' %}activo{% endif %}" href="{% url 'login' %}">Login</a></li>
+                <li><a class="nav-link-custom {% if request.resolver_match.url_name == 'register' %}activo{% endif %}" href="{% url 'register' %}">Register</a></li>
                 {% endif %}
                 <li class="item-desplegable">
-                    <a class="nav-link-custom">Categories</a>
+                    <a class="nav-link-custom {% if request.resolver_match.url_name == 'category' or request.resolver_match.url_name == 'category_summary' %}activo{% endif %}" tabindex="0">Categories</a>
                     <ul class="menu-desplegable">
                         <li><a href="{% url 'category_summary' %}">All Products</a></li>
                         <hr class="divisor" />
-                        <li><a href="{% url 'category' 'Español' %}">Español</a></li>
-                        <li><a href="{% url 'category' 'Inglés' %}">Inglés</a></li>
-                        <li><a href="{% url 'category' 'Portugués' %}">Portugués</a></li>
-                        <li><a href="{% url 'category' 'Italiano' %}">Italiano</a></li>
+                        <li><a href="{% url 'category' 'Tecnología' %}">Tecnología</a></li>
+                        <li><a href="{% url 'category' 'Idiomas' %}">Idiomas</a></li>
+
                     </ul>
                 </li>
-                <!--  <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a></li> -->
-                <li><a class="nav-link-custom" href="{% url 'search' %}">Search</a></li>
-                <li><a class="nav-link-custom" href="{% url 'about' %}">About</a></li>
+                <li><a class="nav-link-custom {% if request.resolver_match.url_name == 'search' %}activo{% endif %}" href="{% url 'search' %}">Search</a></li>
+                <li><a class="nav-link-custom {% if request.resolver_match.url_name == 'about' %}activo{% endif %}" href="{% url 'about' %}">About</a></li>
             </ul>
             <form class="form-carrito">
                 <a href="{% url 'cart_summary' %}" class="boton-carrito">
@@ -67,253 +65,3 @@
         </div>
     </div>
 </nav>
-
-<style>
-    /* --- CONFIGURACIÓN BASE --- */
-.nav-principal {
-    background-color: #ffffff; /* Fondo rojo corporativo */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    padding: 0;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    height: 60px; /* Altura fija para alineación */
-
-}
-
-.contenedor-nav {
-    max-width: 1200px;
-    
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    height: 60px; /* Altura fija para alineación */
-}
-
-.nav-logo {
-    color: var(--azul-dark);
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
-    letter-spacing: -1px;
-}
-
-/* --- MENÚ PC (ESCRITORIO) --- */
-.nav-colapso {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Espaciado entre elementos */
-}
-
-.lista-nav {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: 5px; /* Espaciado entre enlaces */
-}
-
-.nav-link-custom {
-    color: var(--azul-dark);
-    text-decoration: none;
-    padding: 10px 15px;
-    display: block;
-    font-weight: 500;
-    transition: 0.3s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 0.9rem;
-}
-
-.nav-link-custom:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.perfil-usuario {
-    text-transform: capitalize;
-}
-
-/* --- DROPDOWNS (MENÚS DESPLEGABLES) --- */
-.item-desplegable {
-    position: relative;
-}
-
-.menu-desplegable {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: rgb(255, 255, 255);
-    min-width: 180px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-    border-radius: 4px;
-    padding: 10px 0;
-    z-index: 1100;
-}
-
-.item-desplegable:hover .menu-desplegable {
-    display: block;
-}
-
-.menu-desplegable a {
-    color: var(--azul-dark);
-    text-decoration: none;
-    padding: 10px 20px;
-    display: block;
-    font-size: 0.9rem;
-}
-
-.menu-desplegable a:hover {
-    background-color: #e9e9e9;
-    color: var(--azul-dark);
-}
-
-.divisor {
-    border: 0;
-    border-top: 1px solid #ff0000;
-    margin: 5px 0;
-}
-
-/* --- BOTÓN CARRITO --- */
-.boton-carrito {
-    background-color: #ffdddd; /* Fondo claro */
-    border: 2px solid #ff5757; /* Borde rojo */
-    color: #500000; /* Texto oscuro */
-    padding: 8px 18px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease;
-}
-
-.boton-carrito:hover {
-    background-color: #ffcccc;
-}
-
-.icono-carrito {
-    font-style: normal;
-}
-
-.contador-badge {
-    background: #333;
-    color: white;
-    padding: 2px 8px;
-    border-radius: 10px;
-    margin-left: 8px;
-    font-size: 0.8rem;
-}
-
-/* --- LÓGICA MÓVIL (MAX 992px) --- */
-
-.check-oculto {
-    display: none; /* Checkbox invisible */
-}
-
-/* LA SOLUCIÓN: Oculto por defecto en pantallas grandes */
-.nav-toggle-button {
-    display: none; 
-    cursor: pointer;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.288);
-    border-radius: 4px;
-    padding: 12px;
-    min-width: 44px;
-    min-height: 44px;
-    align-items: center;
-    justify-content: center;
-}
-
-.icono-hamburguesa {
-    display: block;
-    width: 20px;
-    height: 2px;
-    background: #003366;
-    position: relative;
-    pointer-events: none; /* No intercepta clics */
-}
-
-.icono-hamburguesa::before, .icono-hamburguesa::after {
-    content: "";
-    width: 20px;
-    height: 2px;
-    background: #003366;
-    position: absolute;
-    left: 0;
-}
-
-.icono-hamburguesa::before { top: -6px; }
-.icono-hamburguesa::after { bottom: -6px; }
-
-/* MEDIA QUERY PARA MÓVIL */
-@media (max-width: 992px) {
-    .nav-toggle-button {
-        display: flex; /* APARECE AQUÍ */
-    }
-
-
-    .nav-colapso {
-        display: none; /* Cerrado por defecto en móvil */
-        flex-direction: column;
-        position: absolute;
-        top: 100%; /* Justo debajo del nav */
-        left: 0;
-        width: 100%;
-        background-color: #ffffff;
-        padding: 20px;
-        box-shadow: 0 10px 10px rgba(0,0,0,0.1);
-        z-index: 1050;
-        
-    }
-
-    /* ACCIÓN AL MARCAR EL CHECKBOX */
-    .check-oculto:checked ~ .nav-colapso {
-        display: flex; /* Se abre */
-    }
-
-    .lista-nav {
-        flex-direction: column;
-        width: 100%;
-        gap: 10px;
-    }
-
-    .nav-link-custom {
-        padding: 15px;
-        width: 100%;
-        border-bottom: 1px solid rgba(29, 7, 235, 0.1);
-    }
-
-    .menu-desplegable {
-        position: static;
-        width: 100%;
-        background-color: #ffffff;
-        box-shadow: none;
-        list-style: none; 
-        padding-left: 0; /* Esto asegura que el texto no se mueva a la derecha */
-    }
-
-    .menu-desplegable a {
-        color: #1d3557;
-        padding-left: 30px;
-    }
-
-    .form-carrito {
-        margin-top: 20px;
-        width: 100%;
-        justify-content: center;
-        display: flex;
-    }
-
-    .boton-carrito {
-        margin-left: 0;
-        width: 100%;
-        justify-content: center;
-    }
-}
-</style>

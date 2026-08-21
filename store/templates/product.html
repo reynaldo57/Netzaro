@@ -1,441 +1,261 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/product.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
-
-<style>
-    :root {
-        --color-dominante: #ffffff;    /* 60% - Blanco (Limpieza absoluta) */
-        --color-primario: #b91c1c;      /* 30% - Rojo Sangre (Poder y acción) */
-        --color-secundario: #1d3557;    /* 10% - Azul Marino (Confianza y detalle) */
-        --gris-borde: #e2e8f0;
-        --gris-fondo: #f8fafc;         /* Color neutro para suavizar fondos */
-        --texto-negro: #000000;
-    }
-    
-    /* ========== HEADER REFINADO (SIN CAMBIOS) ========== */
-    header {
-        background: var(--color-primario) !important;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-bottom: 5px solid var(--color-secundario);
-        margin-bottom: 1rem;
-        height: 100px !important;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        padding: 1rem 0 !important;
-    }
-
-    header h1 {
-        color: white !important;
-        font-weight: bold !important;
-        text-transform: uppercase;
-        margin-top: 1rem;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        letter-spacing: -0.5px;
-    }
-    header p {
-        color: white !important;
-        margin-top: 1px;
-    }
-
-    /* ========== SECCIONES MEJORADAS (MENOS ROJO, MÁS AZUL DARK Y NEUTROS) ========== */
-    .product-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        padding: 2rem 4rem;
-        gap: 2rem;
-    }
-
-    .media-section {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-        flex: 1;
-        min-width: 300px;
-    }
-
-    .media-box {
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        background-color: #fff;
-        border: 4px solid var(--color-secundario); /* Cambiado de rojo a Azul Dark */
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    .media-box img,
-    .media-box video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    .details {
-        flex: 1;
-        min-width: 300px;
-        padding: 2rem;
-        background-color: #fff;
-        border-left: 6px solid var(--color-secundario); /* Cambiado de rojo a Azul Dark */
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .details h3 {
-        color: var(--color-secundario); /* Cambiado de rojo a Azul Dark */
-        margin-bottom: 1rem;
-    }
-
-    .price {
-        font-size: 1.4rem;
-        color: #e67e22; /* Se mantiene el naranja de énfasis para precios */
-        font-weight: bold;
-    }
-
-    .btn-group-custom {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-top: 1.5rem;
-    }
-
-    .btn-custom {
-        flex: 1;
-        min-width: 180px;
-        padding: 0.8rem 1.2rem;
-        border-radius: 12px;
-        font-weight: bold;
-        font-size: 1rem;
-        text-align: center;
-        transition: all 0.3s ease;
-    }
-
-    /* Botones Sólidos: Ahora usan el Azul Dark corporativo */
-    .btn-custom-danger {
-        background: var(--color-secundario);
-        color: white;
-        border: none;
-    }
-    .btn-custom-danger:hover {
-        background: #112237; /* Tono de azul un poco más oscuro al pasar el cursor */
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(29, 53, 87, 0.3);
-    }
-
-    /* Botones de Contorno: Líneas en Azul Dark */
-    .btn-custom-outline {
-        background: transparent;
-        border: 2px solid var(--color-secundario);
-        color: var(--color-secundario);
-    }
-    .btn-custom-outline:hover {
-        background: var(--color-secundario);
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(29, 53, 87, 0.3);
-    }
-
-    .btn-custom i {
-        margin-right: 0.5rem;
-    }
-    .btn-group a, .btn-group button {
-        margin-top: 0.8rem;
-        width: 100%;
-    }
-
-    /* Sección de Comentarios: Cambiado fondo rosado por un gris azulado muy limpio */
-    .comments {
-        margin: 2rem 4rem;
-        background-color: var(--gris-fondo);
-        padding: 2rem;
-        border-radius: 10px;
-        border-left: 5px solid var(--color-secundario); /* Borde Azul Dark */
-    }
-
-    .comments h2 {
-        color: var(--color-secundario); /* Cambiado a Azul Dark */
-    }
-
-    .card-comment {
-        margin-top: 1.5rem;
-        padding: 1rem;
-        background-color: #ffffff;
-        border-left: 4px solid #e67e22; /* Mantiene el detalle naranja */
-        border-radius: 6px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    .card-comment h6 {
-        color: var(--color-secundario); /* Texto de nombre en Azul Dark en vez de rojo */
-    }
-
-    /* Forzar estilos para componentes específicos de Bootstrap dentro de comentarios */
-    .text-danger {
-        color: var(--color-secundario) !important;
-    }
-    .btn-danger {
-        background-color: var(--color-secundario) !important;
-        border-color: var(--color-secundario) !important;
-    }
-    .btn-danger:hover {
-        background-color: #112237 !important;
-    }
-    .btn-outline-danger {
-        color: var(--color-secundario) !important;
-        border-color: var(--color-secundario) !important;
-    }
-    .btn-outline-danger:hover {
-        background-color: var(--color-secundario) !important;
-        color: #fff !important;
-    }
-
-    @media (max-width: 768px) {
-        .product-container {
-            flex-direction: column;
-            padding: 1rem;
-        }
-
-        .comments {
-            margin: 1rem;
-        }
-    }
-    body::-webkit-scrollbar {
-        display: none;
-    }
-</style>
-<header>
-      <h1>Listado de Órdenes Enviadas</h1>
-      <p>Gestión de pedidos con estilo y funcionalidad</p>
+<header class="pd-banner">
+    <nav class="breadcrumb-trail">
+        <a href="{% url 'index' %}"><i class="bi bi-house-door-fill"></i> Inicio</a>
+        <span>/</span>
+        <a href="{% url 'category' product.category.name %}">{{ product.category.name }}</a>
+        <span>/</span>
+        <span class="current">{{ product.name }}</span>
+    </nav>
+    {% if product.rating_count %}
+    <div class="pd-rating-mini"><i class="bi bi-star-fill"></i> {{ product.average_rating|floatformat:1 }} ({{ product.rating_count }} reseñas)</div>
+    {% endif %}
 </header>
-<div class="product-container">
-  <!-- Sección Multimedia -->
-  <div class="media-section">
-    <div class="media-box">
-      <img src="{{ product.image.url }}" alt="Imagen del producto">
-    </div>
 
-    {% if product.video %}
-    <div class="media-box">
-      <video controls>
-        <source src="{{ product.video.url }}" type="video/mp4">
-        Tu navegador no soporta la reproducción de video.
-      </video>
-    </div>
-    {% endif %}
-  </div>
+<main class="pd-container">
+    <div class="row g-3">
 
-  <!-- Sección Detalles -->
-  <div class="details">
-    <h3>{{ product.name }}</h3>
-    <p><strong>Por:</strong> {{ product.user.username }}</p>
-    <p>{{ product.description }}</p>
+        <!-- COLUMNA IZQUIERDA: MEDIA + CONTENIDO -->
+        <div class="col-lg-6">
 
-
-    <div class="course-meta d-flex flex-wrap gap-3 my-3">
-  <span><i class="bi bi-clock"></i> {{ product.duration_display }}</span>
-  <span><i class="bi bi-play-circle"></i> {{ product.total_lessons }} lecciones</span>
-  <span><i class="bi bi-translate"></i> {{ product.language }}</span>
-  <span><i class="bi bi-people"></i> {{ product.students_count }} estudiantes inscritos</span>
-</div>
-
-<div class="rating-summary mb-3">
-  {% for i in "12345" %}
-    {% if forloop.counter <= product.average_rating_rounded %}★{% else %}☆{% endif %}
-  {% endfor %}
-  <strong>{{ product.average_rating|floatformat:1 }}</strong>
-  <span class="text-muted">({{ product.rating_count }} reseñas </span>
-</div>
-
-{% if product.learning_points_list %}
-<div class="learning-points mb-3">
-  <h5>Lo que aprenderás</h5>
-  <ul class="list-unstyled">
-    {% for point in product.learning_points_list %}
-      <li><i class="bi bi-check2-circle text-success"></i> {{ point }}</li>
-    {% endfor %}
-  </ul>
-</div>
-{% endif %}
-
-{% if product.requirements_list %}
-<div class="requirements mb-3">
-  <h5>Requisitos previos</h5>
-  <ul>
-    {% for r in product.requirements_list %}<li>{{ r }}</li>{% endfor %}
-  </ul>
-</div>
-{% endif %}
-
-{% if product.target_audience_list %}
-<div class="target-audience mb-3">
-  <h5>Dirigido a</h5>
-  <ul>
-    {% for a in product.target_audience_list %}<li>{{ a }}</li>{% endfor %}
-  </ul>
-</div>
-{% endif %}
-
-<div class="instructor-card d-flex align-items-center gap-3 mb-3 p-3 border rounded">
-  <img src="{{ product.user.profile.get_profile_picture }}" alt="{{ product.user.username }}"
-       style="width:64px;height:64px;object-fit:cover;border-radius:50%;">
-  <div>
-    <strong>{{ product.user.get_full_name|default:product.user.username }}</strong>
-    <p class="mb-0 text-muted small">{{ product.user.profile.about_me }}</p>
-    <span class="small">{{ instructor_courses_count }} curso{{ instructor_courses_count|pluralize }}</span>
-  </div>
-</div>
-
-
-    <p><strong>Método de pago:</strong> {{ product.pay_method }}</p>
-
-{% if product.is_sale and product.sale_price %}
-  <p class="price">
-    <strike>${{ product.price }}</strike> &nbsp;&nbsp;<span style="color: green;">${{ product.sale_price }}</span>
-  </p>
-{% else %}
-  <p class="price">${{ product.price }}</p>
-{% endif %}
-
-
-    
-    <div class="btn-group-custom">
-      {% if product.user == user %}
-      <a href="{% url 'add_clase' %}?productClase={{ product.id }}" class="btn-custom btn-custom-outline"><i class="bi bi-plus-circle"></i>Agregar Clase</a>
-      <a href="{% url 'add_quiz' product.id %}" class="btn-custom btn-custom-outline"><i class="bi bi-patch-question"></i>Evaluaciones</a>
-      <a href="{% url 'add_tarea' product.id %}" class="btn-custom btn-custom-outline"><i class="bi bi-clipboard-check"></i>Tareas</a>
-      <a href="{% url 'manage_coupons' product.id %}" class="btn-custom btn-custom-outline"><i class="bi bi-ticket-perforated"></i>Cupones</a>
-      {% endif %}
-      <a href="{% url 'product_detail' product.id %}" class="btn-custom btn-custom-danger"><i class="bi bi-download"></i> Descargar las clases</a>
-    </div>
-    
-
-    <div class="btn-group-custom">
-      <a href="{% url 'index' %}" class="btn-custom btn-custom-outline"><i class="bi bi-house-door-fill"></i>Home</a>
-      <button type="button" id="add-cart" value="{{ product.id }}" class="btn-custom btn-custom-danger">
-         <i class="bi bi-cart-plus"></i>Reserva una Clase
-      </button>
-    </div>
-  </div>
-</div>
-
-
-<div class="curriculum my-4 mx-4">
-  <h4>Contenido del curso</h4>
-  <div class="accordion" id="curriculumAccordion">
-    {% for nivel_nombre, clases in curriculum %}
-      <div class="accordion-item">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button"
-                  data-bs-toggle="collapse" data-bs-target="#nivel-{{ forloop.counter }}">
-            {{ nivel_nombre }} ({{ clases|length }} clases)
-          </button>
-        </h2>
-        <div id="nivel-{{ forloop.counter }}" class="accordion-collapse collapse"
-             data-bs-parent="#curriculumAccordion">
-          <ul class="list-group list-group-flush">
-            {% for clase in clases %}
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ clase.titleClase }}
-                {% if clase.es_preview %}
-                  <a href="{{ clase.fileClase.url }}" class="badge bg-success text-decoration-none">
-                    <i class="bi bi-play-fill"></i> Vista previa gratis
-                  </a>
-                {% elif not clase.requiere_pago %}
-                  <span class="badge bg-secondary"><i class="bi bi-unlock"></i> Incluida</span>
-                {% else %}
-                  <span class="badge bg-light text-dark"><i class="bi bi-lock"></i> Bloqueada</span>
+            <div class="row g-2 mb-2">
+                <div class="{% if product.video %}col-6{% else %}col-12{% endif %}">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="media-preview-img">
+                </div>
+                {% if product.video %}
+                <div class="col-6">
+                    <div class="video-player-container">
+                        <video controls>
+                            <source src="{{ product.video.url }}" type="video/mp4">
+                            Tu navegador no soporta la reproducción de video.
+                        </video>
+                    </div>
+                </div>
                 {% endif %}
-              </li>
-            {% empty %}
-              <li class="list-group-item text-muted">Aún no hay clases en este nivel.</li>
-            {% endfor %}
-          </ul>
+            </div>
+
+            <div class="compact-card">
+                <h3 class="block-title"><i class="bi bi-layer-group-fill"></i> Contenido del curso</h3>
+
+                <div class="accordion" id="curriculumAccordion">
+                    {% for nivel_nombre, clases in curriculum %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nivel-{{ forloop.counter }}">
+                                {{ nivel_nombre }} ({{ clases|length }} clases)
+                            </button>
+                        </h2>
+                        <div id="nivel-{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#curriculumAccordion">
+                            {% for clase in clases %}
+                            <div class="lesson-item">
+                                <span>{{ clase.titleClase }}</span>
+                                {% if clase.es_preview %}
+                                <a href="{{ clase.fileClase.url }}" class="badge bg-success text-decoration-none">
+                                    <i class="bi bi-play-fill"></i> Vista previa gratis
+                                </a>
+                                {% elif not clase.requiere_pago %}
+                                <span class="badge bg-secondary"><i class="bi bi-unlock"></i> Incluida</span>
+                                {% else %}
+                                <span class="badge bg-light text-dark"><i class="bi bi-lock"></i> Bloqueada</span>
+                                {% endif %}
+                            </div>
+                            {% empty %}
+                            <div class="lesson-item text-muted">Aún no hay clases en este nivel.</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
         </div>
-      </div>
-    {% endfor %}
-  </div>
-</div>
 
+        <!-- COLUMNA DERECHA: DETALLES Y COMPRA -->
+        <div class="col-lg-6">
 
+            <div class="compact-card">
 
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                    <div>
+                        <h2 class="course-title">{{ product.name }}</h2>
+                        <p class="course-subtitle">Por {{ product.user.username }}</p>
+                    </div>
+                    <div class="rating-box">
+                        <span class="stars">
+                            {% for i in "12345" %}{% if forloop.counter <= product.average_rating_rounded %}★{% else %}☆{% endif %}{% endfor %}
+                        </span>
+                        <strong>{{ product.average_rating|floatformat:1 }}</strong>
+                        <span class="text-muted">({{ product.rating_count }} reseñas)</span>
+                    </div>
+                </div>
 
+                <p class="course-description">{{ product.description }}</p>
 
-<!-- Reseñas -->
-<div class="comments">
-  <h2><i class="bi bi-chat-dots-fill"></i> Reseñas y calificaciones</h2>
+                <div class="meta-badges">
+                    <div class="meta-item"><i class="bi bi-clock"></i> {{ product.duration_display }}</div>
+                    <div class="meta-item"><i class="bi bi-play-circle"></i> {{ product.total_lessons }} lecciones</div>
+                    <div class="meta-item"><i class="bi bi-translate"></i> {{ product.language }}</div>
+                    <div class="meta-item"><i class="bi bi-people"></i> {{ product.students_count }} estudiantes inscritos</div>
+                </div>
 
-  {% if can_review %}
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <h5 class="text-danger"><i class="bi bi-pencil-square"></i> Escribe tu reseña</h5>
-      <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" name="comment_form" class="btn btn-danger w-100 mt-2">
-          <i class="bi bi-send-fill"></i> Enviar
-        </button>
-      </form>
+                <div class="info-grid">
+                    {% if product.learning_points_list %}
+                    <div class="info-section">
+                        <h6>Lo que aprenderás</h6>
+                        <ul>
+                            {% for point in product.learning_points_list %}
+                            <li><i class="bi bi-check2-circle text-success"></i> {{ point }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    {% if product.requirements_list %}
+                    <div class="info-section">
+                        <h6>Requisitos previos</h6>
+                        <ul>
+                            {% for r in product.requirements_list %}<li><i class="bi bi-angle-right"></i> {{ r }}</li>{% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    {% if product.target_audience_list %}
+                    <div class="info-section">
+                        <h6>Dirigido a</h6>
+                        <ul>
+                            {% for a in product.target_audience_list %}<li><i class="bi bi-angle-right"></i> {{ a }}</li>{% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <div class="info-section">
+                        <h6>Método de pago</h6>
+                        <span class="text-muted" style="font-size: 0.78rem;">{{ product.pay_method }}</span>
+                    </div>
+                </div>
+
+                <div class="instructor-box">
+                    <img src="{{ product.user.profile.get_profile_picture }}" alt="{{ product.user.username }}" class="instructor-avatar">
+                    <div class="instructor-info">
+                        <h6>{{ product.user.get_full_name|default:product.user.username }}</h6>
+                        <p>{{ product.user.profile.about_me }}</p>
+                        <p>{{ instructor_courses_count }} curso{{ instructor_courses_count|pluralize }}</p>
+                    </div>
+                </div>
+
+                {% if product.user == user %}
+                <div class="owner-tools-title">Herramientas de instructor</div>
+                <div class="action-buttons mb-3">
+                    <a href="{% url 'add_clase' %}?productClase={{ product.id }}" class="btn-action-secondary"><i class="bi bi-plus-circle"></i> Agregar Clase</a>
+                    <a href="{% url 'add_quiz' product.id %}" class="btn-action-secondary"><i class="bi bi-patch-question"></i> Evaluaciones</a>
+                    <a href="{% url 'add_tarea' product.id %}" class="btn-action-secondary"><i class="bi bi-clipboard-check"></i> Tareas</a>
+                    <a href="{% url 'manage_coupons' product.id %}" class="btn-action-secondary"><i class="bi bi-ticket-perforated"></i> Cupones</a>
+                </div>
+                {% endif %}
+
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 pt-2 border-top">
+                    <div class="price-box mb-0">
+                        {% if product.is_sale and product.sale_price %}
+                        <span class="price-old">${{ product.price }}</span>
+                        <span class="price-current">${{ product.sale_price }}</span>
+                        {% else %}
+                        <span class="price-current">${{ product.price }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="action-buttons">
+                        <a href="{% url 'product_detail' product.id %}" class="btn-action-primary"><i class="bi bi-download"></i> Descargar clases</a>
+                        <a href="{% url 'index' %}" class="btn-action-secondary"><i class="bi bi-house-door-fill"></i> Home</a>
+                        <button type="button" id="add-cart" value="{{ product.id }}" class="btn-action-secondary">
+                            <i class="bi bi-cart-plus"></i> Reserva una Clase
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RESEÑAS -->
+            <div class="compact-card">
+                <h3 class="block-title"><i class="bi bi-chat-dots-fill"></i> Reseñas y calificaciones</h3>
+
+                {% if can_review %}
+                <div class="review-form">
+                    <h6 class="mb-2" style="font-size:0.8rem; color: var(--naranja);"><i class="bi bi-pencil-square"></i> Escribe tu reseña</h6>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" name="comment_form" class="btn-action-primary w-100 mt-2">
+                            <i class="bi bi-send-fill"></i> Enviar
+                        </button>
+                    </form>
+                </div>
+                {% elif user.is_authenticated %}
+                <div class="alert alert-info" style="font-size:0.8rem;">Debes comprar este curso para poder dejar una reseña.</div>
+                {% else %}
+                <div class="alert alert-info" style="font-size:0.8rem;">
+                    <a href="{% url 'login' %}?next={{ request.path }}">Inicia sesión</a> para dejar tu reseña.
+                </div>
+                {% endif %}
+
+                {% for comment in comments %}
+                <div class="review-card">
+                    <div class="review-header">
+                        <div>
+                            <strong>{{ comment.name }}</strong>
+                            <span class="text-muted ms-1">• {{ comment.created_date|timesince }} atrás</span>
+                        </div>
+                        {% if comment.is_verified_purchase %}
+                        <span class="badge-verified"><i class="bi bi-patch-check-fill"></i> Compra verificada</span>
+                        {% endif %}
+                    </div>
+                    {% if comment.rating %}
+                    <div class="stars mb-1">
+                        {% for i in "12345" %}{% if forloop.counter <= comment.rating %}★{% else %}☆{% endif %}{% endfor %}
+                    </div>
+                    {% endif %}
+                    <p class="mb-1">{{ comment.text }}</p>
+
+                    {% if is_instructor %}
+                    <button class="btn-action-secondary" style="flex:none; padding:0.3rem 0.6rem; font-size:0.72rem;" data-bs-toggle="collapse" data-bs-target="#reply{{ comment.id }}">
+                        <i class="bi bi-reply-fill"></i> Responder
+                    </button>
+
+                    <div class="collapse mt-2" id="reply{{ comment.id }}">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            {{ response_form.as_p }}
+                            <button type="submit" name="respuesta_form" class="btn-action-primary w-100 mt-2">
+                                <i class="bi bi-send"></i> Enviar respuesta
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+
+                    {% for response in comment.responses.all %}
+                    <div class="review-reply">
+                        <h6>{{ response.responder_name }} <small class="text-muted">• {{ response.created_at|timesince }} atrás</small></h6>
+                        <p class="mb-0">{{ response.response_text }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% empty %}
+                <p class="text-muted" style="font-size:0.8rem;">Aún no hay reseñas. ¡Sé el primero en dejar la tuya!</p>
+                {% endfor %}
+            </div>
+
+        </div>
+
     </div>
-  </div>
-  {% elif user.is_authenticated %}
-  <div class="alert alert-info">Debes comprar este curso para poder dejar una reseña.</div>
-  {% else %}
-  <div class="alert alert-info">
-    <a href="{% url 'login' %}?next={{ request.path }}">Inicia sesión</a> para dejar tu reseña.
-  </div>
-  {% endif %}
-
-  {% for comment in comments %}
-  <div class="card-comment">
-    <h6>
-      {{ comment.name }} <small class="text-muted">• {{ comment.created_date|timesince }} atrás</small>
-      {% if comment.is_verified_purchase %}
-        <span class="badge bg-success"><i class="bi bi-patch-check-fill"></i> Compra verificada</span>
-      {% endif %}
-    </h6>
-    {% if comment.rating %}
-      <div class="text-warning">
-        {% for i in "12345" %}
-          {% if forloop.counter <= comment.rating %}★{% else %}☆{% endif %}
-        {% endfor %}
-      </div>
-    {% endif %}
-    <p>{{ comment.text }}</p>
-
-    {% if is_instructor %}
-    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="collapse" data-bs-target="#reply{{ comment.id }}">
-      <i class="bi bi-reply-fill"></i> Responder
-    </button>
-
-    <div class="collapse mt-3" id="reply{{ comment.id }}">
-      <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="comment_id" value="{{ comment.id }}">
-        {{ response_form.as_p }}
-        <button type="submit" name="respuesta_form" class="btn btn-outline-success btn-sm w-100 mt-2">
-          <i class="bi bi-send"></i> Enviar respuesta
-        </button>
-      </form>
-    </div>
-    {% endif %}
-
-    {% for response in comment.responses.all %}
-    <div class="mt-3 ms-4 ps-3 border-start border-2 border-success">
-      <h6 class="text-success">{{ response.responder_name }}<small class="text-muted"> • {{ response.created_at|timesince }} atrás</small></h6>
-      <p>{{ response.response_text }}</p>
-    </div>
-    {% endfor %}
-  </div>
-  {% empty %}
-  <p class="text-muted">Aún no hay reseñas. ¡Sé el primero en dejar la tuya!</p>
-  {% endfor %}
-</div>
-
-
+</main>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
@@ -460,5 +280,4 @@
     });
   });
 </script>
-
 {% endblock %}

@@ -1,0 +1,282 @@
+.antares-product-detail {
+    --pd-sky: #38bdf8;
+    --pd-purple: #8b5cf6;
+    --pd-green: #10b981;
+    --pd-yellow: #eab308;
+    --pd-orange: #f97316;
+    --pd-navy: #0b1329;
+    --pd-card-bg: var(--surface-bg);
+    --pd-input-bg: var(--surface-bg-alt);
+    --pd-border: var(--border-soft);
+    --pd-text: var(--text-body);
+    --pd-muted: var(--text-muted-soft);
+
+    color: var(--pd-text);
+    padding: 2rem 0 3rem 0;
+}
+
+/* ========== HEADER DEL CURSO ========== */
+.antares-product-detail .course-header-banner {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(11, 19, 41, 0.95) 100%),
+                radial-gradient(circle at top right, rgba(249, 115, 22, 0.15), transparent 50%);
+    border: 1px solid var(--pd-border);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.antares-product-detail .course-header-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.antares-product-detail .course-header-subtitle {
+    font-size: 0.9rem;
+    color: var(--pd-muted);
+    margin-top: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.antares-product-detail .action-header-btns {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.antares-product-detail .btn-action-outline {
+    background-color: var(--pd-input-bg);
+    color: var(--pd-text);
+    border: 1px solid var(--pd-border);
+    padding: 0.55rem 1.1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.antares-product-detail .btn-action-outline:hover {
+    background-color: #334155;
+    color: #ffffff;
+    border-color: var(--pd-sky);
+}
+
+.antares-product-detail .btn-action-primary {
+    background: linear-gradient(90deg, #2563eb 0%, var(--pd-sky) 100%);
+    color: #ffffff;
+    border: none;
+    padding: 0.55rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: opacity 0.2s;
+}
+
+.antares-product-detail .btn-action-primary:hover {
+    opacity: 0.9;
+    color: #ffffff;
+}
+
+/* ========== TÍTULOS DE SECCIÓN ========== */
+.antares-product-detail .section-column-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.antares-product-detail .indicator-bar {
+    width: 4px;
+    height: 18px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.antares-product-detail .bar-sky { background-color: var(--pd-sky); }
+.antares-product-detail .bar-green { background-color: var(--pd-green); }
+.antares-product-detail .bar-purple { background-color: var(--pd-purple); }
+
+/* ========== TARJETAS DE CLASE ========== */
+.antares-product-detail .class-card {
+    background-color: var(--pd-card-bg);
+    border: 1px solid var(--pd-border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.antares-product-detail .class-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(56, 189, 248, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.antares-product-detail .class-card-img-wrapper {
+    width: 100%;
+    height: 190px;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--pd-input-bg);
+}
+
+.antares-product-detail .class-card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.antares-product-detail .class-card-body {
+    padding: 1.25rem;
+}
+
+.antares-product-detail .class-card-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    margin-bottom: 0.4rem;
+    text-transform: capitalize;
+}
+
+.antares-product-detail .class-card-desc {
+    font-size: 0.85rem;
+    color: var(--pd-muted);
+    margin-bottom: 1.2rem;
+}
+
+.antares-product-detail .btn-ver-clase {
+    background: linear-gradient(90deg, var(--pd-purple) 0%, #a855f7 100%);
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: opacity 0.2s;
+}
+
+.antares-product-detail .btn-ver-clase:hover {
+    opacity: 0.9;
+    color: #ffffff;
+}
+
+.antares-product-detail .no-classes-msg {
+    font-style: italic;
+    color: var(--pd-muted);
+    font-size: 0.9rem;
+}
+
+/* ========== ACCESO / PAGO ========== */
+.antares-product-detail .payment-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.antares-product-detail .btn-pagar {
+    border: none;
+    padding: 0.55rem 1.1rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: opacity 0.2s;
+    cursor: pointer;
+}
+
+.antares-product-detail .btn-pagar:hover {
+    opacity: 0.9;
+    color: #ffffff;
+}
+
+.antares-product-detail .btn-pagar-izipay {
+    background: linear-gradient(90deg, #2563eb 0%, var(--pd-sky) 100%);
+}
+
+.antares-product-detail .btn-pagar-paypal {
+    background: linear-gradient(90deg, var(--pd-orange) 0%, var(--pd-yellow) 100%);
+}
+
+/* ========== RECOMENDACIONES ========== */
+.antares-product-detail .recommend-card {
+    background-color: var(--pd-card-bg);
+    border: 1px solid var(--pd-border);
+    border-radius: 14px;
+    padding: 1.25rem;
+}
+
+.antares-product-detail .recommend-label {
+    color: var(--pd-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.antares-product-detail .mini-course-item {
+    background-color: var(--pd-navy);
+    border: 1px solid var(--pd-border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.antares-product-detail .mini-course-img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+}
+
+.antares-product-detail .mini-course-body {
+    padding: 0.9rem;
+}
+
+.antares-product-detail .mini-course-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--pd-sky);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.antares-product-detail .mini-course-title:hover {
+    text-decoration: underline;
+}
+
+.antares-product-detail .mini-course-price {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--pd-green);
+}

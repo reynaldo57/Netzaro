@@ -1,0 +1,293 @@
+:root {
+    --wl-border: var(--border-soft);
+    --wl-surface: var(--surface-bg-alt);
+    --wl-text: var(--text-strong);
+    --wl-muted: var(--text-muted-soft);
+}
+
+/* ========== HERO HEADER ========== */
+.wl-hero {
+    background: linear-gradient(180deg, var(--surface-bg-alt) 0%, var(--page-bg) 100%) !important;
+    border-bottom: 1px solid var(--wl-border);
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.wl-hero-content {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.wl-hero h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--text-strong) !important;
+}
+
+.wl-hero p {
+    color: var(--text-muted-soft) !important;
+    margin: 0.2rem 0 0;
+    font-size: 0.95rem;
+}
+
+/* ========== CONTENEDOR ========== */
+.wl-container {
+    max-width: 1250px;
+    margin: 0 auto 4rem;
+    padding: 0 1.5rem;
+}
+
+/* ========== TOOLBAR ========== */
+.wishlist-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--wl-border);
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.wishlist-count {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text-strong) !important;
+}
+
+.wishlist-count span {
+    color: var(--wl-muted) !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* ========== TARJETA DE CURSO ========== */
+.wishlist-card {
+    background: var(--surface-bg) !important;
+    border: 1px solid var(--wl-border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    display: flex;
+    gap: 1.25rem;
+    transition: all 0.2s ease;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.wishlist-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: var(--shadow-md);
+}
+
+.wishlist-img {
+    width: 160px;
+    height: 110px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid var(--wl-border);
+    flex-shrink: 0;
+}
+
+.wishlist-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+}
+
+.wishlist-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--wl-text) !important;
+    text-decoration: none;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.wishlist-title:hover {
+    color: var(--naranja) !important;
+}
+
+.wishlist-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.82rem;
+    color: var(--wl-muted) !important;
+    margin-bottom: 0.5rem;
+}
+
+.wishlist-meta a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.wishlist-meta a:hover {
+    color: var(--azul) !important;
+}
+
+.wishlist-rating {
+    color: var(--naranja) !important;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.wishlist-rating .text-muted {
+    color: var(--wl-muted) !important;
+    font-weight: 500;
+}
+
+.wishlist-price-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: auto;
+}
+
+.price-tag {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--wl-text) !important;
+}
+
+.price-tag .old-price {
+    font-size: 0.88rem;
+    color: var(--wl-muted) !important;
+    text-decoration: line-through;
+    margin-left: 0.4rem;
+    font-weight: 500;
+}
+
+.action-btns {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.btn-add-cart {
+    background: var(--azul-dark) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    transition: opacity 0.2s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-add-cart:hover {
+    opacity: 0.88;
+    color: #ffffff !important;
+}
+
+.btn-remove {
+    background: transparent !important;
+    color: var(--rojo) !important;
+    border: 1px solid #fecaca !important;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.5rem 0.85rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-remove:hover {
+    background: #fef2f2 !important;
+    border-color: var(--rojo) !important;
+    color: var(--rojo) !important;
+}
+
+/* ========== ESTADO VACÍO ========== */
+.wl-empty {
+    border: 1px solid var(--wl-border);
+    border-radius: var(--radius);
+    background: var(--wl-surface) !important;
+    color: var(--wl-muted) !important;
+    padding: 2.5rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* ========== SIDEBAR DE RESUMEN ========== */
+.summary-card {
+    background: var(--surface-bg) !important;
+    border: 1px solid var(--wl-border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 20px;
+}
+
+.summary-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-strong) !important;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--wl-border);
+}
+
+.summary-title i {
+    color: var(--naranja) !important;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    color: var(--wl-muted) !important;
+}
+
+.summary-row .fw-bold {
+    color: var(--wl-text) !important;
+}
+
+.summary-row .text-success {
+    color: #16a34a !important;
+}
+
+.summary-row.total {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--wl-text) !important;
+    border-top: 1px dashed var(--wl-border);
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.btn-checkout-all {
+    width: 100%;
+    background: var(--gradient-brand) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 0.92rem;
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: none;
+    margin-top: 1rem;
+    transition: opacity 0.2s ease;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+    cursor: pointer;
+}
+
+.btn-checkout-all:hover {
+    opacity: 0.95;
+    color: #ffffff !important;
+}
+
+.btn-checkout-all:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

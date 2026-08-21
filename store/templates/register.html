@@ -1,95 +1,92 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/auth.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-<style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        overflow: hidden; /* ❌ Evita scroll vertical innecesario */
-        font-family: Arial, sans-serif;
-        background-color: #f3f6f8;
-    }
-    .register-wrapper {
-        display: flex;
-        height: 100vh; /* ✅ Ocupa toda la pantalla */
-        width: 100%;
-    }
-    .register-image {
-        flex: 1;
-        background: 
-            linear-gradient(rgba(10, 102, 194, 0.6), rgba(10, 102, 194, 0.6)), 
-            url('/static/assets/fondo.jpg') center/cover no-repeat;
-    }
-    .register-form-container {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #fff;
-    }
-    .register-form {
-        width: 80%;
-        max-width: 400px;
-    }
-    .register-form h2 {
-        color: #0A66C2;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-    .register-form p {
-        color: #666;
-        margin-bottom: 30px;
-    }
-    .form-control {
-        border-radius: 6px;
-        padding: 12px;
-    }
-    .btn-primary {
-        background-color: #0A66C2;
-        border: none;
-        padding: 12px;
-        border-radius: 6px;
-        width: 100%;
-        font-weight: bold;
-        transition: 0.3s;
-    }
-    .btn-primary:hover {
-        background-color: #004182;
-    }
-    a {
-        text-decoration: none;
-    }
-    /* 📱 Responsive */
-    @media (max-width: 768px) {
-        .register-wrapper {
-            flex-direction: column;
-        }
-        .register-image {
-            display: none;
-        }
-        .register-form-container {
-            flex: none;
-            height: 100vh;
-        }
-    }
-</style>
 
-<div class="register-wrapper">
-    <div class="register-image"></div>
-    <div class="register-form-container">
-        <div class="register-form">
-            <h2>Create Your Account</h2>
-            <p>Fill in the details to get started</p>
-            <form method="POST" action="{% url 'register' %}">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Register</button>
-            </form>
-            <p class="mt-3 text-center">
-                Already have an account? <a href="{% url 'login' %}" style="color: #0A66C2;">Log in</a>
-            </p>
+<div class="auth-container">
+
+    <!-- HERO VISUAL -->
+    <div class="auth-hero">
+        <div class="auth-hero-overlay"></div>
+        <div class="auth-hero-content">
+            <h2>Crea tu cuenta y empieza a aprender</h2>
+            <p>Únete a ANTARES para reservar clases, seguir tu progreso y acceder a tus cursos desde cualquier dispositivo.</p>
+
+            <div class="auth-hero-features">
+                <div><i class="bi bi-check-circle-fill"></i> Cursos a tu ritmo</div>
+                <div><i class="bi bi-check-circle-fill"></i> Certificado al finalizar</div>
+                <div><i class="bi bi-check-circle-fill"></i> Soporte de instructores</div>
+            </div>
         </div>
     </div>
+
+    <!-- FORMULARIO -->
+    <div class="auth-form-section">
+        <div class="auth-card">
+
+            <div class="auth-header">
+                <h3>Crea tu cuenta</h3>
+                <p>Completa tus datos para comenzar</p>
+            </div>
+
+            <form method="POST" action="{% url 'register' %}">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="field-error mb-3">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <div class="input-icon-group">
+                    <i class="bi bi-person"></i>
+                    {{ form.username }}
+                    {% if form.username.errors %}<div class="field-error">{{ form.username.errors }}</div>{% endif %}
+                </div>
+
+                <div class="input-icon-group">
+                    <i class="bi bi-id-badge"></i>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}<div class="field-error">{{ form.first_name.errors }}</div>{% endif %}
+                </div>
+
+                <div class="input-icon-group">
+                    <i class="bi bi-id-badge"></i>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}<div class="field-error">{{ form.last_name.errors }}</div>{% endif %}
+                </div>
+
+                <div class="input-icon-group">
+                    <i class="bi bi-envelope"></i>
+                    {{ form.email }}
+                    {% if form.email.errors %}<div class="field-error">{{ form.email.errors }}</div>{% endif %}
+                </div>
+
+                <div class="input-icon-group">
+                    <i class="bi bi-lock"></i>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}<div class="field-error">{{ form.password1.errors }}</div>{% endif %}
+                </div>
+
+                <div class="input-icon-group">
+                    <i class="bi bi-lock-fill"></i>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}<div class="field-error">{{ form.password2.errors }}</div>{% endif %}
+                </div>
+
+                <button type="submit" class="btn-auth-submit">
+                    <i class="bi bi-person-plus me-1"></i> Registrarme
+                </button>
+            </form>
+
+            <div class="auth-prompt">
+                ¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión</a>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 {% endblock %}

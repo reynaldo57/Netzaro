@@ -1,362 +1,34 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/about.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 
+<section class="about-hero">
+    <span class="about-badge"><i class="fas fa-compass me-1"></i> Conócenos</span>
+    <h1>Quiénes Somos</h1>
+    <p>Nuestra historia desde su fundación: educación idiomática clara, dinámica y cercana para todos.</p>
+</section>
 
+<main class="about-container">
 
-    <title>Quiénes Somos - Nuestra Historia</title>
-    <style>
-
-
-        /* Container */
-        .container-QS {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
-
-        /* Sección Historia */
-        .historia-QS {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-            margin-bottom: 80px;
-            flex-wrap: wrap;
-        }
-
-        .historia-content-QS {
-            flex: 1;
-            min-width: 300px;
-            opacity: 0;
-            transform: translateX(-50px);
-            animation: slideInLeft 1s ease forwards;
-        }
-
-        .historia-content h2 {
-            color: #dc2626;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
-
-        .historia-content p {
-            font-size: 1.1em;
-            margin-bottom: 15px;
-            color: #555;
-        }
-
-        .historia-image {
-            flex: 1;
-            min-width: 300px;
-            opacity: 0;
-            transform: translateX(50px);
-            animation: slideInRight 1s ease forwards;
-        }
-
-        .historia-image img {
-            width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        /* Valores */
-        .valores {
-            background: #1e40af;
-            padding: 80px 20px;
-            color: white;
-            margin: 60px 0;
-        }
-
-        .valores h2 {
-            text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 50px;
-        }
-
-        .valores-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .valor-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .valor-card:nth-child(1) {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .valor-card:nth-child(2) {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .valor-card:nth-child(3) {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .valor-card:nth-child(4) {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .valor-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-            border-color: rgba(255, 255, 255, 0.6);
-        }
-
-        .valor-card .icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-        }
-
-        .valor-card h3 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        /* Equipo */
-        .equipo {
-            padding: 60px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .equipo h2 {
-            text-align: center;
-            font-size: 2.5em;
-            color: #dc2626;
-            margin-bottom: 50px;
-        }
-
-        .equipo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-        }
-
-        .miembro {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            opacity: 0;
-            animation: fadeIn 1s ease forwards;
-        }
-
-        .miembro:nth-child(1) { animation-delay: 0.2s; }
-        .miembro:nth-child(2) { animation-delay: 0.4s; }
-        .miembro:nth-child(3) { animation-delay: 0.6s; }
-        .miembro:nth-child(4) { animation-delay: 0.8s; }
-
-        .miembro:hover {
-            transform: translateY(-10px);
-        }
-
-        .miembro-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: #dc2626;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3em;
-            color: white;
-        }
-
-        .miembro:nth-child(1) .miembro-avatar {
-            background: #dc2626;
-        }
-
-        .miembro:nth-child(2) .miembro-avatar {
-            background: #1e40af;
-        }
-
-        .miembro:nth-child(3) .miembro-avatar {
-            background: #64748b;
-        }
-
-        .miembro:nth-child(4) .miembro-avatar {
-            background: #dc2626;
-        }
-
-        .miembro h3 {
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .miembro .cargo {
-            color: #dc2626;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .miembro p {
-            color: #666;
-            font-size: 0.95em;
-        }
-
-        /* Footer */
-        footer {
-            background: #1e293b;
-            color: white;
-            text-align: center;
-            padding: 30px 20px;
-        }
-
-        footer p {
-            margin-bottom: 10px;
-        }
-
-        /* Animaciones */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideInLeft {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes slideInRight {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2em;
-            }
-
-            .historia-content h2,
-            .valores h2,
-            .equipo h2 {
-                font-size: 2em;
-            }
-
-            .historia {
-                flex-direction: column;
-            }
-        }
-
-        /* Botón CTA */
-        .cta-button {
-            display: inline-block;
-            padding: 15px 40px;
-            background: #dc2626;
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            margin-top: 20px;
-            font-weight: bold;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
-            background: #b91c1c;
-        }
-
-        /* Estadísticas */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin: 60px 0;
-            text-align: center;
-        }
-
-        .stat-item {
-            padding: 20px;
-        }
-
-        .stat-number {
-            font-size: 3em;
-            font-weight: bold;
-            color: #dc2626;
-        }
-
-        .stat-item:nth-child(1) .stat-number {
-            color: #dc2626;
-        }
-
-        .stat-item:nth-child(2) .stat-number {
-            color: #1e40af;
-        }
-
-        .stat-item:nth-child(3) .stat-number {
-            color: #64748b;
-        }
-
-        .stat-item:nth-child(4) .stat-number {
-            color: #dc2626;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 1.1em;
-            margin-top: 10px;
-        }
-    </style>
-
-    <!-- Header -->
-<header style="background: radial-gradient(circle, #8b0101 0%, #8b0101 100%) center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
-  <div class="text-center text-white">
-      <h1 class="display-5 fw-bold">'Quiénes Somos</h1>
-      <p class="lead fw-normal text-white-50 mb-0">Nuestra Historia desde su Fundación</p>
-  </div>
-</header>
-
-    <!-- Historia -->
-    <div class="container-QS">
-        <section class="historia-QS">
-            <div class="historia-content-QS">
+    <!-- HISTORIA -->
+    <section class="about-story-section">
+        <div class="story-grid">
+            <div class="story-image-box">
+                <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="500" height="400" fill="var(--surface-bg)"/>
+                    <circle cx="250" cy="200" r="80" fill="#f97316" opacity="0.25"/>
+                    <circle cx="150" cy="150" r="60" fill="#c2410c" opacity="0.2"/>
+                    <circle cx="350" cy="250" r="70" fill="#78716c" opacity="0.15"/>
+                    <rect x="150" y="280" width="200" height="80" rx="10" fill="#f97316"/>
+                    <text x="250" y="325" text-anchor="middle" fill="white" font-size="24" font-weight="bold">2015-2025</text>
+                </svg>
+            </div>
+            <div class="story-content">
                 <h2>Nuestra Historia</h2>
                 <p>
                     Somos apasionados por los idiomas y por compartirlo con el mundo. Creemos que aprender una lengua es mucho más que memorizar palabras: es descubrir una cultura, conectar con personas y abrir nuevas oportunidades.
@@ -367,165 +39,162 @@
                 <p>
                     Con cada clase, buscamos que nuestros alumnos se sientan seguros, motivados y acompañados en su camino hacia la fluidez. Porque enseñar no es solo nuestro trabajo, es nuestra vocación.
                 </p>
-                <a href="#contacto" class="cta-button">Contáctanos</a>
+                <a href="{% url 'category_summary' %}" class="btn-cta-orange">Explorar Cursos</a>
             </div>
-            <div class="historia-image">
-                <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="500" height="400" fill="#f8fafc"/>
-                    <circle cx="250" cy="200" r="80" fill="#dc2626" opacity="0.3"/>
-                    <circle cx="150" cy="150" r="60" fill="#1e40af" opacity="0.3"/>
-                    <circle cx="350" cy="250" r="70" fill="#64748b" opacity="0.3"/>
-                    <rect x="150" y="280" width="200" height="80" rx="10" fill="#dc2626"/>
-                    <text x="250" y="325" text-anchor="middle" fill="white" font-size="24" font-weight="bold">2015-2025</text>
-                </svg>
-            </div>
-        </section>
+        </div>
 
-        <!-- Estadísticas -->
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-number" data-target="10">0</div>
-                <div class="stat-label">Años de Experiencia</div>
+        <!-- MISIÓN Y VISIÓN -->
+        <div class="mv-grid">
+            <div class="mv-card">
+                <div class="mv-icon"><i class="fas fa-bullseye"></i></div>
+                <h3>Nuestra Misión</h3>
+                <p>Enseñar de forma clara, dinámica y cercana, adaptándonos a las necesidades de cada estudiante para que aprender sea una experiencia enriquecedora.</p>
             </div>
-            <div class="stat-item">
-                <div class="stat-number" data-target="500">0</div>
-                <div class="stat-label">Clientes Satisfechos</div>
+            <div class="mv-card">
+                <div class="mv-icon"><i class="fas fa-eye"></i></div>
+                <h3>Nuestra Visión</h3>
+                <p>Acompañar a cada alumno hasta la fluidez, siendo un espacio donde se sienta seguro, motivado y guiado en todo su camino de aprendizaje.</p>
             </div>
-            <div class="stat-item">
-                <div class="stat-number" data-target="50">0</div>
-                <div class="stat-label">Profesionales</div>
+        </div>
+    </section>
+
+    <!-- ESTADÍSTICAS -->
+    <div class="stats-banner">
+        <div class="stat-box">
+            <h2 class="stat-number" data-target="10">0</h2>
+            <p>Años de Experiencia</p>
+        </div>
+        <div class="stat-box">
+            <h2 class="stat-number" data-target="500">0</h2>
+            <p>Clientes Satisfechos</p>
+        </div>
+        <div class="stat-box">
+            <h2 class="stat-number" data-target="50">0</h2>
+            <p>Profesionales</p>
+        </div>
+        <div class="stat-box">
+            <h2 class="stat-number" data-target="1000">0</h2>
+            <p>Proyectos Completados</p>
+        </div>
+    </div>
+
+    <!-- VALORES -->
+    <div class="about-section-title">
+        <h2>Nuestros Valores</h2>
+        <p>Los principios que guían cada clase y cada decisión.</p>
+    </div>
+
+    <div class="values-grid">
+        <div class="value-card">
+            <i class="fas fa-lightbulb"></i>
+            <h4>Innovación</h4>
+            <p>Buscamos constantemente nuevas formas de resolver problemas y mejorar procesos.</p>
+        </div>
+        <div class="value-card">
+            <i class="fas fa-handshake"></i>
+            <h4>Integridad</h4>
+            <p>Actuamos con honestidad y transparencia en cada decisión que tomamos.</p>
+        </div>
+        <div class="value-card">
+            <i class="fas fa-bullseye"></i>
+            <h4>Excelencia</h4>
+            <p>Nos comprometemos con la calidad en cada proyecto que emprendemos.</p>
+        </div>
+        <div class="value-card">
+            <i class="fas fa-star"></i>
+            <h4>Pasión</h4>
+            <p>Amamos lo que hacemos y eso se refleja en nuestros resultados.</p>
+        </div>
+    </div>
+
+    <!-- EQUIPO -->
+    <div class="about-section-title">
+        <h2>Nuestro Equipo</h2>
+        <p>Las personas detrás de cada clase.</p>
+    </div>
+
+    <div class="team-grid">
+        <div class="team-card">
+            <div class="team-avatar">CM</div>
+            <div class="team-info">
+                <h5>Carlos Mendoza</h5>
+                <span>CEO & Fundador</span>
+                <p>Visionario con más de 15 años de experiencia liderando proyectos de innovación tecnológica.</p>
             </div>
-            <div class="stat-item">
-                <div class="stat-number" data-target="1000">0</div>
-                <div class="stat-label">Proyectos Completados</div>
+        </div>
+        <div class="team-card">
+            <div class="team-avatar">AG</div>
+            <div class="team-info">
+                <h5>Ana García</h5>
+                <span>CTO</span>
+                <p>Experta en desarrollo de software con pasión por crear soluciones escalables y eficientes.</p>
+            </div>
+        </div>
+        <div class="team-card">
+            <div class="team-avatar">LR</div>
+            <div class="team-info">
+                <h5>Luis Ramírez</h5>
+                <span>Director de Diseño</span>
+                <p>Creativo excepcional que transforma ideas en experiencias visuales memorables.</p>
+            </div>
+        </div>
+        <div class="team-card">
+            <div class="team-avatar">MT</div>
+            <div class="team-info">
+                <h5>María Torres</h5>
+                <span>Directora de Marketing</span>
+                <p>Estratega de marketing digital con un historial comprobado de éxito en campañas innovadoras.</p>
             </div>
         </div>
     </div>
 
-    <!-- Valores -->
-    <section class="valores">
-        <h2>Nuestros Valores</h2>
-        <div class="valores-grid">
-            <div class="valor-card">
-                <div class="icon">💡</div>
-                <h3>Innovación</h3>
-                <p>Buscamos constantemente nuevas formas de resolver problemas y mejorar procesos.</p>
-            </div>
-            <div class="valor-card">
-                <div class="icon">🤝</div>
-                <h3>Integridad</h3>
-                <p>Actuamos con honestidad y transparencia en cada decisión que tomamos.</p>
-            </div>
-            <div class="valor-card">
-                <div class="icon">🎯</div>
-                <h3>Excelencia</h3>
-                <p>Nos comprometemos con la calidad en cada proyecto que emprendemos.</p>
-            </div>
-            <div class="valor-card">
-                <div class="icon">🌟</div>
-                <h3>Pasión</h3>
-                <p>Amamos lo que hacemos y eso se refleja en nuestros resultados.</p>
-            </div>
-        </div>
-    </section>
+    <!-- CTA FINAL -->
+    <div class="about-cta">
+        <h3>¿Listo para Potenciar tus Conocimientos?</h3>
+        <p>Explora nuestro catálogo de cursos creados para el entorno actual.</p>
+        <a href="{% url 'category_summary' %}" class="btn-cta-orange">
+            <i class="fas fa-magnifying-glass me-1"></i> Explorar Catálogo
+        </a>
+    </div>
 
-    <!-- Equipo -->
-    <section class="equipo">
-        <h2>Nuestro Equipo</h2>
-        <div class="equipo-grid">
-            <div class="miembro">
-                <div class="miembro-avatar">👨‍💼</div>
-                <h3>Carlos Mendoza</h3>
-                <div class="cargo">CEO & Fundador</div>
-                <p>Visionario con más de 15 años de experiencia liderando proyectos de innovación tecnológica.</p>
-            </div>
-            <div class="miembro">
-                <div class="miembro-avatar">👩‍💻</div>
-                <h3>Ana García</h3>
-                <div class="cargo">CTO</div>
-                <p>Experta en desarrollo de software con pasión por crear soluciones escalables y eficientes.</p>
-            </div>
-            <div class="miembro">
-                <div class="miembro-avatar">👨‍🎨</div>
-                <h3>Luis Ramírez</h3>
-                <div class="cargo">Director de Diseño</div>
-                <p>Creativo excepcional que transforma ideas en experiencias visuales memorables.</p>
-            </div>
-            <div class="miembro">
-                <div class="miembro-avatar">👩‍💼</div>
-                <h3>María Torres</h3>
-                <div class="cargo">Directora de Marketing</div>
-                <p>Estratega de marketing digital con un historial comprobado de éxito en campañas innovadoras.</p>
-            </div>
-        </div>
-    </section>
+</main>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Tu Empresa. Todos los derechos reservados.</p>
-        <p>Construyendo el futuro, un proyecto a la vez.</p>
-    </footer>
+<script>
+    function animateCounters() {
+        const counters = document.querySelectorAll('.stat-number');
+        const speed = 200;
 
-    <script>
-        // Animación de contadores
-        function animateCounters() {
-            const counters = document.querySelectorAll('.stat-number');
-            const speed = 200;
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-target'));
+            const increment = target / speed;
+            let count = 0;
 
-            counters.forEach(counter => {
-                const target = parseInt(counter.getAttribute('data-target'));
-                const increment = target / speed;
-                let count = 0;
-
-                const updateCount = () => {
-                    count += increment;
-                    if (count < target) {
-                        counter.textContent = Math.ceil(count);
-                        setTimeout(updateCount, 10);
-                    } else {
-                        counter.textContent = target + '+';
-                    }
-                };
-
-                updateCount();
-            });
-        }
-
-        // Observador de intersección para animar cuando sea visible
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateCounters();
-                    observer.unobserve(entry.target);
+            const updateCount = () => {
+                count += increment;
+                if (count < target) {
+                    counter.textContent = Math.ceil(count);
+                    setTimeout(updateCount, 10);
+                } else {
+                    counter.textContent = target + '+';
                 }
-            });
-        }, { threshold: 0.5 });
+            };
 
-        const statsSection = document.querySelector('.stats');
-        if (statsSection) {
-            observer.observe(statsSection);
-        }
+            updateCount();
+        });
+    }
 
-        // Efecto parallax suave en el scroll
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const header = document.querySelector('header');
-            if (header) {
-                header.style.transform = `translateY(${scrolled * 0.5}px)`;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounters();
+                observer.unobserve(entry.target);
             }
         });
+    }, { threshold: 0.5 });
 
-        // Agregar efecto de hover interactivo a las tarjetas de valores
-        document.querySelectorAll('.valor-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.background = 'rgba(255, 255, 255, 0.2)';
-            });
-            card.addEventListener('mouseleave', function() {
-                this.style.background = 'rgba(255, 255, 255, 0.1)';
-            });
-        });
-    </script>
-</body>
-</html>
-
+    const statsSection = document.querySelector('.stats-banner');
+    if (statsSection) {
+        observer.observe(statsSection);
+    }
+</script>
 {% endblock %}

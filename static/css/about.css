@@ -1,0 +1,334 @@
+:root {
+    --ab-orange: #f97316;
+    --ab-orange-dark: #c2410c;
+    --ab-orange-light: #fff7ed;
+    --ab-dark: #1c1917;
+    --ab-text: #292524;
+    --ab-muted: var(--text-muted-soft);
+    --ab-surface: var(--surface-bg);
+    --ab-border: var(--border-soft);
+}
+
+/* ========== HERO ========== */
+.about-hero {
+    position: relative;
+    background: linear-gradient(135deg, var(--ab-dark) 0%, #3a3330 100%) !important;
+    padding: 5rem 1.5rem 4.5rem;
+    text-align: center;
+    color: #ffffff !important;
+}
+
+.about-badge {
+    background: rgba(249, 115, 22, 0.2) !important;
+    color: #fdba74 !important;
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 50px;
+    display: inline-block;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(249, 115, 22, 0.4);
+}
+
+.about-hero h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #ffffff !important;
+    margin-bottom: 0.8rem;
+}
+
+.about-hero p {
+    font-size: 1.1rem;
+    color: #e7e5e4 !important;
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* ========== CONTENEDOR ========== */
+.about-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* ========== HISTORIA ========== */
+.about-story-section {
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid var(--ab-border);
+}
+
+.story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: center;
+}
+
+.story-image-box {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    border: 1px solid var(--ab-border);
+    background: var(--ab-surface) !important;
+}
+
+.story-image-box svg {
+    width: 100%;
+    height: 340px;
+    display: block;
+}
+
+.story-content h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--text-strong) !important;
+    margin-bottom: 1rem;
+}
+
+.story-content p {
+    font-size: 0.95rem;
+    color: var(--ab-muted) !important;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.btn-cta-orange {
+    background: var(--ab-orange) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    padding: 0.7rem 1.6rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s;
+}
+
+.btn-cta-orange:hover {
+    background: var(--ab-orange-dark) !important;
+    color: #ffffff !important;
+}
+
+/* ========== MISIÓN Y VISIÓN ========== */
+.mv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+.mv-card {
+    background: var(--surface-bg) !important;
+    border: 1px solid var(--ab-border);
+    border-radius: 12px;
+    padding: 1.8rem;
+    transition: border-color 0.2s ease;
+}
+
+.mv-card:hover {
+    border-color: var(--ab-orange);
+}
+
+.mv-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--ab-orange-light) !important;
+    color: var(--ab-orange) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.mv-card h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-strong) !important;
+    margin-bottom: 0.5rem;
+}
+
+.mv-card p {
+    font-size: 0.88rem;
+    color: var(--ab-muted) !important;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ========== MÉTRICAS ========== */
+.stats-banner {
+    background: linear-gradient(135deg, var(--ab-dark) 0%, #3a3330 100%) !important;
+    border-radius: 14px;
+    padding: 3rem 1.5rem;
+    margin: 3.5rem 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    text-align: center;
+    color: #ffffff !important;
+}
+
+.stat-box h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--ab-orange) !important;
+    margin-bottom: 0.2rem;
+}
+
+.stat-box p {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #d6d3d1 !important;
+    margin: 0;
+}
+
+/* ========== TÍTULOS DE SECCIÓN ========== */
+.about-section-title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.about-section-title h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-strong) !important;
+    margin-bottom: 0.4rem;
+}
+
+.about-section-title p {
+    font-size: 0.9rem;
+    color: var(--ab-muted) !important;
+    margin: 0;
+}
+
+/* ========== VALORES ========== */
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 4rem;
+}
+
+.value-card {
+    background: var(--surface-bg) !important;
+    border: 1px solid var(--ab-border);
+    border-radius: 10px;
+    padding: 1.4rem;
+    transition: transform 0.2s;
+}
+
+.value-card:hover {
+    transform: translateY(-3px);
+}
+
+.value-card i {
+    font-size: 1.4rem;
+    color: var(--ab-orange) !important;
+    margin-bottom: 0.8rem;
+    display: block;
+}
+
+.value-card h4 {
+    font-size: 0.98rem;
+    font-weight: 800;
+    color: var(--text-strong) !important;
+    margin-bottom: 0.4rem;
+}
+
+.value-card p {
+    font-size: 0.82rem;
+    color: var(--ab-muted) !important;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ========== EQUIPO ========== */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 4rem;
+}
+
+.team-card {
+    background: var(--surface-bg) !important;
+    border: 1px solid var(--ab-border);
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: border-color 0.2s ease;
+}
+
+.team-card:hover {
+    border-color: var(--ab-orange);
+}
+
+.team-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--ab-orange-light) !important;
+    color: var(--ab-orange-dark) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    border: 1px solid var(--ab-border);
+}
+
+.team-info h5 {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--text-strong) !important;
+    margin: 0 0 0.15rem;
+}
+
+.team-info span {
+    font-size: 0.75rem;
+    color: var(--ab-orange-dark) !important;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.team-info p {
+    font-size: 0.78rem;
+    color: var(--ab-muted) !important;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* ========== CTA FINAL ========== */
+.about-cta {
+    background: linear-gradient(135deg, var(--ab-dark) 0%, #3a3330 100%) !important;
+    color: #ffffff !important;
+    border-radius: 14px;
+    padding: 3.5rem 2rem;
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.about-cta h3 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 0.6rem;
+    color: #ffffff !important;
+}
+
+.about-cta p {
+    font-size: 0.92rem;
+    color: #d6d3d1 !important;
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .about-hero h1 { font-size: 1.8rem; }
+    .story-grid { grid-template-columns: 1fr; }
+}

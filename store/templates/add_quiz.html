@@ -1,30 +1,131 @@
 {% extends 'base.html' %}
-{% block content %}
-<div class="container mt-4">
-  <h2>Evaluaciones de "{{ product.name }}"</h2>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Crear quiz</button>
-  </form>
+{% load static %}
 
-  <hr>
-  <ul class="list-group">
-    {% for quiz in quizzes %}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <span>{{ quiz.titulo }} ({{ quiz.total_preguntas }} preguntas)
-          — <a href="{% url 'add_pregunta' quiz.id %}">Agregar/ver preguntas</a>
-        </span>
-        <form method="POST" action="{% url 'eliminar_quiz' quiz.id %}"
-              onsubmit="return confirm('¿Eliminar este quiz y todas sus preguntas?');">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
-        </form>
-      </li>
-    {% empty %}
-      <li class="list-group-item">Todavía no hay quizzes.</li>
-    {% endfor %}
-  </ul>
-  <a href="{% url 'add_tarea' product.id %}" class="btn btn-outline-secondary">Ir a agregar tareas →</a>
+{% block title %}Evaluaciones de {{ product.name }}{% endblock title %}
+
+{% block extra_css %}
+<link href="{% static 'css/add_quiz.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="antares-quiz-page">
+    <div class="container">
+
+        <h1 class="page-title">
+            <i class="fa-solid fa-file-pen"></i> Evaluaciones de "{{ product.name }}"
+        </h1>
+
+        <div class="row g-4">
+
+            <!-- COLUMNA IZQUIERDA: FORMULARIO Y LISTA DE QUIZZES -->
+            <div class="col-lg-8">
+
+                <!-- CREAR QUIZ -->
+                <div class="panel-card mb-4">
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label-custom" for="{{ form.titulo.id_for_label }}">
+                                <i class="fa-solid fa-heading"></i> Título del Quiz
+                            </label>
+                            {{ form.titulo }}
+                            <p class="error-text">{{ form.titulo.errors }}</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label-custom" for="{{ form.nota_minima_aprobatoria.id_for_label }}">
+                                <i class="fa-solid fa-percent"></i> Nota mínima para aprobar (%)
+                            </label>
+                            {{ form.nota_minima_aprobatoria }}
+                            <p class="error-text">{{ form.nota_minima_aprobatoria.errors }}</p>
+                        </div>
+
+                        <button type="submit" class="btn-crear-quiz">
+                            <i class="fa-solid fa-plus me-1"></i> Crear quiz
+                        </button>
+                    </form>
+                </div>
+
+                <!-- LISTADO DE EVALUACIONES EXISTENTES -->
+                <div class="panel-card">
+                    <h5 class="panel-title">
+                        <i class="fa-solid fa-list-check me-2"></i>Evaluaciones registradas
+                    </h5>
+
+                    <div class="quiz-list">
+                        {% for quiz in quizzes %}
+                        <div class="quiz-item">
+                            <div>
+                                <span class="quiz-info-title">{{ quiz.titulo }}</span>
+                                <span class="quiz-info-meta ms-1">({{ quiz.total_preguntas }} preguntas)</span>
+                                <div class="mt-1">
+                                    <a href="{% url 'add_pregunta' quiz.id %}" class="link-preguntas">
+                                        <i class="fa-solid fa-layer-group me-1"></i>Agregar / ver preguntas
+                                    </a>
+                                </div>
+                            </div>
+                            <form method="POST" action="{% url 'eliminar_quiz' quiz.id %}"
+                                  onsubmit="return confirm('¿Eliminar este quiz y todas sus preguntas?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-eliminar">
+                                    <i class="fa-regular fa-trash-can me-1"></i>Eliminar
+                                </button>
+                            </form>
+                        </div>
+                        {% empty %}
+                        <p class="quiz-empty">Todavía no hay quizzes.</p>
+                        {% endfor %}
+                    </div>
+
+                    <!-- BOTÓN NAVEGACIÓN -->
+                    <div class="mt-4 pt-2 border-top border-secondary border-opacity-25">
+                        <a href="{% url 'add_tarea' product.id %}" class="btn-navegacion">
+                            Ir a agregar tareas <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- COLUMNA DERECHA: TARJETA VISUAL DE RESUMEN -->
+            <div class="col-lg-4">
+                <div class="banner-card">
+                    {% if product.image %}
+                    <div class="banner-img-wrapper">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        <div class="banner-img-overlay"></div>
+                    </div>
+                    {% endif %}
+
+                    <div class="banner-body">
+                        <h5><i class="fa-solid fa-chart-pie me-2"></i>Gestión de Evaluación</h5>
+                        <p>Diseña cuestionarios para medir el avance de tus alumnos en "{{ product.name }}". Asigna puntajes mínimos de aprobación para habilitar los siguientes módulos.</p>
+
+                        <div class="stat-badge-grid">
+                            <div class="mini-stat-card">
+                                <div class="mini-stat-value">{{ quizzes|length }}</div>
+                                <div class="mini-stat-label">Quizzes Creados</div>
+                            </div>
+                            <div class="mini-stat-card">
+                                <div class="mini-stat-value">60%</div>
+                                <div class="mini-stat-label">Nota Mín. Sugerida</div>
+                            </div>
+                        </div>
+
+                        <div class="tip-box">
+                            <div class="tip-box-inner">
+                                <small class="tip-title"><i class="fa-solid fa-lightbulb me-1"></i> Sugerencia</small>
+                                <small class="tip-text">Asegúrate de agregar al menos 5 preguntas por quiz para garantizar una evaluación efectiva.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </div>
 {% endblock %}

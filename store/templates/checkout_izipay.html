@@ -1,25 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Formulario de Pago Seguro</title>
+  <title>Izipay - Pasarela de Pago Seguro</title>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css"
-      integrity="sha384-QDSPDoVOoSWz2ypaRUidLmLYl4RyoBWI44iA5agn6jHegBxZkNqgm2eHb6yZ5bYs" crossorigin="anonymous" />
+
+  <!-- jQuery / Popper / Bootstrap JS (sin cambios: se mantienen por si la pasarela los requiere) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Fonts & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Libreria JS de la pasarela -->
+  <!-- Libreria JS de la pasarela: NO MODIFICAR estos atributos, son requeridos por Izipay -->
   <script type="text/javascript"
     src="https://static.micuentaweb.pe/static/js/krypton-client/V4.0/stable/kr-payment-form.min.js"
     kr-public-key="{{ publickey }}"
@@ -32,449 +29,256 @@
   </script>
 
   <style>
-    :root {
-        --color-primary: #dc2626;
-        --color-secondary: #991b1b;
-        --color-accent: #2563eb;
-        --color-success: #059669;
-        --color-bg: #f8fafc;
-        --color-text: #1e293b;
-    }
+  :root {
+      --izipay-red: #FF3B3F;
+      --izipay-turquoise: #00D1C1;
+      --izipay-turquoise-hover: #00B3A5;
+      --izipay-dark: #1E232A;
+      --izipay-bg-light: #F8FAFC;
+      --izipay-card-bg: #FFFFFF;
+      --izipay-border: #E2E8F0;
+      --izipay-muted: #64748B;
+  }
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+  body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--izipay-dark);
+      background-color: #FFFFFF;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+  }
 
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #fef2f2 0%, #f8fafc 100%);
-        min-height: 100vh;
-        padding-bottom: 3rem;
-    }
+  /* HEADER IZIPAY */
+  .izipay-header {
+      background-color: var(--izipay-red);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(255, 59, 63, 0.2);
+  }
 
-    /* ========== NAVBAR - Rojo elegante ========== */
-    .navbar {
-        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%) !important;
-        padding: 1.25rem 0;
-        box-shadow: 0 4px 20px rgba(220, 38, 38, 0.2);
-        position: relative;
-        overflow: hidden;
-    }
+  .brand-logo-izipay {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #FFFFFF;
+      letter-spacing: -1.5px;
+      display: flex;
+      align-items: center;
+      line-height: 1;
+  }
 
-    .navbar::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-        animation: float 8s ease-in-out infinite;
-    }
+  .brand-logo-izipay span {
+      color: var(--izipay-turquoise);
+  }
 
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-20px); }
-    }
+  .security-badge {
+      color: #FFFFFF;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+  }
 
-    .navbar-brand {
-        position: relative;
-        z-index: 10;
-        transition: transform 0.3s ease;
-    }
+  /* MAIN CONTAINER */
+  .checkout-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1rem;
+  }
 
-    .navbar-brand:hover {
-        transform: scale(1.05);
-    }
+  .payment-container {
+      max-width: 860px;
+      width: 100%;
+  }
 
-    .navbar-brand img {
-        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
-    }
+  .payment-card {
+      background-color: var(--izipay-card-bg);
+      border: 1px solid var(--izipay-border);
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+  }
 
-    /* ========== CONTAINER ========== */
-    .container {
-        margin-top: 3rem;
-        animation: fadeInUp 0.8s ease;
-    }
+  /* COLUMNA FORMULARIO (IZQUIERDA) */
+  .form-column {
+      padding: 2.25rem;
+  }
 
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+  .accepted-cards {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.5rem;
+      color: var(--izipay-red);
+  }
 
-    /* ========== PAYMENT FORM CARD ========== */
-    .payment-form {
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-        padding: 2.5rem;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid #e5e7eb;
-    }
+  /* Contenedor real del widget de pago de Izipay: sus campos son inyectados por classic.js */
+  #micuentawebstd_rest_wrapper {
+      margin-top: 1rem;
+  }
 
-    .payment-form::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
-        background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-    }
+  .kr-embedded {
+      min-height: 220px;
+  }
 
-    /* ========== HEADER DE FORMULARIO ========== */
-    .payment-header {
-        text-align: center;
-        margin-bottom: 2rem;
-        padding-bottom: 1.5rem;
-        border-bottom: 2px solid #f1f5f9;
-        position: relative;
-    }
+  /* COLUMNA DE CONFIANZA (DERECHA) */
+  .summary-column {
+      background-color: var(--izipay-bg-light);
+      border-left: 1px solid var(--izipay-border);
+      padding: 2.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+  }
 
-    .payment-header::after {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 2px;
-        background: var(--color-primary);
-    }
+  .summary-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--izipay-red);
+  }
 
-    .payment-header .icon {
-        font-size: 3rem;
-        color: var(--color-primary);
-        margin-bottom: 1rem;
-        animation: pulse 2s ease-in-out infinite;
-    }
+  .trust-list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1.1rem;
+  }
 
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
+  .trust-list-item i {
+      color: var(--izipay-turquoise);
+      font-size: 1.1rem;
+      margin-top: 0.1rem;
+  }
 
-    .payment-header h2 {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: var(--color-text);
-        margin-bottom: 0.5rem;
-        letter-spacing: -0.5px;
-    }
+  .trust-list-item h6 {
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.15rem;
+      color: var(--izipay-dark);
+  }
 
-    .payment-header p {
-        color: #64748b;
-        font-size: 1rem;
-        margin: 0;
-    }
+  .trust-list-item p {
+      font-size: 0.8rem;
+      color: var(--izipay-muted);
+      margin: 0;
+  }
 
-    /* ========== LISTA Y TARJETAS ACEPTADAS ========== */
-    .payment-method {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-        padding: 1.25rem;
-        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-        border-radius: 12px;
-        border: 2px solid rgba(220, 38, 38, 0.2);
-    }
+  .info-box {
+      background-color: #FFFFFF;
+      border: 2px dashed var(--izipay-red);
+      border-radius: 14px;
+      padding: 1.1rem;
+      margin-top: 0.5rem;
+  }
 
-    .payment-method li {
-        list-style: none;
-        font-weight: 600;
-        color: var(--color-text);
-        font-size: 1.0625rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .payment-method li::before {
-        content: '';
-        display: inline-block;
-        width: 8px;
-        height: 8px;
-        background: var(--color-primary);
-        border-radius: 50%;
-    }
-
-    .payment-method img {
-        max-width: 220px;
-        height: auto;
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-    }
-
-    /* ========== LÍNEA SEPARADORA ========== */
-    hr {
-        border: none;
-        height: 2px;
-        background: linear-gradient(90deg, transparent 0%, #e5e7eb 50%, transparent 100%);
-        margin: 2rem 0;
-    }
-
-    /* ========== FORMULARIO INTEGRADO ========== */
-    #micuentawebstd_rest_wrapper {
-        margin-top: 2rem;
-    }
-
-    .kr-embedded {
-        padding: 2rem;
-        background: #fafafa;
-        border-radius: 16px;
-        border: 2px solid #e5e7eb;
-        margin: 0 auto;
-        max-width: 100%;
-    }
-
-    /* ========== SECURITY BADGES ========== */
-    .security-info {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        margin-top: 2rem;
-        padding-top: 2rem;
-        border-top: 1px solid #e5e7eb;
-        flex-wrap: wrap;
-    }
-
-    .security-badge {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: var(--color-text);
-        font-size: 0.9375rem;
-        font-weight: 500;
-    }
-
-    .security-badge i {
-        font-size: 1.5rem;
-        color: var(--color-success);
-    }
-
-    /* ========== INFO CARDS ========== */
-    .info-cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 1.25rem;
-        margin-top: 2rem;
-    }
-
-    .info-card {
-        text-align: center;
-        padding: 1.25rem;
-        background: white;
-        border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        transition: all 0.3s ease;
-    }
-
-    .info-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-    }
-
-    .info-card i {
-        font-size: 2rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .info-card:nth-child(1) {
-        border-top: 3px solid var(--color-primary);
-    }
-
-    .info-card:nth-child(1) i {
-        color: var(--color-primary);
-    }
-
-    .info-card:nth-child(2) {
-        border-top: 3px solid var(--color-accent);
-    }
-
-    .info-card:nth-child(2) i {
-        color: var(--color-accent);
-    }
-
-    .info-card:nth-child(3) {
-        border-top: 3px solid var(--color-success);
-    }
-
-    .info-card:nth-child(3) i {
-        color: var(--color-success);
-    }
-
-    .info-card h6 {
-        font-weight: 700;
-        color: var(--color-text);
-        font-size: 0.9375rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .info-card p {
-        font-size: 0.8125rem;
-        color: #64748b;
-        margin: 0;
-    }
-
-    /* ========== RESPONSIVE ========== */
-    @media (max-width: 768px) {
-        .container {
-            margin-top: 2rem;
-        }
-
-        .payment-form {
-            padding: 1.75rem;
-        }
-
-        .payment-header h2 {
-            font-size: 1.5rem;
-        }
-
-        .payment-method {
-            flex-direction: column;
-            text-align: center;
-        }
-
-        .payment-method img {
-            max-width: 180px;
-        }
-
-        .security-info {
-            gap: 1rem;
-        }
-
-        .info-cards {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .navbar {
-            padding: 1rem 0;
-        }
-
-        .navbar-brand img {
-            width: 70px;
-        }
-
-        .payment-form {
-            padding: 1.5rem;
-            border-radius: 16px;
-        }
-
-        .payment-header .icon {
-            font-size: 2.5rem;
-        }
-
-        .payment-header h2 {
-            font-size: 1.25rem;
-        }
-
-        .kr-embedded {
-            padding: 1.5rem;
-        }
-    }
-
-    /* ========== ANIMACIÓN ADICIONAL ========== */
-    .payment-method,
-    .security-info,
-    .info-cards {
-        animation: fadeIn 0.8s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
+  @media (max-width: 991px) {
+      .summary-column {
+          border-left: none;
+          border-top: 1px solid var(--izipay-border);
+      }
+  }
   </style>
 </head>
-
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="container-fluid">
-        <a href="/" class="navbar-brand mb-1">
-            <img src="https://iziweb001b.s3.amazonaws.com/webresources/img/logo.png" width="80" alt="Logo">
-        </a>
-    </div>
-  </nav>
 
-  <!-- SECCIÓN PRINCIPAL -->
-  <section class="container">
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-8">
-        <section class="payment-form">
-          <!-- Header -->
-          <div class="payment-header">
-            <i class="bi bi-credit-card-2-front icon"></i>
-            <h2>Pago Seguro</h2>
-            <p>Completa tu compra de forma rápida y protegida</p>
-          </div>
-
-          <!-- Método de pago -->
-          <div class="payment-method">
-            <li>Pago con tarjeta de crédito/débito</li>
-            <img src="https://github.com/izipay-pe/Imagenes/blob/main/logo_tarjetas_aceptadas/logo-tarjetas-aceptadas-351x42.png?raw=true" 
-                 alt="Tarjetas aceptadas">
-          </div>
-
-          <hr>
-
-          <!-- Formulario integrado -->
-          <div id="micuentawebstd_rest_wrapper">
-            <div class="kr-embedded" kr-form-token="{{token}}"></div>
-          </div>
-
-          <!-- Badges de seguridad -->
-          <div class="security-info">
-            <div class="security-badge">
-                <i class="bi bi-shield-check"></i>
-                <span>Pago Seguro SSL</span>
-            </div>
-            <div class="security-badge">
-                <i class="bi bi-lock-fill"></i>
-                <span>Datos Encriptados</span>
-            </div>
-            <div class="security-badge">
-                <i class="bi bi-credit-card"></i>
-                <span>Todas las Tarjetas</span>
-            </div>
-          </div>
-
-          <!-- Info cards -->
-          <div class="info-cards">
-            <div class="info-card">
-                <i class="bi bi-lightning-charge-fill"></i>
-                <h6>Proceso Rápido</h6>
-                <p>Pago en segundos</p>
-            </div>
-            <div class="info-card">
-                <i class="bi bi-shield-lock-fill"></i>
-                <h6>100% Seguro</h6>
-                <p>Protección total</p>
-            </div>
-            <div class="info-card">
-                <i class="bi bi-headset"></i>
-                <h6>Soporte 24/7</h6>
-                <p>Ayuda inmediata</p>
-            </div>
-          </div>
-        </section>
+  <header class="izipay-header">
+      <div class="brand-logo-izipay">
+          izi<span>pay</span>
       </div>
-      <div class="col-md-2"></div>
-    </div>
-  </section>
+
+      <div class="security-badge">
+          <i class="fa-solid fa-shield-halved"></i> Pago 100% Seguro
+      </div>
+  </header>
+
+  <div class="checkout-wrapper">
+      <div class="payment-container">
+          <div class="payment-card">
+              <div class="row g-0">
+
+                  <!-- COLUMNA IZQUIERDA: WIDGET DE PAGO DE IZIPAY -->
+                  <div class="col-lg-7 form-column">
+                      <div class="d-flex align-items-center justify-content-between mb-3">
+                          <h5 class="fw-bold m-0" style="font-size: 1.1rem; color: var(--izipay-dark);">
+                              Datos de tarjeta
+                          </h5>
+                          <div class="accepted-cards">
+                              <i class="fa-brands fa-cc-visa" title="Visa"></i>
+                              <i class="fa-brands fa-cc-mastercard" title="Mastercard"></i>
+                              <i class="fa-brands fa-cc-amex" title="Amex"></i>
+                              <i class="fa-brands fa-cc-diners-club" title="Diners Club"></i>
+                          </div>
+                      </div>
+
+                      <!-- Widget embebido de Izipay: NO MODIFICAR el id, la clase ni el atributo kr-form-token -->
+                      <div id="micuentawebstd_rest_wrapper">
+                          <div class="kr-embedded" kr-form-token="{{ token }}"></div>
+                      </div>
+                  </div>
+
+                  <!-- COLUMNA DERECHA: CONFIANZA Y SEGURIDAD -->
+                  <div class="col-lg-5 summary-column">
+                      <div>
+                          <div class="summary-title">
+                              <i class="fa-solid fa-shield-halved"></i> Compra protegida
+                          </div>
+
+                          <div class="trust-list-item">
+                              <i class="fa-solid fa-lock"></i>
+                              <div>
+                                  <h6>Pago Seguro SSL</h6>
+                                  <p>Conexión cifrada de extremo a extremo.</p>
+                              </div>
+                          </div>
+                          <div class="trust-list-item">
+                              <i class="fa-solid fa-user-shield"></i>
+                              <div>
+                                  <h6>Datos Encriptados</h6>
+                                  <p>Tu información nunca se almacena en este sitio.</p>
+                              </div>
+                          </div>
+                          <div class="trust-list-item">
+                              <i class="fa-regular fa-credit-card"></i>
+                              <div>
+                                  <h6>Todas las Tarjetas</h6>
+                                  <p>Aceptamos Visa, Mastercard, Amex y Diners.</p>
+                              </div>
+                          </div>
+                          <div class="trust-list-item">
+                              <i class="fa-solid fa-headset"></i>
+                              <div>
+                                  <h6>Soporte 24/7</h6>
+                                  <p>Ayuda inmediata ante cualquier duda.</p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="info-box">
+                          <div class="d-flex align-items-center gap-2 text-muted" style="font-size: 0.82rem;">
+                              <i class="fa-solid fa-circle-check" style="color: var(--izipay-turquoise);"></i>
+                              <span>Transacción protegida por izipay.</span>
+                          </div>
+                      </div>
+                  </div>
+
+              </div>
+          </div>
+      </div>
+  </div>
+
 </body>
 </html>

@@ -1,0 +1,281 @@
+:root {
+    --cr-navy-dark: #0f172a;
+    --cr-text: var(--text-body);
+    --cr-muted: var(--text-muted-soft);
+    --cr-bg: var(--surface-bg-alt);
+    --cr-surface: var(--surface-bg);
+    --cr-border: var(--border-soft);
+}
+
+body {
+    font-size: 0.85rem;
+}
+
+/* ========== BANNER ========== */
+.cr-banner {
+    background: linear-gradient(135deg, var(--cr-navy-dark), var(--azul-dark)) !important;
+    color: #ffffff !important;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 3px solid var(--naranja);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.cr-banner h1 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cr-banner h1 i { color: var(--naranja) !important; }
+
+.cr-banner p {
+    font-size: 0.78rem;
+    color: #94a3b8 !important;
+    margin: 0;
+}
+
+.cr-banner .cr-secure-note {
+    font-size: 0.8rem;
+    color: #cbd5e1 !important;
+}
+
+.cr-banner .cr-secure-note i { color: var(--amarillo) !important; }
+
+/* ========== CONTENEDOR ========== */
+.cr-container {
+    max-width: 1180px;
+    margin: 1.2rem auto;
+    padding: 0 1rem;
+}
+
+/* ========== TARJETAS ========== */
+.compact-card {
+    background: var(--cr-surface) !important;
+    border: 1px solid var(--cr-border);
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    margin-bottom: 1rem;
+}
+
+.card-header-title {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--text-strong) !important;
+    border-bottom: 2px solid var(--cr-bg);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.card-header-title i { color: var(--naranja) !important; }
+
+/* ========== ITEM RESERVADO ========== */
+.reserved-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.8rem;
+    border: 1px solid var(--cr-border);
+    border-radius: 8px;
+    background: var(--cr-surface) !important;
+    margin-bottom: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.reserved-item:last-child { margin-bottom: 0; }
+
+.item-image {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--cr-border);
+}
+
+.item-details { flex: 1; min-width: 200px; }
+
+.item-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-strong) !important;
+    margin: 0;
+}
+
+.badge-sale {
+    background: #fef08a !important;
+    color: #854d0e !important;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.item-instructor {
+    font-size: 0.75rem;
+    color: var(--cr-muted) !important;
+    margin: 0.2rem 0 0.3rem;
+}
+
+.item-meta {
+    font-size: 0.72rem;
+    color: #475569 !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.price-box {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+}
+
+.price-current {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #16a34a !important;
+}
+
+.price-old {
+    font-size: 0.85rem;
+    color: var(--cr-muted) !important;
+    text-decoration: line-through;
+}
+
+.item-qty-select {
+    font-size: 0.78rem;
+}
+
+.item-actions {
+    text-align: right;
+}
+
+/* ========== CUPÓN ========== */
+.coupon-box {
+    border: 1px solid var(--cr-border);
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    background: var(--cr-bg) !important;
+    margin-top: 0.8rem;
+}
+
+/* ========== GARANTÍAS ========== */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.6rem;
+}
+
+.feature-card {
+    background: var(--cr-surface) !important;
+    border: 1px solid var(--cr-border);
+    border-left: 3px solid var(--naranja);
+    border-radius: 6px;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feature-card i {
+    font-size: 1rem;
+    color: var(--naranja) !important;
+}
+
+.feature-info h6 {
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-strong) !important;
+}
+
+.feature-info p {
+    font-size: 0.65rem;
+    color: var(--cr-muted) !important;
+    margin: 0;
+}
+
+/* ========== RESUMEN ========== */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+    font-size: 0.82rem;
+    color: var(--cr-text) !important;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.8rem;
+    padding-top: 0.6rem;
+    border-top: 2px dashed var(--cr-border);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-strong) !important;
+}
+
+.btn-checkout {
+    background: #16a34a !important;
+    color: #ffffff !important;
+    font-weight: 800;
+    width: 100%;
+    padding: 0.65rem;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    box-shadow: 0 2px 4px rgba(22, 163, 74, 0.2);
+    text-decoration: none;
+}
+
+.btn-checkout:hover { opacity: 0.92; color: #ffffff !important; }
+
+.btn-checkout:disabled,
+.btn-checkout.disabled {
+    background: var(--cr-muted) !important;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.cr-info-note {
+    background: rgba(30, 64, 175, 0.15) !important;
+    border: 1px solid rgba(30, 64, 175, 0.35) !important;
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.75rem;
+    color: var(--azul) !important;
+}
+
+.cr-info-note i { color: var(--azul) !important; }
+
+/* ========== CARRITO VACÍO ========== */
+.cr-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.cr-empty h3 { color: var(--cr-muted) !important; }
+.cr-empty p { color: var(--cr-muted) !important; }
+
+@media (max-width: 768px) {
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .item-actions { text-align: left; width: 100%; }
+}

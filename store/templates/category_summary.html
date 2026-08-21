@@ -1,107 +1,102 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/catalog.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 
-<!-- HEADER CON DEGRADADO ELEGANTE -->
-<header>
-      <h1>Elige tu Curso</h1>
-      <p>Descubre nuevas oportunidades</p>
-</header>
+<div class="antares-catalog">
 
-<!-- SECCIÓN DE CATEGORÍAS -->
-<div class="container my-5">
-    <h2 class="text-center mb-4 fw-bold" style="color: #0f4c5c;">Categories</h2>
-    <div class="row justify-content-center g-4">
-        {% for category in categories %}
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <a href="{% url 'category' category %}" class="text-decoration-none">
-                <div class="card h-100 border-0 shadow-sm" 
-                     style="border-radius: 10px; background-color: #fdfdfd; transition: all 0.3s;">
-                    <div class="card-body text-center">
-                        <h5 class="fw-semibold" style="color: #0f4c5c;">{{ category }}</h5>
-                    </div>
-                </div>
+    <!-- HERO -->
+    <div class="catalog-hero">
+        <h2>Aprende a tu propio ritmo</h2>
+        <p>Explora cursos impartidos por expertos y fortalece tus conocimientos hoy mismo.</p>
+    </div>
+
+    <div class="main-container">
+
+        <!-- CATEGORÍAS -->
+        <h3 class="section-title">Categorías</h3>
+        <div class="category-pills">
+            <a href="{% url 'category_summary' %}" class="pill-btn active-orange">
+                <i class="fas fa-border-all"></i> Todos los Cursos
             </a>
+            {% for category in categories %}
+            <a href="{% url 'category' category %}" class="pill-btn">
+                <i class="fas fa-layer-group"></i> {{ category }}
+            </a>
+            {% endfor %}
         </div>
-        {% endfor %}
+
+        <!-- CURSOS -->
+        <h3 class="section-title">Todos los Cursos</h3>
+
+        <div class="courses-grid-5col">
+            {% for product in products %}
+            <div class="original-card">
+                <img src="{{ product.image.url }}" class="card-thumb-original" alt="{{ product.name }}">
+                <div class="card-info-original">
+                    <span class="category-label-original">{{ product.category.name }}</span>
+                    <a href="{% url 'product' product.id %}" class="card-title-original">{{ product.name }}</a>
+                    <div class="card-meta-original">
+                        <span><i class="fa-regular fa-clock me-1" style="color: var(--antares-blue);"></i> {{ product.duration_display }}</span>
+                        <span class="price-tag-original">
+                            {% if product.is_sale and product.sale_price %}${{ product.sale_price }}{% else %}${{ product.price }}{% endif %}
+                        </span>
+                    </div>
+                    <a href="{% url 'product' product.id %}" class="btn-ver-curso-original">Ver Curso</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="catalog-empty">Todavía no hay cursos publicados.</div>
+            {% endfor %}
+        </div>
+
+        <!-- BANNER PROMOCIONAL -->
+        <div class="promo-banner-horizontal">
+            <div class="d-flex align-items-center gap-3">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=300&q=80" alt="Comunidad">
+                <div class="promo-banner-text">
+                    <h5>Nuevas lecciones disponibles cada semana</h5>
+                    <p>Únete a la comunidad de estudiantes y accede a tutorías en vivo en Antares.</p>
+                </div>
+            </div>
+            <a href="{% url 'search' %}" class="btn-promo-explore">Explorar Más</a>
+        </div>
+
+        <!-- POR QUÉ ELEGIRNOS -->
+        <div class="why-choose-section">
+            <h3 class="section-title">¿Por qué elegir ANTARES?</h3>
+
+            <div class="features-grid">
+                <div class="feature-card-original">
+                    <div class="feature-icon-box">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h5>Calidad Garantizada</h5>
+                    <p>Contenido rigurosamente revisado y estructurado por instructores expertos.</p>
+                </div>
+
+                <div class="feature-card-original">
+                    <div class="feature-icon-box" style="background-color: #fff7ed; color: var(--antares-orange);">
+                        <i class="fas fa-circle-play"></i>
+                    </div>
+                    <h5>Acceso Inmediato</h5>
+                    <p>Comienza tus lecciones al instante desde cualquier dispositivo y a tu propio ritmo.</p>
+                </div>
+
+                <div class="feature-card-original">
+                    <div class="feature-icon-box" style="background-color: #f0fdf4; color: #16a34a;">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <h5>Pago 100% Seguro</h5>
+                    <p>Tus transacciones y datos de compra están protegidos bajo cifrado de alta seguridad.</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
-
-<!-- SECCIÓN DE CARDS INFORMATIVOS -->
-<div class="container my-5">
-    <h2 class="text-center mb-4 fw-bold" style="color: #0f4c5c;">Why Choose Us?</h2>
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100" style="background-color: #f5f3f0; border-radius: 12px;">
-                <div class="card-body text-center p-4">
-                    <i class="bi bi-star-fill fs-1" style="color: #d4af37;"></i>
-                    <h5 class="mt-3 fw-bold" style="color: #1b263b;">Premium Quality</h5>
-                    <p class="text-muted">All our products go through strict quality checks to ensure the best for you.</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100" style="background-color: #edf6f9; border-radius: 12px;">
-                <div class="card-body text-center p-4">
-                    <i class="bi bi-truck fs-1" style="color: #0f4c5c;"></i>
-                    <h5 class="mt-3 fw-bold" style="color: #1b263b;">Fast Delivery</h5>
-                    <p class="text-muted">Get your orders delivered quickly and securely right to your door.</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100" style="background-color: #fef9ef; border-radius: 12px;">
-                <div class="card-body text-center p-4">
-                    <i class="bi bi-shield-check fs-1" style="color: #d4af37;"></i>
-                    <h5 class="mt-3 fw-bold" style="color: #1b263b;">Secure Payment</h5>
-                    <p class="text-muted">Your transactions are encrypted and safe with our trusted payment partners.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ESTILOS EXTRA -->
-<style>
-    :root {
-        --color-dominante: #ffffff;    /* 60% - Blanco (Limpieza absoluta) */
-        --color-primario: #b91c1c;      /* 30% - Rojo Sangre (Poder y acción) */
-        --color-secundario: #1d3557;    /* 10% - Azul Marino (Confianza y detalle) */
-        --gris-borde: #e2e8f0;
-        --texto-negro: #000000;
-    }
-    /* ========== HEADER REFINADO ========== */
-    header {
-        background: var(--color-primario) !important;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-bottom: 5px solid var(--color-secundario);
-        margin-bottom: 1rem;
-        height: 100px !important;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        padding: 1rem 0 !important;
-    }
-
-    header h1 {
-        color: white !important;
-        font-weight: bold !important;
-        text-transform: uppercase;
-        margin-top: 1rem;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        letter-spacing: -0.5px;
-    }
-    header p {
-        color: white !important;
-        margin-top: 1px;
-    }
-.card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
-}
-</style>
-
 {% endblock %}

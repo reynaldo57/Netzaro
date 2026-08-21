@@ -1,0 +1,286 @@
+.antares-coupons-page {
+    --cp-orange: #f97316;
+    --cp-yellow: #eab308;
+    --cp-green: #10b981;
+    --cp-red: #ef4444;
+    --cp-light-blue: #93c5fd;
+    --cp-navy: #0f172a;
+    --cp-text: var(--text-body);
+    --cp-muted: var(--text-muted-soft);
+    --cp-border: var(--border-soft);
+    --cp-input-bg: var(--surface-bg-alt);
+
+    color: var(--cp-text);
+    padding: 2rem 0 3rem 0;
+}
+
+.antares-coupons-page .page-header {
+    margin-bottom: 2rem;
+}
+
+.antares-coupons-page .page-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.antares-coupons-page .page-title i {
+    color: var(--cp-orange);
+}
+
+.antares-coupons-page .page-subtitle {
+    color: var(--cp-muted);
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+}
+
+/* ========== CARDS ========== */
+.antares-coupons-page .panel-card {
+    background-color: var(--surface-bg);
+    border: 1px solid var(--cp-border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.antares-coupons-page .panel-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-strong);
+    margin-bottom: 1rem;
+}
+
+.antares-coupons-page .panel-title i {
+    color: var(--cp-orange);
+}
+
+.antares-coupons-page .form-label-custom {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--cp-light-blue);
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+.antares-coupons-page .form-label-custom i {
+    color: var(--cp-orange);
+}
+
+.antares-coupons-page .form-hint {
+    color: var(--cp-muted);
+    font-size: 0.78rem;
+    display: block;
+    margin-top: 0.35rem;
+}
+
+.antares-coupons-page .form-control {
+    background-color: var(--cp-input-bg);
+    border: 1px solid var(--cp-border);
+    color: var(--text-strong);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+}
+
+.antares-coupons-page .form-control:focus {
+    background-color: var(--cp-input-bg);
+    color: var(--text-strong);
+    border-color: var(--cp-orange);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.antares-coupons-page .form-control::placeholder {
+    color: var(--cp-muted);
+}
+
+.antares-coupons-page .error-text {
+    color: #f87171;
+    font-size: 0.78rem;
+    margin: 0.35rem 0 0;
+}
+
+.antares-coupons-page .error-text:empty {
+    display: none;
+}
+
+/* ========== SWITCH ACTIVE ========== */
+.antares-coupons-page .switch-active-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background-color: var(--cp-navy);
+    border: 1px solid var(--cp-border);
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.antares-coupons-page .switch-active-wrapper input[type="checkbox"] {
+    accent-color: var(--cp-orange);
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.antares-coupons-page .switch-active-wrapper span {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text-strong);
+}
+
+/* ========== BOTONES ========== */
+.antares-coupons-page .btn-crear-cupon {
+    background: linear-gradient(90deg, var(--cp-orange) 0%, var(--cp-yellow) 100%);
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: opacity 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.antares-coupons-page .btn-crear-cupon:hover {
+    opacity: 0.95;
+    color: #ffffff;
+}
+
+.antares-coupons-page .btn-eliminar {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--cp-red);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 0.35rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.antares-coupons-page .btn-eliminar:hover {
+    background-color: var(--cp-red);
+    color: #ffffff;
+}
+
+/* ========== BANNER ILUSTRATIVO ========== */
+.antares-coupons-page .promo-banner {
+    background-color: var(--cp-navy);
+    border: 1px solid var(--cp-border);
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: center;
+    padding: 2rem 1.5rem;
+}
+
+.antares-coupons-page .promo-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1rem auto;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.18) 0%, rgba(234, 179, 8, 0.12) 100%);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    color: var(--cp-orange);
+}
+
+.antares-coupons-page .promo-banner h6 {
+    font-weight: 700;
+    color: var(--text-strong);
+    margin-bottom: 0.4rem;
+}
+
+.antares-coupons-page .promo-banner p {
+    color: var(--cp-muted);
+    font-size: 0.82rem;
+    margin: 0;
+}
+
+/* ========== TABLA DE CUPONES ========== */
+.antares-coupons-page .table-custom {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+}
+
+.antares-coupons-page .table-custom th {
+    color: var(--cp-light-blue);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--cp-border);
+    text-align: left;
+}
+
+.antares-coupons-page .table-custom td {
+    background-color: var(--cp-navy);
+    padding: 0.9rem 1rem;
+    font-size: 0.88rem;
+    vertical-align: middle;
+    color: var(--cp-text);
+}
+
+.antares-coupons-page .table-custom tr td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-left: 1px solid var(--cp-border);
+}
+
+.antares-coupons-page .table-custom tr td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-right: 1px solid var(--cp-border);
+}
+
+.antares-coupons-page .table-custom tr td {
+    border-top: 1px solid var(--cp-border);
+    border-bottom: 1px solid var(--cp-border);
+}
+
+.antares-coupons-page .empty-row td {
+    text-align: center;
+    color: var(--cp-muted);
+    padding: 2rem 1rem;
+}
+
+.antares-coupons-page .badge-coupon {
+    background-color: rgba(249, 115, 22, 0.15);
+    color: var(--cp-orange);
+    border: 1px solid var(--cp-orange);
+    font-family: monospace;
+    font-size: 0.9rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.antares-coupons-page .badge-status-active {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: var(--cp-green);
+    border: 1px solid var(--cp-green);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.antares-coupons-page .badge-status-inactive {
+    background-color: rgba(148, 163, 184, 0.12);
+    color: var(--cp-muted);
+    border: 1px solid var(--cp-border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}

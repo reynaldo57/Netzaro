@@ -1,231 +1,190 @@
 {% extends 'base.html' %}
-{% block title %}Add Course{% endblock title %}
+{% load static %}
+
+{% block title %}Crear Curso{% endblock title %}
+
+{% block extra_css %}
+<link href="{% static 'css/add_product.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 
-<!-- Header-->
-<header style="background: url('/static/assets/rojo.jpg') center/cover no-repeat; min-height: 200px;" class="d-flex justify-content-center align-items-center">
-  <div class="text-center text-white">
-      <h1 class="display-4 fw-bolder"><i class="bi bi-shop"></i>  Shop in style</h1>
-      <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
-  </div>
-</header>
+<div class="antares-form-page">
 
-<!-- Contenedor principal con fondo blanco -->
-<div class="general-container-add-blog" style="background-color: #fff; min-height: 100vh; padding: 50px 0; display: flex; justify-content: center; align-items: center;">
+    <!-- HERO -->
+    <div class="page-hero">
+        <h1><i class="fa-solid fa-square-plus"></i> Crear Nuevo Curso</h1>
+        <p>Completa la información para publicar tu contenido en la plataforma Antares</p>
+    </div>
 
-  <!-- Contenedor interno del formulario -->
-  <div class="container-add-blog" style="background: #fefefe; padding: 40px; border-radius: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 650px;">
-    
-    <!-- Título con mezcla de colores -->
-    <h2 style="text-align: center; color: #d32f2f; margin-bottom: 30px; font-weight: bold;">
-      <i class="fas fa-chalkboard-teacher" style="color: #32d113;"></i> Create Your Course
-    </h2>
+    <!-- FORMULARIO -->
+    <div class="form-container">
+        <div class="form-card">
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.media }}
+                {% csrf_token %}
 
-    <!-- Formulario para agregar curso -->
-    <form action="" method="POST" enctype="multipart/form-data">
-      {{ form.media }}
-      {% csrf_token %}
-      
-      <!-- Input: Nombre -->
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label for="name" style="color: #333; font-weight: 500;"><i class="fas fa-book-open" style="color: #d32f2f;"></i> Course Name</label>
-        <input type="text" name="name" class="input-field" 
-          style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;" 
-          placeholder="Enter course name" required>
-        <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.name.errors }}</p>
-      </div>
+                <!-- SECCIÓN 1: INFORMACIÓN BÁSICA -->
+                <div class="section-header">
+                    <i class="fa-solid fa-info-circle"></i> Información del Curso
+                </div>
 
-      <!-- Select: Categoría -->
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label for="category" style="color: #333; font-weight: 500;"><i class="fas fa-tags" style="color: #32d113;"></i> Category</label>
-        <select name="category" id="category_id" 
-          style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;">
-          {% for category in categories %}
-            <option value="{{ category.id }}">{{ category.name }}</option>
-          {% endfor %}
-        </select>
-        <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.category.errors }}</p>
-      </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-8">
+                        <label class="form-label-custom" for="id_name"><i class="fa-solid fa-book"></i> Nombre del Curso</label>
+                        <input type="text" name="name" id="id_name" class="form-control" value="{{ form.name.value|default:'' }}" placeholder="Ej: Master en Python 3 desde cero" required>
+                        <p class="error-text">{{ form.name.errors }}</p>
+                    </div>
 
-      <!-- Textarea: Descripción -->
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label for="description" style="color: #333; font-weight: 500;"><i class="fas fa-align-left" style="color: #d32f2f;"></i> Description</label>
-        <textarea name="description" class="input-field" 
-          style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;" 
-          rows="4" placeholder="Brief description" required></textarea>
-        <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.description.errors }}</p>
-      </div>
+                    <div class="col-md-4">
+                        <label class="form-label-custom" for="id_category"><i class="fa-solid fa-tag"></i> Categoría</label>
+                        <select name="category" id="id_category" class="form-select">
+                            {% for category in categories %}
+                            <option value="{{ category.id }}" {% if form.category.value|stringformat:"s" == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <p class="error-text">{{ form.category.errors }}</p>
+                    </div>
 
-      <!-- Input: Método de pago -->
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label for="pay_method" style="color: #333; font-weight: 500;"><i class="fas fa-credit-card" style="color: #32d113;"></i> Payment Method</label>
-        <input name="pay_method" class="input-field" 
-          style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;" 
-          placeholder="How will students pay?" required>
-        <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.pay_method.errors }}</p>
-      </div>
+                    <div class="col-12">
+                        <label class="form-label-custom" for="id_description"><i class="fa-solid fa-align-left"></i> Descripción Corta</label>
+                        <textarea name="description" id="id_description" class="form-control" rows="3" placeholder="Resumen atractivo sobre lo que ofrece este curso..." required>{{ form.description.value|default:'' }}</textarea>
+                        <p class="error-text">{{ form.description.errors }}</p>
+                    </div>
+                </div>
 
-      <!-- Input: Precio -->
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label for="price" style="color: #333; font-weight: 500;"><i class="fas fa-dollar-sign" style="color: #d32f2f;"></i> Price</label>
-        <input name="price" class="input-field" 
-          style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;" 
-          placeholder="Enter the price" required>
-        <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.price.errors }}</p>
-      </div>
-<!-- Checkbox: ¿Está en oferta? -->
-<div class="form-group" style="margin-bottom: 20px;">
-  <label for="is_sale" style="color: #333; font-weight: 500;">
-    <i class="fas fa-tag" style="color: #ffb300;"></i> On Sale
-  </label>
-  <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
-    <input type="checkbox" name="is_sale" id="is_sale" 
-      style="width: 20px; height: 20px; cursor: pointer;">
-    <label for="is_sale" style="margin: 0; color: #777;">Check if this course is on sale</label>
-  </div>
-  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.is_sale.errors }}</p>
+                <!-- SECCIÓN 2: PRECIOS Y ACCESO -->
+                <div class="section-header">
+                    <i class="fa-solid fa-dollar-sign"></i> Precios y Pago
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label-custom" for="id_pay_method"><i class="fa-solid fa-credit-card"></i> Método de Pago</label>
+                        <input type="text" name="pay_method" id="id_pay_method" class="form-control" value="{{ form.pay_method.value|default:'' }}" placeholder="Ej: paypal: paola@hotmail.com" required>
+                        <p class="error-text">{{ form.pay_method.errors }}</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label-custom" for="id_price"><i class="fa-solid fa-tag"></i> Precio General ($)</label>
+                        <input type="number" step="0.01" min="0" name="price" id="id_price" class="form-control" value="{{ form.price.value|default:'' }}" placeholder="0.00" required>
+                        <p class="error-text">{{ form.price.errors }}</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label-custom" for="id_full_access_price"><i class="fa-solid fa-lock"></i> Precio de Acceso Total ($)</label>
+                        <input type="number" step="0.01" min="0" name="full_access_price" id="id_full_access_price" class="form-control" value="{{ form.full_access_price.value|default:'' }}" placeholder="Opcional">
+                        <p class="error-text">{{ form.full_access_price.errors }}</p>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-check mt-1">
+                            <input class="form-check-input" type="checkbox" name="is_sale" id="id_is_sale" {% if form.is_sale.value %}checked{% endif %}>
+                            <label class="form-check-label text-muted fw-semibold" for="id_is_sale">
+                                Marcar este curso como <strong>En Oferta / Promoción</strong>
+                            </label>
+                        </div>
+                        <p class="error-text">{{ form.is_sale.errors }}</p>
+                    </div>
+
+                    <div class="col-md-4{% if not form.is_sale.value %} d-none{% endif %}" id="sale_price_container">
+                        <label class="form-label-custom" for="id_sale_price"><i class="fa-solid fa-dollar-sign"></i> Precio de Oferta ($)</label>
+                        <input type="number" name="sale_price" id="id_sale_price" step="0.01" min="0" class="form-control" value="{{ form.sale_price.value|default:'' }}" placeholder="Precio con descuento">
+                        <p class="error-text">{{ form.sale_price.errors }}</p>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 3: ARCHIVOS MULTIMEDIA -->
+                <div class="section-header">
+                    <i class="fa-solid fa-photo-film"></i> Archivos Multimedia
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label-custom"><i class="fa-solid fa-image"></i> Imagen de Portada</label>
+                        <label class="dropzone-box" for="id_image">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span data-dropzone-label>Haz clic o arrastra la imagen del curso</span>
+                            <input type="file" name="image" id="id_image" class="visually-hidden" accept="image/*" required>
+                        </label>
+                        <p class="error-text">{{ form.image.errors }}</p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label-custom"><i class="fa-solid fa-video"></i> Video Promocional</label>
+                        <label class="dropzone-box" for="id_video">
+                            <i class="fa-solid fa-file-video"></i>
+                            <span data-dropzone-label>Haz clic o arrastra el video promocional</span>
+                            <input type="file" name="video" id="id_video" class="visually-hidden" accept="video/*">
+                        </label>
+                        <p class="error-text">{{ form.video.errors }}</p>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 4: DETALLES PEDAGÓGICOS -->
+                <div class="section-header">
+                    <i class="fa-solid fa-list-check"></i> Detalles del Contenido
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label-custom" for="id_learning_points"><i class="fa-solid fa-graduation-cap"></i> Lo que aprenderás</label>
+                        <textarea name="learning_points" id="id_learning_points" class="form-control" rows="4" placeholder="Un punto por línea. Ej:&#10;Dominarás Python desde cero&#10;Crearás proyectos reales">{{ form.learning_points.value|default:'' }}</textarea>
+                        <p class="error-text">{{ form.learning_points.errors }}</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label-custom" for="id_requirements"><i class="fa-solid fa-clipboard-list"></i> Requisitos Previos</label>
+                        <textarea name="requirements" id="id_requirements" class="form-control" rows="4" placeholder="Un requisito por línea. Ej:&#10;Computadora con Internet&#10;Conocimientos básicos">{{ form.requirements.value|default:'' }}</textarea>
+                        <p class="error-text">{{ form.requirements.errors }}</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label-custom" for="id_target_audience"><i class="fa-solid fa-users"></i> ¿A quién va dirigido?</label>
+                        <textarea name="target_audience" id="id_target_audience" class="form-control" rows="4" placeholder="Un perfil por línea. Ej:&#10;Estudiantes de programación&#10;Emprendedores">{{ form.target_audience.value|default:'' }}</textarea>
+                        <p class="error-text">{{ form.target_audience.errors }}</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label-custom" for="id_duration_minutes"><i class="fa-regular fa-clock"></i> Duración total (minutos)</label>
+                        <input type="number" name="duration_minutes" id="id_duration_minutes" class="form-control" min="0" value="{{ form.duration_minutes.value|default:0 }}">
+                        <p class="error-text">{{ form.duration_minutes.errors }}</p>
+                    </div>
+                </div>
+
+                <!-- BOTÓN ENVIAR -->
+                <div class="mt-4 pt-2">
+                    <button type="submit" class="btn-submit-course">
+                        <i class="fa-solid fa-paper-plane me-2"></i> Publicar Curso
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
 </div>
 
-<!-- Input oculto: Precio de oferta -->
-<div id="sale_price_container" class="form-group" style="margin-bottom: 20px; display: none;">
-  <label for="sale_price" style="color: #333; font-weight: 500;">
-    <i class="fas fa-dollar-sign" style="color: #66bb6a;"></i> Sale Price
-  </label>
-  <input type="number" name="sale_price" id="sale_price" step="0.01" min="0"
-    style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; margin-top: 5px;"
-    placeholder="Enter discounted price">
-  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.sale_price.errors }}</p>
-</div>
-
-<!-- Input: Precio de acceso a todas las clases de pago -->
-<div class="form-group" style="margin-bottom: 20px;">
-  <label for="full_access_price" style="color: #333; font-weight: 500;">
-    <i class="fas fa-unlock" style="color: #1d3557;"></i> Precio de acceso a todas las clases de pago
-  </label>
-  <input type="number" name="full_access_price" id="full_access_price" step="0.01" min="0"
-    class="input-field"
-    style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;"
-    placeholder="Si lo dejas vacío se usa el precio normal">
-  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.full_access_price.errors }}</p>
-</div>
-
-<!-- Script para mostrar/ocultar input de precio de oferta -->
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const checkbox = document.getElementById('is_sale');
-    const salePriceContainer = document.getElementById('sale_price_container');
+document.addEventListener('DOMContentLoaded', function () {
+    var saleCheckbox = document.getElementById('id_is_sale');
+    var salePriceContainer = document.getElementById('sale_price_container');
 
-    function toggleSalePriceInput() {
-      if (checkbox.checked) {
-        salePriceContainer.style.display = 'block';
-      } else {
-        salePriceContainer.style.display = 'none';
-        document.getElementById('sale_price').value = ''; // opcional: limpia el campo
-      }
-    }
+    saleCheckbox.addEventListener('change', function () {
+        salePriceContainer.classList.toggle('d-none', !saleCheckbox.checked);
+        if (!saleCheckbox.checked) {
+            document.getElementById('id_sale_price').value = '';
+        }
+    });
 
-    checkbox.addEventListener('change', toggleSalePriceInput);
-
-    // Ejecuta al cargar, en caso esté pre-marcado
-    toggleSalePriceInput();
-  });
+    document.querySelectorAll('.dropzone-box input[type="file"]').forEach(function (input) {
+        input.addEventListener('change', function () {
+            var label = input.closest('.dropzone-box').querySelector('[data-dropzone-label]');
+            label.textContent = input.files.length ? input.files[0].name : label.dataset.defaultText;
+        });
+        var label = input.closest('.dropzone-box').querySelector('[data-dropzone-label]');
+        label.dataset.defaultText = label.textContent;
+    });
+});
 </script>
-
-
-      <!-- Inputs de imagen y video -->
-      <div class="general-form-group" style="display: flex; gap: 20px; margin-bottom: 25px;">
-        
-        <!-- Imagen -->
-<div class="form-group" style="flex: 1;">
-  <label for="image" style="color: #333; font-weight: 500;">
-    <i class="fas fa-image" style="color: #32d113; font-size: 22px;"></i> Upload Image
-  </label>
-
-  <div class="custom-upload-area" style="background: #f5f5f5; border: 2px dashed #d32f2f; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; position: relative;">
-    <i class="fas fa-upload" style="font-size: 30px; color: #d32f2f;"></i>
-    <p style="margin-top: 10px; color: #777;">Click or Drag & Drop Image</p>
-    
-    <!-- Input bien posicionado y pequeño -->
-    <input type="file" name="image" class="file-input" 
-      style="opacity: 0; width: 100%; height: 100%; top: 0; left: 0; position: absolute; cursor: pointer;">
-  </div>
-
-  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.image.errors }}</p>
-</div>
-
-<!-- Video -->
-<div class="form-group" style="flex: 1;">
-  <label for="video" style="color: #333; font-weight: 500;">
-    <i class="fas fa-video" style="color: #d32f2f; font-size: 22px;"></i> Upload Video
-  </label>
-
-  <div class="custom-upload-area" style="background: #f5f5f5; border: 2px dashed #ffb300; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; position: relative;">
-    <i class="fas fa-upload" style="font-size: 30px; color: #32d113;"></i>
-    <p style="margin-top: 10px; color: #777;">Click or Drag & Drop Video</p>
-    
-    <!-- Input bien posicionado y pequeño -->
-    <input type="file" name="video" class="file-input" 
-      style="opacity: 0; width: 100%; height: 100%; top: 0; left: 0; position: absolute; cursor: pointer;">
-  </div>
-
-  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.video.errors }}</p>
-</div>
-
-      </div>
-
-      <!-- Lo que aprenderás -->
-<div class="form-group" style="margin-bottom: 20px;">
-  <label for="learning_points" style="color: #333; font-weight: 500;"><i class="fas fa-list-check" style="color: #32d113;"></i> Lo que aprenderás</label>
-  <textarea name="learning_points" class="input-field"
-    style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;"
-    rows="4" placeholder="Un punto por línea. Ej:&#10;Dominarás Python desde cero&#10;Crearás tu primer proyecto real"></textarea>
-  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.learning_points.errors }}</p>
-</div>
-
-<!-- Requisitos previos -->
-<div class="form-group" style="margin-bottom: 20px;">
-  <label for="requirements" style="color: #333; font-weight: 500;"><i class="fas fa-clipboard-check" style="color: #d32f2f;"></i> Requisitos previos</label>
-  <textarea name="requirements" class="input-field"
-    style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;"
-    rows="3" placeholder="Un requisito por línea"></textarea>
-  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.requirements.errors }}</p>
-</div>
-
-<!-- Dirigido a -->
-<div class="form-group" style="margin-bottom: 20px;">
-  <label for="target_audience" style="color: #333; font-weight: 500;"><i class="fas fa-users" style="color: #32d113;"></i> Dirigido a</label>
-  <textarea name="target_audience" class="input-field"
-    style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;"
-    rows="3" placeholder="Un público por línea"></textarea>
-  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.target_audience.errors }}</p>
-</div>
-
-<!-- Duración -->
-<div class="form-group" style="margin-bottom: 20px;">
-  <label for="duration_minutes" style="color: #333; font-weight: 500;"><i class="fas fa-clock" style="color: #32d113;"></i> Duración total (minutos)</label>
-  <input type="number" name="duration_minutes" class="input-field" min="0" value="0"
-    style="width: 100%; background: #f5f5f5; padding: 12px; border: 2px solid #ccc; border-radius: 8px; margin-top: 5px;">
-  <p class="error" style="color: #d32f2f; font-size: 14px;">{{ form.duration_minutes.errors }}</p>
-</div>
-
-      <!-- Botón enviar -->
-      <input type="submit" value="Submit Course" 
-        class="submit-btn" 
-        style="width: 100%; padding: 14px; background-color: #d32f2f; border: none; border-radius: 10px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; transition: background-color 0.3s;">
-      
-    </form>
-  </div>
-</div>
-
-<!-- Hover del botón -->
-<style>
-  .submit-btn:hover {
-    background-color: #b71c1c;
-  }
-</style>
-
-<!-- Font Awesome Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 {% endblock content %}

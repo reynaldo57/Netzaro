@@ -1,27 +1,106 @@
 {% extends 'base.html' %}
-{% block content %}
-<div class="container mt-4">
-  <h2>Tareas de "{{ product.name }}"</h2>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Agregar tarea</button>
-  </form>
+{% load static %}
 
-  <hr>
-   <ul class="list-group">
-    {% for tarea in tareas %}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <span>{{ tarea.titulo }} {% if tarea.fecha_limite %}(vence: {{ tarea.fecha_limite }}){% endif %}</span>
-        <form method="POST" action="{% url 'eliminar_tarea' tarea.id %}"
-              onsubmit="return confirm('¿Eliminar esta tarea? Se perderán las entregas de los estudiantes.');">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
-        </form>
-      </li>
-    {% empty %}
-      <li class="list-group-item">Todavía no hay tareas.</li>
-    {% endfor %}
-  </ul>
+{% block title %}Tareas de "{{ product.name }}"{% endblock title %}
+
+{% block extra_css %}
+<link href="{% static 'css/add_tarea.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="antares-tarea-page">
+    <div class="container">
+
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fa-solid fa-list-check"></i> Tareas de "{{ product.name }}"
+            </h1>
+            <p class="page-subtitle">Crea y gestiona las asignaciones pendientes para esta materia.</p>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- FORMULARIO DE CREACIÓN DE TAREA -->
+            <div class="col-lg-7">
+                <div class="panel-card">
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label-custom" for="{{ form.titulo.id_for_label }}">
+                                <i class="fa-solid fa-pen-nib me-1"></i> Título
+                            </label>
+                            {{ form.titulo }}
+                            <p class="error-text">{{ form.titulo.errors }}</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label-custom" for="{{ form.descripcion.id_for_label }}">
+                                <i class="fa-solid fa-align-left me-1"></i> Descripción
+                            </label>
+                            {{ form.descripcion }}
+                            <p class="error-text">{{ form.descripcion.errors }}</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label-custom" for="{{ form.fecha_limite.id_for_label }}">
+                                <i class="fa-regular fa-calendar-days me-1"></i> Fecha límite
+                            </label>
+                            {{ form.fecha_limite }}
+                            <p class="error-text">{{ form.fecha_limite.errors }}</p>
+                        </div>
+
+                        <div class="pt-2 border-top border-secondary border-opacity-25">
+                            <button type="submit" class="btn-agregar-tarea">
+                                <i class="fa-solid fa-plus"></i> Agregar tarea
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- LISTADO DE TAREAS ASIGNADAS -->
+            <div class="col-lg-5">
+                <div class="panel-card h-100 d-flex flex-column">
+                    <h5 class="panel-title">
+                        <i class="fa-solid fa-folder-open me-2"></i>Tareas asignadas
+                    </h5>
+
+                    {% if tareas %}
+                    <div class="tarea-list">
+                        {% for tarea in tareas %}
+                        <div class="tarea-item">
+                            <div>
+                                <span class="tarea-titulo">{{ tarea.titulo }}</span>
+                                {% if tarea.fecha_limite %}
+                                <span class="tarea-fecha"><i class="fa-regular fa-calendar-days me-1"></i>Vence: {{ tarea.fecha_limite }}</span>
+                                {% endif %}
+                            </div>
+                            <form method="POST" action="{% url 'eliminar_tarea' tarea.id %}"
+                                  onsubmit="return confirm('¿Eliminar esta tarea? Se perderán las entregas de los estudiantes.');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-eliminar">
+                                    <i class="fa-regular fa-trash-can me-1"></i>Eliminar
+                                </button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- ESTADO VACÍO -->
+                    <div class="empty-state-box my-auto">
+                        <div class="empty-state-icon">
+                            <i class="fa-regular fa-folder-open"></i>
+                        </div>
+                        <h6 class="empty-state-title">Todavía no hay tareas</h6>
+                        <p class="empty-state-desc">Las actividades que agregues aparecerán detalladas en este panel.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </div>
 {% endblock %}

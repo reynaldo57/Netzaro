@@ -1,99 +1,62 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/auth.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-<style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        overflow: hidden; /* ❌ Evita scroll innecesario */
-        font-family: Arial, sans-serif;
-        background-color: #f3f6f8;
-    }
-    .login-wrapper {
-        display: flex;
-        height: 100vh; /* ✅ Ocupa toda la pantalla */
-        width: 100%;
-    }
-    .login-image {
-        flex: 1;
-        background: url('/static/assets/fondo.jpg') center/cover no-repeat;
-    }
-    .login-form-container {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #fff;
-    }
-    .login-form {
-        width: 80%;
-        max-width: 400px;
-    }
-    .login-form h2 {
-        color: #0A66C2;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-    .login-form p {
-        color: #666;
-        margin-bottom: 30px;
-    }
-    .form-control {
-        border-radius: 6px;
-        padding: 12px;
-    }
-    .btn-primary {
-        background-color: #0A66C2;
-        border: none;
-        padding: 12px;
-        border-radius: 6px;
-        width: 100%;
-        font-weight: bold;
-        transition: 0.3s;
-    }
-    .btn-primary:hover {
-        background-color: #004182;
-    }
-    a {
-        text-decoration: none;
-    }
-    /* 📱 Responsive: en móviles la imagen desaparece */
-    @media (max-width: 768px) {
-        .login-wrapper {
-            flex-direction: column;
-        }
-        .login-image {
-            display: none;
-        }
-        .login-form-container {
-            flex: none;
-            height: 100vh;
-        }
-    }
-</style>
 
-<div class="login-wrapper">
-    <div class="login-image"></div>
-    <div class="login-form-container">
-        <div class="login-form">
-            <h2>Welcome Back</h2>
-            <p>Log in to continue to your account</p>
-            <form method="POST" action="{% url 'login' %}">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <input type="text" class="form-control" name="username" placeholder="Enter your Username" required>
-                </div>
-                <div class="mb-3">
-                    <input type="password" class="form-control" name="password" placeholder="Password" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
-            <p class="mt-3 text-center">
-                Don't have an account? <a href="{% url 'register' %}" style="color: #0A66C2;">Sign up</a>
-            </p>
+<div class="auth-container">
+
+    <!-- HERO VISUAL -->
+    <div class="auth-hero">
+        <div class="auth-hero-overlay"></div>
+        <div class="auth-hero-content">
+            <h2>Impulsa tu aprendizaje al siguiente nivel</h2>
+            <p>Accede a tus cursos, gestiona tus clases reservadas y conecta con instructores expertos en la plataforma ANTARES.</p>
+
+            <div class="auth-hero-features">
+                <div><i class="bi bi-check-circle-fill"></i> Cursos a tu ritmo</div>
+                <div><i class="bi bi-check-circle-fill"></i> Certificado al finalizar</div>
+                <div><i class="bi bi-check-circle-fill"></i> Soporte de instructores</div>
+            </div>
         </div>
     </div>
-</div>
 
+    <!-- FORMULARIO -->
+    <div class="auth-form-section">
+        <div class="auth-card">
+
+            <div class="auth-header">
+                <h3>Bienvenido de nuevo</h3>
+                <p>Ingresa tus credenciales para continuar</p>
+            </div>
+
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+
+                <div class="input-icon-group">
+                    <i class="bi bi-person"></i>
+                    <input type="text" class="form-control" name="username" placeholder="Usuario" required>
+                </div>
+
+                <div class="input-icon-group">
+                    <i class="bi bi-lock"></i>
+                    <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
+                </div>
+
+                <button type="submit" class="btn-auth-submit">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
+                </button>
+            </form>
+
+            <div class="auth-prompt">
+                ¿No tienes una cuenta aún? <a href="{% url 'register' %}">Regístrate aquí</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
 {% endblock %}

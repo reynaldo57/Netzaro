@@ -1,0 +1,445 @@
+.antares-catalog {
+    --antares-orange: #f97316;
+    --antares-orange-dark: #ea580c;
+    --antares-blue: #2563eb;
+    --antares-blue-dark: #1d4ed8;
+    --antares-blue-soft: #e0f2fe;
+    --antares-navy: #0f172a;
+    --antares-text: var(--text-body);
+    --antares-muted: var(--text-muted-soft);
+    --antares-border: var(--border-soft);
+    --antares-bg: var(--surface-bg-alt);
+
+    color: var(--antares-text);
+    background-color: var(--page-bg);
+}
+
+/* ========== HERO ========== */
+.antares-catalog .catalog-hero {
+    background: linear-gradient(90deg, #1e3a8a 0%, #0284c7 100%), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80');
+    background-blend-mode: overlay;
+    background-size: cover;
+    background-position: center;
+    color: #ffffff;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.antares-catalog .catalog-hero h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.antares-catalog .catalog-hero p {
+    font-size: 0.95rem;
+    color: #e0f2fe;
+    margin: 0;
+}
+
+/* ========== BUSCADOR (hero de search.html) ========== */
+.antares-catalog .hero-search-box {
+    max-width: 600px;
+    margin: 1.75rem auto 0;
+    position: relative;
+    display: block;
+}
+
+.antares-catalog .hero-search-box input {
+    width: 100%;
+    padding: 0.85rem 1.25rem;
+    padding-right: 120px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.antares-catalog .hero-search-box button {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    bottom: 5px;
+    background: var(--antares-orange);
+    color: #ffffff;
+    border: none;
+    padding: 0 1.2rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.antares-catalog .hero-search-box button:hover {
+    background: var(--antares-orange-dark);
+}
+
+.antares-catalog .hero-filter-bar {
+    max-width: 900px;
+    margin: 1.1rem auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+.antares-catalog .hero-filter-bar select,
+.antares-catalog .hero-filter-bar input[type="number"] {
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 0.85rem;
+    background: #ffffff;
+    color: var(--antares-navy);
+}
+
+.antares-catalog .hero-filter-bar input[type="number"] {
+    width: 120px;
+}
+
+.antares-catalog .hero-filter-bar button {
+    background: var(--antares-orange);
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.antares-catalog .hero-filter-bar button:hover {
+    background: var(--antares-orange-dark);
+}
+
+/* ========== CONTENEDOR ========== */
+.antares-catalog .main-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem 1.5rem;
+}
+
+.antares-catalog .section-title {
+    font-weight: 800;
+    color: var(--text-strong);
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.25rem;
+    position: relative;
+}
+
+.antares-catalog .section-title::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background-color: var(--antares-orange);
+    border-radius: 2px;
+    margin: 6px auto 0 auto;
+}
+
+/* ========== CATEGORÍAS ========== */
+.antares-catalog .category-pills {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+}
+
+.antares-catalog .pill-btn {
+    background: var(--surface-bg);
+    border: 1px solid var(--antares-border);
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--antares-text);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.antares-catalog .pill-btn.active-orange {
+    background-color: var(--antares-orange);
+    color: #ffffff;
+    border-color: var(--antares-orange);
+}
+
+.antares-catalog .pill-btn.active-blue {
+    background-color: var(--antares-blue);
+    color: #ffffff;
+    border-color: var(--antares-blue);
+}
+
+.antares-catalog .pill-btn:hover:not(.active-orange):not(.active-blue) {
+    background-color: rgba(37, 99, 235, 0.15);
+    color: var(--antares-blue);
+    border-color: var(--antares-blue);
+}
+
+/* ========== GRID DE CURSOS (5 COLUMNAS) ========== */
+.antares-catalog .courses-grid-5col {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+@media (max-width: 1200px) {
+    .antares-catalog .courses-grid-5col {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .antares-catalog .courses-grid-5col {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .antares-catalog .courses-grid-5col {
+        grid-template-columns: 1fr;
+    }
+}
+
+.antares-catalog .original-card {
+    background: var(--surface-bg);
+    border: 1px solid var(--antares-border);
+    border-radius: 10px;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.antares-catalog .original-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--antares-blue);
+}
+
+.antares-catalog .card-thumb-original {
+    width: 100%;
+    height: 100px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.antares-catalog .card-info-original {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.antares-catalog .category-label-original {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--antares-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.antares-catalog .card-title-original {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    margin: 0.1rem 0 0.3rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-decoration: none;
+    display: block;
+}
+
+.antares-catalog .card-title-original:hover {
+    color: var(--antares-blue);
+}
+
+.antares-catalog .card-meta-original {
+    font-size: 0.75rem;
+    color: var(--antares-muted);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.antares-catalog .price-tag-original {
+    font-weight: 800;
+    color: var(--antares-orange);
+}
+
+.antares-catalog .btn-ver-curso-original {
+    background-color: var(--antares-bg);
+    border: 1px solid var(--antares-border);
+    color: var(--antares-text);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.35rem;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    margin-top: auto;
+    transition: all 0.2s;
+}
+
+.antares-catalog .btn-ver-curso-original:hover {
+    background-color: var(--antares-blue);
+    color: #ffffff;
+    border-color: var(--antares-blue);
+}
+
+.antares-catalog .catalog-empty {
+    grid-column: 1 / -1;
+    border: 1px solid var(--antares-border);
+    border-radius: 10px;
+    background: var(--antares-bg);
+    color: var(--antares-muted);
+    padding: 2.5rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* ========== BANNER PROMOCIONAL ========== */
+.antares-catalog .promo-banner-horizontal {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.12) 0%, rgba(37, 99, 235, 0.22) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.35);
+    border-radius: 12px;
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+}
+
+@media (max-width: 768px) {
+    .antares-catalog .promo-banner-horizontal {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+.antares-catalog .promo-banner-horizontal img {
+    width: 120px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.antares-catalog .promo-banner-text h5 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    margin-bottom: 0.2rem;
+}
+
+.antares-catalog .promo-banner-text p {
+    font-size: 0.85rem;
+    color: var(--antares-muted);
+    margin: 0;
+}
+
+.antares-catalog .btn-promo-explore {
+    background-color: var(--antares-blue);
+    border: none;
+    color: #ffffff;
+    font-weight: 700;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+}
+
+.antares-catalog .btn-promo-explore:hover {
+    background-color: var(--antares-blue-dark);
+    color: #ffffff;
+}
+
+/* ========== ¿POR QUÉ ELEGIR ANTARES? ========== */
+.antares-catalog .why-choose-section {
+    background-color: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.25);
+    border-radius: 16px;
+    padding: 2.5rem 1.5rem;
+}
+
+.antares-catalog .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.25rem;
+}
+
+.antares-catalog .feature-card-original {
+    background: var(--surface-bg);
+    border: 1px solid rgba(37, 99, 235, 0.25);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.antares-catalog .feature-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background-color: rgba(37, 99, 235, 0.15);
+    color: var(--antares-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin: 0 auto 0.8rem auto;
+}
+
+.antares-catalog .feature-card-original h5 {
+    font-weight: 800;
+    color: var(--text-strong);
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+}
+
+.antares-catalog .feature-card-original p {
+    font-size: 0.82rem;
+    color: var(--antares-muted);
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* ========== PAGINACIÓN (search.html) ========== */
+.antares-catalog .catalog-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 2.5rem;
+    font-size: 0.85rem;
+    color: var(--antares-muted);
+}
+
+.antares-catalog .catalog-pagination a {
+    background: var(--surface-bg);
+    border: 1px solid var(--antares-border);
+    color: var(--antares-text);
+    text-decoration: none;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.antares-catalog .catalog-pagination a:hover {
+    border-color: var(--antares-blue);
+    color: var(--antares-blue);
+}

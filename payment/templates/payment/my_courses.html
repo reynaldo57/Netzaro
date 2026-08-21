@@ -1,62 +1,97 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/my_courses.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-<header class="text-center py-4">
-    <h1>Mis Cursos Comprados</h1>
+
+<header class="mc-hero">
+    <div class="mc-hero-content">
+        <h1>Mis Cursos Comprados</h1>
+        <p>Gestión de aprendizaje y seguimiento de actividades recientes.</p>
+    </div>
 </header>
 
-<section class="py-4">
-    <div class="container">
-        {% if cursos %}
-        <div class="row gx-4 gy-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center">
-            {% for curso in cursos %}
-            <div class="col">
-                <div class="card h-100 shadow-lg border-0">
-                    <img class="card-img-top" src="{{ curso.product.image.url }}" alt="{{ curso.product.name }}" />
-                    <div class="card-body p-3">
-                        <h5 class="fw-bold">{{ curso.product.name }}</h5>
-                        <div class="progress mt-2" style="height: 10px;" role="progressbar" aria-valuenow="{{ curso.porcentaje }}" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-porcentaje="{{ curso.porcentaje }}" style="background-color: #e67e22;"></div>
+<main class="mc-container">
+    <div class="row g-4">
+
+        <!-- SECCIÓN: CURSOS REGISTRADOS -->
+        <div class="col-lg-7">
+            <div class="mc-section-title">
+                <i class="fas fa-list-check"></i> Cursos Registrados
+            </div>
+
+            {% if cursos %}
+            <div class="course-row-container">
+                {% for curso in cursos %}
+                <div class="course-row-item">
+                    <div class="course-media">
+                        <img src="{{ curso.product.image.url }}" alt="{{ curso.product.name }}" class="course-img-thumb">
+                        <div class="course-details">
+                            <h4>{{ curso.product.name }}</h4>
+                            {% if curso.porcentaje >= 100 %}
+                            <p><i class="fas fa-circle-check status-ok me-1"></i> Completado</p>
+                            {% else %}
+                            <p><i class="fas fa-spinner status-progress me-1"></i> En progreso</p>
+                            {% endif %}
                         </div>
-                        <small class="text-muted">{{ curso.porcentaje }}% completado</small>
                     </div>
-                    <div class="card-footer bg-transparent border-0 text-center">
-                        <a class="btn btn-custom-danger" href="{% url 'continuar_curso' curso.product.id %}">
-                            {% if curso.porcentaje > 0 %}Continuar curso{% else %}Empezar curso{% endif %}
+
+                    <div class="course-progress-col">
+                        <div class="progress-label-wrap">
+                            <span class="text-muted">Progreso</span>
+                            <span class="text-dark">{{ curso.porcentaje }}% completado</span>
+                        </div>
+                        <div class="progress" role="progressbar" aria-valuenow="{{ curso.porcentaje }}" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar" data-porcentaje="{{ curso.porcentaje }}"></div>
+                        </div>
+                    </div>
+
+                    <div class="course-actions-col">
+                        <a href="{% url 'continuar_curso' curso.product.id %}" class="btn-action-primary">
+                            <i class="fas fa-rotate-right me-1"></i> {% if curso.porcentaje > 0 %}Continuar curso{% else %}Empezar curso{% endif %}
                         </a>
-                        <a class="btn btn-link" href="{% url 'product' curso.product.id %}">Ver ficha</a>
+                        <a href="{% url 'product' curso.product.id %}" class="btn-action-secondary">Ver ficha</a>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+            {% else %}
+            <div class="mc-empty">Todavía no has comprado ningún curso.</div>
+            {% endif %}
         </div>
-        {% else %}
-        <div class="alert alert-warning">Todavía no has comprado ningún curso.</div>
-        {% endif %}
-    </div>
-</section>
 
-{% if actividad_reciente %}
-<section class="py-4">
-    <div class="container">
-        <h3 class="mb-3">Actividad reciente</h3>
-        <ul class="list-group">
-            {% for item in actividad_reciente %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span>
-                    Completaste <strong>{{ item.clase.titleClase }}</strong>
-                    en <em>{{ item.clase.productClase.name }}</em>
-                </span>
-                <small class="text-muted">{{ item.fecha|date:"d/m/Y H:i" }}</small>
-            </li>
-            {% endfor %}
-        </ul>
+        <!-- SECCIÓN: ACTIVIDAD RECIENTE -->
+        <div class="col-lg-5">
+            <div class="mc-section-title accent-azul">
+                <i class="fas fa-clock-rotate-left"></i> Actividad reciente
+            </div>
+
+            {% if actividad_reciente %}
+            <div class="activity-timeline">
+                {% for item in actividad_reciente %}
+                <div class="timeline-item">
+                    <div class="timeline-left">
+                        <span class="status-dot"></span>
+                        <div>Completaste <strong>{{ item.clase.titleClase }}</strong> en <em>{{ item.clase.productClase.name }}</em></div>
+                    </div>
+                    <div class="text-muted small ms-3">{{ item.fecha|date:"d/m/Y H:i" }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="mc-empty">Aún no hay actividad reciente.</div>
+            {% endif %}
+        </div>
+
     </div>
-</section>
+</main>
 
 <script>
     document.querySelectorAll('.progress-bar[data-porcentaje]').forEach(function (bar) {
         bar.style.width = bar.dataset.porcentaje + '%';
     });
 </script>
-{% endif %}
 {% endblock %}

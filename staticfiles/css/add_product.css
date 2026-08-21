@@ -1,0 +1,209 @@
+.antares-form-page {
+    --antares-orange: #f97316;
+    --antares-orange-dark: #ea580c;
+    --antares-red: #dc2626;
+    --antares-navy: #0f172a;
+    --antares-text: var(--text-body);
+    --antares-muted: var(--text-muted-soft);
+    --antares-border: var(--border-soft);
+    --antares-bg: var(--surface-bg-alt);
+
+    color: var(--antares-text);
+    background-color: var(--page-bg);
+    padding-bottom: 1px;
+}
+
+/* ========== HERO ========== */
+.antares-form-page .page-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+}
+
+.antares-form-page .page-hero h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+}
+
+.antares-form-page .page-hero p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* ========== FORM CONTAINER ========== */
+.antares-form-page .form-container {
+    max-width: 1000px;
+    margin: -2rem auto 3rem auto;
+    padding: 0 1rem;
+    position: relative;
+    z-index: 10;
+}
+
+.antares-form-page .form-container--narrow {
+    max-width: 560px;
+}
+
+.antares-form-page .form-card {
+    background: var(--surface-bg);
+    border: 1px solid var(--antares-border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+}
+
+.antares-form-page .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-strong);
+    border-bottom: 2px solid var(--antares-bg);
+    padding-bottom: 0.6rem;
+    margin-bottom: 1.5rem;
+}
+
+.antares-form-page .section-header i {
+    color: var(--antares-orange);
+}
+
+.antares-form-page .form-label-custom {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-strong);
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.antares-form-page .form-label-custom i {
+    color: var(--antares-muted);
+    font-size: 0.85rem;
+}
+
+.antares-form-page .form-control,
+.antares-form-page .form-select {
+    border-radius: 8px;
+    border: 1px solid var(--antares-border);
+    background-color: var(--surface-bg-alt);
+    color: var(--text-strong);
+    padding: 0.6rem 0.8rem;
+    font-size: 0.88rem;
+}
+
+.antares-form-page .form-control:focus,
+.antares-form-page .form-select:focus {
+    border-color: var(--antares-orange);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.antares-form-page .error-text {
+    color: var(--antares-red);
+    font-size: 0.78rem;
+    margin: 0.35rem 0 0;
+}
+
+.antares-form-page .error-text:empty {
+    display: none;
+}
+
+.antares-form-page .form-help-text {
+    font-size: 0.78rem;
+    color: var(--antares-muted);
+    margin-top: 0.35rem;
+}
+
+.antares-form-page .form-help-text ul {
+    padding-left: 1.1rem;
+    margin-bottom: 0;
+}
+
+/* ========== ARCHIVO ACTUAL (edición) ========== */
+.antares-form-page .current-file-preview {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0.7rem;
+    background: var(--antares-bg);
+    border: 1px solid var(--antares-border);
+    border-radius: 8px;
+    font-size: 0.78rem;
+    color: var(--antares-muted);
+}
+
+.antares-form-page .current-file-preview img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+/* ========== DROPZONE PARA MULTIMEDIA ========== */
+.antares-form-page .dropzone-box {
+    border: 2px dashed var(--antares-border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    background: var(--antares-bg);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: block;
+    margin: 0;
+}
+
+.antares-form-page .dropzone-box:hover,
+.antares-form-page .dropzone-box:focus-within {
+    border-color: var(--antares-orange);
+    background: rgba(249, 115, 22, 0.12);
+}
+
+.antares-form-page .dropzone-box i {
+    font-size: 1.8rem;
+    color: var(--antares-muted);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.antares-form-page .dropzone-box:hover i,
+.antares-form-page .dropzone-box:focus-within i {
+    color: var(--antares-orange);
+}
+
+.antares-form-page .dropzone-box span {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--antares-text);
+}
+
+.antares-form-page .dropzone-box small {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.72rem;
+    color: var(--antares-muted);
+    font-weight: 500;
+}
+
+/* ========== BOTÓN SUBMIT ========== */
+.antares-form-page .btn-submit-course {
+    background-color: var(--antares-red);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    border: none;
+    width: 100%;
+    transition: background-color 0.2s;
+}
+
+.antares-form-page .btn-submit-course:hover {
+    background-color: #b91c1c;
+    color: #ffffff;
+}

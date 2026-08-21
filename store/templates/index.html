@@ -1,807 +1,239 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
+
 {% block content %}
 
-<style>
-/* DISEÑO PROFESIONAL - Equilibrado y Moderno */
-/* Hero azul + Formulario blanco + Detalles rojos + Categorías coloridas */
-
-:root {
-    --rojo: #dc2626;
-    --rojo-hover: #b91c1c;
-    --azul: #1e40af;
-    --azul-claro: #3b82f6;
-    --gris-oscuro: #1e293b;
-    --gris: #64748b;
-    --gris-claro: #f1f5f9;
-    --blanco: #ffffff;
-    --azul-dark: #1d3557; 
-}
-
-
-/* ========== HERO SECTION - Azul con detalles rojos ========== */
-.horizontal-section {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 3rem;
-    padding: 4rem 5vw;
-    background: linear-gradient(
-    to right, 
-    rgba(29, 53, 87, 0.95), /* El azul oscuro casi opaco al inicio */
-    rgba(29, 53, 87, 0.4),  /* El mismo azul pero más transparente al medio */
-    transparent             /* Desaparece al final para ver la imagen clara */
-), 
-url('/static/assets/tec.jpg') center/cover no-repeat;
-    color: rgb(255, 255, 255);
-    position: relative;
-    overflow: hidden;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-}
-
-.horizontal-section::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 100px;
-    background: linear-gradient(to bottom, transparent, var(--blanco));
-    pointer-events: none;
-    display: none;
-}
-
-.slogan-text {
-    flex: 1;
-    min-width: 300px;
-    max-width: 600px;
-    animation: fadeInLeft 0.8s ease;
-}
-
-@keyframes fadeInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.slogan-text h2 {
-    font-size: 3rem;
-    color: var(--blanco);
-    font-weight: 800;
-    margin-bottom: 1.2rem;
-    line-height: 1.2;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-    font-family: 'Segoe UI', system-ui, sans-serif;
-}
-
-.slogan-text p {
-    
-    margin-bottom: 1rem;
-    line-height: 1.7;
-    opacity: 0.95;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-}
-
-.slogan-text p:first-of-type {
-    
-    font-weight: 0;
-    margin-bottom: 1.5rem;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-}
-
-.logo-image {
-    flex: 1;
-    min-width: 300px;
-    max-width: 450px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation: fadeInRight 0.8s ease;
-}
-
-@keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.logo-image img {
-    width: 100%;
-    max-width: 380px;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    border: 4px solid rgba(255,255,255,0.1);
-    transition: transform 0.3s ease;
-}
-
-.logo-image img:hover {
-    transform: scale(1.05) rotate(2deg);
-}
-
-/* ========== FORMULARIO - Diseño moderno y profesional ========== */
-.form-horizontal {
-    flex: 1;
-    min-width: 300px;
-    max-width: 480px;
-    background: linear-gradient(to bottom, var(--blanco), #f8fafc);
-    padding: 3rem 2.5rem;
-    border-radius: 24px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.12);
-    position: relative;
-    border: 1px solid #e2e8f0;
-    animation: fadeIn 0.8s ease;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.form-horizontal h3 {
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: var(--gris-oscuro);
-    margin-bottom: 0.3rem;
-    text-align: left;
-}
-
-.form-horizontal .form-subtitle {
-    text-align: left;
-    color: var(--gris);
-    font-size: 1rem;
-    margin-bottom: 2.5rem;
-    font-weight: 400;
-}
-
-.form-horizontal .form-group {
-    position: relative;
-    margin-bottom: 1.5rem;
-}
-
-.form-horizontal label {
-    font-weight: 0;
-    color: var(--azul-dark);
-    margin-bottom: 0.6rem;
-    display: flex;
-    align-items: center;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    transition: color 0.3s ease;
-}
-
-.form-horizontal input,
-.form-horizontal textarea {
-    width: 100%;
-    padding: 1rem 1.2rem;
-    border-radius: 12px;
-    border: 2px solid #e2e8f0;
-    background: var(--blanco);
-    color: var(--gris-oscuro);
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
-}
-
-.form-horizontal input::placeholder,
-.form-horizontal textarea::placeholder {
-    color: #cbd5e1;
-}
-
-.form-horizontal input:focus,
-.form-horizontal textarea:focus {
-    outline: none;
-    border-color: #1e3a8a;
-    background: var(--blanco);
-    box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.1);
-}
-
-.form-horizontal textarea {
-    resize: none;
-    min-height: 110px;
-}
-
-.form-horizontal button {
-    width: 100%;
-    padding: 1.2rem;
-    background: var(--rojo);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-weight: bold;
-    
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.25);
-    font-family: 'Segoe UI', system-ui, sans-serif;
-}
-
-.form-horizontal button:hover {
-    background: var(--rojo-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35);
-}
-
-.form-horizontal button:active {
-    transform: translateY(0);
-}
-
-.form-horizontal button i {
-    font-size: 1.1rem;
-}
-
-/* ========== BTN en Hero - Profesional y limpio ========== */
-.btn-danger {
-    background: var(--rojo);
-    border: none;
-    padding: 1rem 2.2rem;
-    border-radius: 12px;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    color: white;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 1rem;
-    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
-}
-
-.btn-danger:hover {
-    background: var(--rojo-hover);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
-    color: white;
-}
-
-.btn-danger:active {
-    transform: translateY(-1px);
-}
-
-.category-links {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 2rem;
-}
-
-.category-links a {
-    padding: 12px 24px;
-    border-radius: 8px;
-    background-color: white;
-    color: var(--azul);
-    font-weight: 600;
-    text-decoration: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-
-.category-links a:hover {
-    padding: 60px 0;
-    background: #ffffff; /* Fondo limpio para resaltar las cards */
-}
-
-/* ========== SECCIÓN DE CATEGORÍAS - Profesional ========== */
-.product-section {
-    padding: 4rem 2rem;
-    background: linear-gradient(to bottom, var(--gris-claro), var(--blanco));
-}
-
-.learning-section {
-    padding: 5rem 1rem 3rem;
-    text-align: center;
-}
-
-
-
-.learning-title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 2.8rem;
-    font-weight: 700;
-    color: var(--rojo-hover);
-    margin-bottom: 0.5rem;
-    letter-spacing: -1px;
-    position: relative;
-}
-
-.learning-title::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 4px;
-    background: var(--rojo);
-    margin: 15px auto 0;
-    border-radius: 2px;
-}
-
-.row.g-2 {
-    padding: 0 2vw;
-    justify-content: center;
-}
-/* Botones de Idiomas - Estilo Minimalista de Lujo */
-.btn-outline-primary,
-.btn-outline-success,
-.btn-outline-info,
-.btn-outline-danger,
-.btn-outline-warning,
-.btn-outline-secondary {
-    background: transparent;
-    color: var(--azul-dark);
-    border: 1px solid rgba(29, 53, 87, 0.2); /* Borde azul muy suave */
-    border-radius: 0px; /* Bordes rectos suelen verse más ejecutivos/elegantes */
-    padding: 15px 10px;
-    height: 65px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
-    display: flex;
-    flex-direction: column; /* Icono arriba, texto abajo para estilo minimal */
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-/* Iconos sutiles */
-.btn-outline-primary i, .btn-outline-success i, .btn-outline-info i,
-.btn-outline-danger i, .btn-outline-warning i, .btn-outline-secondary i {
-    color: var(--azul-dark);
-    font-size: 1.1rem;
-    opacity: 0.7;
-    transition: all 0.4s ease;
-}
-
-/* HOVER: Aquí entra el Rojo de forma sofisticada */
-.btn-outline-primary:hover,
-.btn-outline-success:hover,
-.btn-outline-info:hover,
-.btn-outline-danger:hover,
-.btn-outline-warning:hover,
-.btn-outline-secondary:hover {
-    background-color: var(--azul-dark) !important;
-    color: var(--blanco) !important;
-    border-color: var(--azul-dark);
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(29, 53, 87, 0.15);
-}
-
-/* El detalle rojo aparece solo en el hover sobre el icono */
-.btn-outline-primary:hover i, .btn-outline-success:hover i, .btn-outline-info:hover i,
-.btn-outline-danger:hover i, .btn-outline-warning:hover i, .btn-outline-secondary:hover i {
-    color: var(--rojo); /* El rojo como detalle de acento */
-    opacity: 1;
-    transform: scale(1.1);
-}
-
-/* Línea decorativa roja que aparece al hacer hover en la base del botón */
-.btn-outline-primary::after, .btn-outline-success::after, .btn-outline-info::after,
-.btn-outline-danger::after, .btn-outline-warning::after, .btn-outline-secondary::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: var(--rojo);
-    transition: width 0.4s ease;
-}
-
-.btn-outline-primary:hover::after, .btn-outline-success:hover::after, .btn-outline-info:hover::after,
-.btn-outline-danger:hover::after, .btn-outline-warning:hover::after, .btn-outline-secondary:hover::after {
-    width: 100%;
-}
-/* ========== CARDS DE PRODUCTOS - Más dinámicas ========== */
-#productSlider {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-#productSlider::-webkit-scrollbar {
-    display: none;
-}
-
-.slider-container {
-    position: relative;
-    overflow: hidden;
-    padding: 2rem;
-    max-width: 1600px;
-    margin: 0 auto;
-}
-
-.slider {
-    display: flex;
-    gap: 2rem;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    padding-bottom: 1rem;
-}
-
-.card {
-    min-width: 320px;
-    flex-shrink: 0;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    background: var(--blanco);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid #e2e8f0;
-    position: relative;
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--rojo), #f59e0b);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-}
-
-.card:hover::before {
-    transform: scaleX(1);
-}
-
-.card:hover {
-    transform: translateY(-12px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-}
-
-.card-img-top {
-    height: 220px;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.card:hover .card-img-top {
-    transform: scale(1.1);
-}
-
-.card-body {
-    padding: 0rem;
-    text-align: center;
-}
-
-.card-body a {
-    font-weight: bold;
-    text-decoration: none;
-    color: var(--gris-oscuro);
-    font-size: 1.15rem;
-    transition: color 0.3s ease;
-    display: block;
-    margin-bottom: -0.5rem;
-}
-
-.card-body a:hover {
-    color: var(--rojo);
-}
-
-.text-dark {
-    color: var(--azul) !important;
-    font-weight: 600;
-}
-
-.card-footer {
-    padding: 0.2rem 1.5rem;
-    background: #fafafa;
-    text-align: center;
-    border-top: 1px solid #e2e8f0;
-}
-
-.card-footer .btn-danger {
-    padding: 0.9rem 1.5rem;
-    width: 100%;
-    font-size: 0.95rem;
-}
-
-/* ========== SLIDER BUTTONS - Profesional ========== */
-.slider-btn-prev,
-.slider-btn-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    background: var(--blanco);
-    border: 3px solid var(--rojo);
-    color: var(--rojo);
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.2);
-}
-
-.slider-btn-prev:hover,
-.slider-btn-next:hover {
-    background: var(--rojo);
-    color: white;
-    transform: translateY(-50%) scale(1.15);
-    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
-}
-
-.slider-btn-prev:active,
-.slider-btn-next:active {
-    transform: translateY(-50%) scale(1.05);
-}
-
-.slider-btn-prev {
-    left: 15px;
-}
-
-.slider-btn-next {
-    right: 15px;
-}
-
-/* ========== BADGES Y PRECIOS ========== */
-.badge {
-    font-size: 0.75rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 6px;
-}
-
-.text-warning {
-    color: #f59e0b !important;
-}
-
-.text-muted {
-    color: var(--gris) !important;
-    font-size: 0.9rem;
-}
-
-/* ========== GRID Y RESPONSIVE ========== */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-@media (max-width: 768px) {
-    .horizontal-section {
-        flex-direction: column;
-        padding: 3rem 1.5rem;
-    }
-
-    .slogan-text h2 {
-        font-size: 3rem;
-    }
-
-    .learning-title {
-        font-size: 2rem;
-    }
-
-    .slider-btn-prev,
-    .slider-btn-next {
-        width: 38px;
-        height: 38px;
-        font-size: 0.9rem;
-    }
-
-    .card {
-        min-width: 280px;
-    }
-
-    .btn-outline-primary,
-    .btn-outline-success,
-    .btn-outline-info,
-    .btn-outline-danger,
-    .btn-outline-warning,
-    .btn-outline-dark,
-    .btn-outline-secondary {
-        padding: 0.85rem 1.2rem;
-        font-size: 0.9rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .slogan-text h2 {
-        font-size: 3rem;
-    }
-
-    .learning-title {
-        font-size: 1.6rem;
-    }
-
-    .card {
-        min-width: 260px;
-    }
-}
-
-</style>
-
-<section class="horizontal-section",>
-    <div class="slogan-text">
-        <h2>ReyTech</h2>
-        <p>Domina Nuevos Idiomas y Expande Tus Fronteras</p>
-        <p>Aprendizaje Personalizado</p>
-        <p>Metodología Eficaz</p>
-        <p>Contenido Innovador</p>
-        <p>Estrategias Eficaces</p>
-        <p>¡Haz despegar tus metas con nosotros hoy!</p>
-        <a href="#" class="btn btn-danger mt-3">Conocimiento que Conecta, Tecnología que Transforma</a>
-    </div>
-
-    <div class="logo-image">
-        <!-- <img src="/static/assets/azul.jpg" alt="Logo"> -->
-    </div>
-
-    <div class="form-horizontal">
-        <form action="#" method="POST">
-            <label for="name">Nombre:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Correo electrónico:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="message">Mensaje:</label>
-            <textarea id="message" name="message" rows="4" required></textarea>
-
-            <button type="button">Enviar</button>
-        </form>
-    </div>
-</section>
-
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
-
-<div class="container mt-4 mb-n3" style="max-width: 95%; margin-bottom: 70px;">
-   <section class="learning-section">
-        <h2 class="learning-title">¿Qué aprenderás hoy?</h2>
-   </section>
-
-  <div class="row g-2" style="margin-top: -40px;">
-    <div class="col-6 col-md-4 col-lg-2">
-      <a href="{% url 'category' 'Inglés' %}" class="btn btn-outline-primary w-100">
-        <i class="fa-solid fa-language me-2"></i> Inglés
-      </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-      <a href="{% url 'category' 'Español' %}" class="btn btn-outline-success w-100">
-        <i class="fa-solid fa-laptop-code me-2"></i> Español
-      </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-      <a href="{% url 'category' 'Portugués' %}" class="btn btn-outline-info w-100">
-        <i class="fa-solid fa-laptop-code me-2"></i> Portugués
-      </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-      <a href="{% url 'category' 'Italiano' %}" class="btn btn-outline-danger w-100">
-        <i class="fa-solid fa-laptop-code me-2"></i> Italiano
-      </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-      <a href="{% url 'category' 'Francés' %}" class="btn btn-outline-warning w-100">
-        <i class="fa-solid fa-laptop-code me-2"></i> Francés
-      </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-      <a href="{% url 'category' 'coreano' %}" class="btn btn-outline-warning w-100">
-        <i class="fa-solid fa-laptop-code me-2"></i> Coreano
-      </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-      <a href="{% url 'category' 'Japonés' %}" class="btn btn-outline-secondary w-100">
-        <i class="fa-solid fa-laptop-code me-2"></i> Japonés
-      </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-      <a href="{% url 'category' 'Chino' %}" class="btn btn-outline-primary w-100">
-        <i class="fa-solid fa-laptop-code me-2"></i> Chino
-      </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-      <a href="{% url 'category' 'Alemán' %}" class="btn btn-outline-success w-100">
-        <i class="fa-solid fa-laptop-code me-2"></i> Alemán
-      </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-      <a href="{% url 'category' 'Ruso' %}" class="btn btn-outline-danger w-100">
-        <i class="fa-solid fa-laptop-code me-2"></i> Ruso
-      </a>
-    </div>
-  </div>
+<div class="top-banner">
+    <span>🔥 <strong>¡Oferta de temporada!</strong> Reserva tu primera clase de prueba hoy mismo.</span>
+    <a href="#cursos" class="btn-sm">Ver Cursos</a>
 </div>
 
+<section class="hero-section">
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1>Domina Nuevos Idiomas con ReyTech</h1>
+            <p class="hero-lead">Aprendizaje personalizado, metodología eficaz y contenido innovador para que hables desde la primera clase.</p>
 
+            <ul class="features-list">
+                <li><i class="fa-solid fa-circle-check"></i> Clases reservables con profesores reales</li>
+                <li><i class="fa-solid fa-circle-check"></i> Certificados verificables al finalizar</li>
+                <li><i class="fa-solid fa-circle-check"></i> Estrategias de aprendizaje probadas</li>
+            </ul>
 
-<section class="product-section">
-    <div class="slider-container">
-        <!-- Botón Izquierdo -->
-        <button class="slider-btn-prev">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-
-        <!-- Contenedor de Cards -->
-        <div class="slider" id="productSlider">
-            {% for product in products %}
-                <div class="card">
-                    {% if product.is_sale %}
-                        <div class="badge bg-light text-black position-absolute" style="top: 0.5rem; right: 1rem;">sale</div>
-                    {% endif %}
-                    <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}">
-                    <div class="card-body">
-                        <a href="{% url 'product' product.id %}">{{ product.name }}</a><br>
-                        <a class="text-dark fw-bold" href="{% url 'user_information' product.user.username %}">{{ product.user.username }}</a><br>
-
-
-                        {% if product.rating_count %}
-                        <div class="rating-mini small text-warning">
-                          {% for i in "12345" %}
-                            {% if forloop.counter <= product.average_rating_rounded %}★{% else %}☆{% endif %}
-                          {% endfor %}
-                          <span class="text-muted">{{ product.average_rating|floatformat:1 }} ({{ product.rating_count }})</span>
-                        </div>
-                        {% endif %}
-
-                        
-                        {% if product.is_sale and product.sale_price %}
-                            <div class="text-warning small my-2">💥 Oferta</div>
-                            <strike>${{ product.price }}</strike> &nbsp; <span style="color: green;">${{ product.sale_price }}</span>
-                        {% else %}
-                            <div style="color: green;">${{ product.price }}</div>
-                        {% endif %}
-                        <p class="text-muted small">{{ product.description }}</p>
-                    </div>
-                    <div class="card-footer">
-                        <a class="btn btn-danger" href="{% url 'product' product.id %}">Reserva una Clase</a>
-                    </div>
-                </div>
-            {% endfor %}
+            <a href="#cursos" class="btn-cta">
+                Explorar Cursos <i class="fa-solid fa-arrow-right"></i>
+            </a>
         </div>
 
-        <!-- Botón Derecho -->
-        <button class="slider-btn-next">
-            <i class="fas fa-chevron-right"></i>
-        </button>
+        <div class="hero-form-card">
+            <h3>Reserva una Clase de Prueba</h3>
+            <p class="form-subtitle">Completa el formulario y te contactaremos en minutos</p>
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="name">Nombre y Apellido</label>
+                    <input type="text" id="name" name="name" placeholder="Ej. Reynaldo Silva" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Mensaje</label>
+                    <textarea id="message" name="message" rows="3" placeholder="¿Cuál es tu objetivo de aprendizaje?" required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Enviar</button>
+            </form>
+        </div>
     </div>
 </section>
 
-<script>
-    // Espera a que el DOM esté cargado
-    document.addEventListener("DOMContentLoaded", function () {
-        const slider = document.getElementById('productSlider');
-        const btnNext = document.querySelector('.slider-btn-next');
-        const btnPrev = document.querySelector('.slider-btn-prev');
+<!-- TODO: reemplazar por datos reales del backend cuando existan (ej. total de alumnos, profesores) -->
+<section class="stats-section">
+    <div class="stats-container">
+        <div class="stat-item">
+            <h2>{{ products|length }}</h2>
+            <p>Cursos Disponibles</p>
+        </div>
+        <div class="stat-item">
+            <h2>10+</h2>
+            <p>Idiomas</p>
+        </div>
+        <div class="stat-item">
+            <h2>100%</h2>
+            <p>Clases en Vivo</p>
+        </div>
+        <div class="stat-item">
+            <h2>24/7</h2>
+            <p>Soporte</p>
+        </div>
+    </div>
+</section>
 
-        // Tamaño de desplazamiento: igual al ancho de una card + gap (280 + 24 px aprox)
-        const scrollAmount = 304;
+<section id="categorias" class="section-container">
+    <div class="section-header">
+        <h2 class="section-title">¿Qué aprenderás hoy?</h2>
+        <p class="section-subtitle">Elige el idioma que impulsará tu carrera</p>
+    </div>
 
-        btnNext.addEventListener('click', () => {
-            slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        });
+    <div class="categories-grid">
+        <a href="{% url 'category' 'Inglés' %}" class="category-card"><i class="fa-solid fa-language"></i> Inglés</a>
+        <a href="{% url 'category' 'Español' %}" class="category-card"><i class="fa-solid fa-comments"></i> Español</a>
+        <a href="{% url 'category' 'Portugués' %}" class="category-card"><i class="fa-solid fa-earth-americas"></i> Portugués</a>
+        <a href="{% url 'category' 'Italiano' %}" class="category-card"><i class="fa-solid fa-pizza-slice"></i> Italiano</a>
+        <a href="{% url 'category' 'Francés' %}" class="category-card"><i class="fa-solid fa-wine-glass"></i> Francés</a>
+        <a href="{% url 'category' 'coreano' %}" class="category-card"><i class="fa-solid fa-sun"></i> Coreano</a>
+        <a href="{% url 'category' 'Japonés' %}" class="category-card"><i class="fa-solid fa-torii-gate"></i> Japonés</a>
+        <a href="{% url 'category' 'Chino' %}" class="category-card"><i class="fa-solid fa-dragon"></i> Chino</a>
+        <a href="{% url 'category' 'Alemán' %}" class="category-card"><i class="fa-solid fa-beer-mug-empty"></i> Alemán</a>
+        <a href="{% url 'category' 'Ruso' %}" class="category-card"><i class="fa-solid fa-snowflake"></i> Ruso</a>
+    </div>
+</section>
 
-        btnPrev.addEventListener('click', () => {
-            slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        });
-    });
-</script>
+<section id="cursos" class="section-container">
+    <div class="section-header">
+        <h2 class="section-title">Cursos Populares</h2>
+        <p class="section-subtitle">Inscripciones abiertas para el nuevo ciclo</p>
+    </div>
+
+    <div class="courses-grid">
+        {% for product in products %}
+            <article class="course-card">
+                <div class="course-thumb-container">
+                    {% if product.is_sale %}<span class="badge-tag">Oferta</span>{% endif %}
+                    <img class="course-thumb" src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                </div>
+                <div class="course-body">
+                    <a href="{% url 'product' product.id %}" class="course-title">{{ product.name }}</a>
+                    <a class="course-instructor" href="{% url 'user_information' product.user.username %}">
+                        <i class="fa-solid fa-user-tie"></i> {{ product.user.username }}
+                    </a>
+
+                    {% if product.rating_count %}
+                    <div class="course-rating">
+                        <span class="rating-num">{{ product.average_rating|floatformat:1 }}</span>
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= product.average_rating_rounded %}★{% else %}☆{% endif %}
+                        {% endfor %}
+                        <span class="rating-count">({{ product.rating_count }})</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="course-footer">
+                        <div class="course-price">
+                            {% if product.is_sale and product.sale_price %}
+                                <span class="price-old">${{ product.price }}</span>
+                                <span class="price-current">${{ product.sale_price }}</span>
+                            {% else %}
+                                <span class="price-current">${{ product.price }}</span>
+                            {% endif %}
+                        </div>
+                        <a class="btn-reserve" href="{% url 'product' product.id %}">Reservar</a>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="benefits-section">
+    <div class="section-header">
+        <h2 class="section-title">¿Por qué estudiar en ReyTech?</h2>
+        <p class="section-subtitle">Diseñado para que hables y apliques conocimientos desde el primer día</p>
+    </div>
+
+    <div class="benefits-grid">
+        <div class="benefit-card">
+            <div class="benefit-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <h3>Tutoría Personalizada</h3>
+            <p>Recibe corrección de pronunciación, tareas y retroalimentación directa de tu profesor.</p>
+        </div>
+        <div class="benefit-card">
+            <div class="benefit-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <h3>Flexibilidad Horaria</h3>
+            <p>Reserva tus clases en el horario que mejor se adapte a tu rutina.</p>
+        </div>
+        <div class="benefit-card">
+            <div class="benefit-icon"><i class="fa-solid fa-award"></i></div>
+            <h3>Certificación Verificable</h3>
+            <p>Al finalizar tu curso obtienes un certificado que puedes validar desde la plataforma.</p>
+        </div>
+        <div class="benefit-card">
+            <div class="benefit-icon"><i class="fa-solid fa-users-rectangle"></i></div>
+            <h3>Comunidad de Alumnos</h3>
+            <p>Conecta con otros estudiantes y profesores de distintos idiomas y niveles.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-container">
+    <div class="section-header">
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+    </div>
+
+    <div class="faq-container">
+        <details class="faq-item">
+            <summary>¿Cómo se dictan las clases?</summary>
+            <p>Cada profesor coordina la modalidad de la clase reservada directamente contigo tras confirmar la reserva.</p>
+        </details>
+        <details class="faq-item">
+            <summary>¿Cómo reservo una clase?</summary>
+            <p>Elige un curso del catálogo, revisa el perfil del profesor y confirma tu reserva desde el botón "Reservar".</p>
+        </details>
+        <details class="faq-item">
+            <summary>¿Cómo obtengo mi certificado?</summary>
+            <p>Al completar un curso, tu certificado queda disponible y puede validarse desde la sección de verificación de certificados.</p>
+        </details>
+    </div>
+</section>
+
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <a href="{% url 'index' %}" class="footer-brand">ReyTech</a>
+            <p>Plataforma de aprendizaje de idiomas con profesores reales y clases reservables.</p>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>Idiomas</h4>
+            <ul>
+                <li><a href="{% url 'category' 'Inglés' %}">Inglés</a></li>
+                <li><a href="{% url 'category' 'Español' %}">Español</a></li>
+                <li><a href="{% url 'category' 'Alemán' %}">Alemán</a></li>
+                <li><a href="{% url 'category' 'coreano' %}">Coreano</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Plataforma</h4>
+            <ul>
+                <li><a href="{% url 'category_summary' %}">Catálogo de Cursos</a></li>
+                <li><a href="{% url 'search' %}">Buscar</a></li>
+                <li><a href="{% url 'about' %}">Nosotros</a></li>
+                <li><a href="{% url 'request_teacher' %}">Ser Profesor</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Contacto</h4>
+            <ul>
+                <li><i class="fa-solid fa-envelope"></i> contacto@reytech.com</li>
+                <li><i class="fa-solid fa-location-dot"></i> Lima, Perú</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; {% now "Y" %} ReyTech. Todos los derechos reservados.</p>
+    </div>
+</footer>
 
 {% endblock %}

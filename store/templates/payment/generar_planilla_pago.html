@@ -4,26 +4,28 @@
   <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-excel-fill"></i> Generar planilla de pago (Yape/Plin)</h2>
 
   {% if resumen %}
-  <table class="table bg-white shadow-sm rounded mb-4">
-    <thead>
-      <tr><th>Profesor</th><th>Celular Yape/Plin</th><th>Monto pendiente</th></tr>
-    </thead>
-    <tbody>
-      {% for row in resumen %}
-      <tr>
-        <td>{{ row.product__user__first_name|default:row.product__user__username }} {{ row.product__user__last_name }}</td>
-        <td>
-          {% if row.product__user__profile__yape_plin_number %}
-            {{ row.product__user__profile__yape_plin_number }}
-          {% else %}
-            <span class="text-danger">Sin número registrado</span>
-          {% endif %}
-        </td>
-        <td>S/. {{ row.monto }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table bg-white shadow-sm rounded mb-4">
+      <thead>
+        <tr><th>Profesor</th><th>Celular Yape/Plin</th><th>Monto pendiente</th></tr>
+      </thead>
+      <tbody>
+        {% for row in resumen %}
+        <tr>
+          <td>{{ row.product__user__first_name|default:row.product__user__username }} {{ row.product__user__last_name }}</td>
+          <td>
+            {% if row.product__user__profile__yape_plin_number %}
+              {{ row.product__user__profile__yape_plin_number }}
+            {% else %}
+              <span class="text-danger">Sin número registrado</span>
+            {% endif %}
+          </td>
+          <td>S/. {{ row.monto }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
   <form method="post">
     {% csrf_token %}

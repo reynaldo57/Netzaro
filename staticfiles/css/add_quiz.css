@@ -1,0 +1,295 @@
+.antares-quiz-page {
+    --aq-orange: #f97316;
+    --aq-yellow: #eab308;
+    --aq-sky: #38bdf8;
+    --aq-light-blue: #93c5fd;
+    --aq-navy: #0f172a;
+    --aq-text: var(--text-body);
+    --aq-muted: var(--text-muted-soft);
+    --aq-border: var(--border-soft);
+    --aq-input-bg: var(--surface-bg-alt);
+
+    color: var(--aq-text);
+    padding: 2rem 0 3rem 0;
+}
+
+.antares-quiz-page .page-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.antares-quiz-page .page-title i {
+    color: var(--aq-orange);
+}
+
+/* ========== PANEL PRINCIPAL ========== */
+.antares-quiz-page .panel-card {
+    background-color: var(--surface-bg);
+    border: 1px solid var(--aq-border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.antares-quiz-page .panel-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-strong);
+    margin-bottom: 1rem;
+}
+
+.antares-quiz-page .panel-title i {
+    color: var(--aq-yellow);
+}
+
+.antares-quiz-page .form-label-custom {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--aq-light-blue);
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.antares-quiz-page .form-control {
+    background-color: var(--aq-input-bg);
+    border: 1px solid var(--aq-border);
+    color: var(--text-strong);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+}
+
+.antares-quiz-page .form-control:focus {
+    background-color: var(--aq-input-bg);
+    color: var(--text-strong);
+    border-color: var(--aq-sky);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.antares-quiz-page .form-control::placeholder {
+    color: var(--aq-muted);
+}
+
+.antares-quiz-page .error-text {
+    color: #f87171;
+    font-size: 0.78rem;
+    margin: 0.35rem 0 0;
+}
+
+.antares-quiz-page .error-text:empty {
+    display: none;
+}
+
+.antares-quiz-page .btn-crear-quiz {
+    background: linear-gradient(90deg, #2563eb 0%, var(--aq-sky) 100%);
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: opacity 0.2s;
+}
+
+.antares-quiz-page .btn-crear-quiz:hover {
+    opacity: 0.95;
+    color: #ffffff;
+}
+
+/* ========== LISTADO DE EVALUACIONES ========== */
+.antares-quiz-page .quiz-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.antares-quiz-page .quiz-item {
+    background-color: var(--aq-navy);
+    border: 1px solid var(--aq-border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    transition: border-color 0.2s;
+}
+
+.antares-quiz-page .quiz-item:hover {
+    border-color: rgba(56, 189, 248, 0.4);
+}
+
+.antares-quiz-page .quiz-info-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-strong);
+}
+
+.antares-quiz-page .quiz-info-meta {
+    font-size: 0.8rem;
+    color: var(--aq-muted);
+}
+
+.antares-quiz-page .link-preguntas {
+    color: var(--aq-sky);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.antares-quiz-page .link-preguntas:hover {
+    text-decoration: underline;
+}
+
+.antares-quiz-page .quiz-empty {
+    color: var(--aq-muted);
+    font-size: 0.9rem;
+    padding: 0.5rem 0.1rem;
+}
+
+.antares-quiz-page .btn-eliminar {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 0.35rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.antares-quiz-page .btn-eliminar:hover {
+    background-color: #ef4444;
+    color: #ffffff;
+}
+
+.antares-quiz-page .btn-navegacion {
+    background-color: transparent;
+    color: var(--aq-muted);
+    border: 1px solid var(--aq-border);
+    padding: 0.55rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.antares-quiz-page .btn-navegacion:hover {
+    color: var(--text-strong);
+    border-color: var(--aq-light-blue);
+}
+
+/* ========== TARJETA LATERAL ========== */
+.antares-quiz-page .banner-card {
+    background: linear-gradient(180deg, var(--aq-navy) 0%, var(--surface-bg) 100%);
+    border: 1px solid var(--aq-border);
+    border-radius: 16px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.antares-quiz-page .banner-img-wrapper {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+}
+
+.antares-quiz-page .banner-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.antares-quiz-page .banner-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, var(--aq-navy) 0%, transparent 100%);
+}
+
+.antares-quiz-page .banner-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.antares-quiz-page .banner-body h5 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-strong);
+}
+
+.antares-quiz-page .banner-body h5 i {
+    color: var(--aq-sky);
+}
+
+.antares-quiz-page .banner-body p {
+    color: var(--aq-muted);
+    font-size: 0.85rem;
+}
+
+.antares-quiz-page .stat-badge-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.antares-quiz-page .mini-stat-card {
+    background-color: var(--aq-input-bg);
+    border: 1px solid var(--aq-border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    text-align: center;
+}
+
+.antares-quiz-page .mini-stat-value {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--aq-yellow);
+}
+
+.antares-quiz-page .mini-stat-label {
+    font-size: 0.68rem;
+    color: var(--aq-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.antares-quiz-page .tip-box {
+    margin-top: auto;
+    padding-top: 1.5rem;
+}
+
+.antares-quiz-page .tip-box-inner {
+    padding: 0.9rem;
+    border-radius: 10px;
+    background-color: rgba(56, 189, 248, 0.05);
+    border: 1px dashed rgba(56, 189, 248, 0.2);
+}
+
+.antares-quiz-page .tip-box-inner small.tip-title {
+    color: var(--aq-sky);
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.antares-quiz-page .tip-box-inner small.tip-text {
+    color: var(--aq-muted);
+}

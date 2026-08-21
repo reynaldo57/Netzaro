@@ -1,0 +1,252 @@
+.antares-dashboard {
+    --antares-orange: #f97316;
+    --antares-orange-dark: #ea580c;
+    --antares-blue: #2563eb;
+    --antares-navy: #0f172a;
+    --antares-text: var(--text-body);
+    --antares-muted: var(--text-muted-soft);
+    --antares-border: var(--border-soft);
+    --antares-bg: var(--surface-bg-alt);
+
+    color: var(--antares-text);
+    background-color: var(--page-bg);
+    padding-bottom: 3rem;
+}
+
+.antares-dashboard .main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+/* ========== TÍTULOS DE SECCIÓN ========== */
+.antares-dashboard .section-title {
+    font-weight: 800;
+    color: var(--text-strong);
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+    position: relative;
+    display: inline-block;
+}
+
+.antares-dashboard .section-title::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background-color: var(--antares-orange);
+    border-radius: 2px;
+    margin-top: 4px;
+}
+
+/* ========== TARJETAS DE ESTADÍSTICAS ========== */
+.antares-dashboard .stats-card {
+    background: var(--surface-bg);
+    border: 1px solid var(--antares-border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    text-decoration: none;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+a.antares-dashboard .stats-card,
+.antares-dashboard a.stats-card {
+    color: inherit;
+}
+
+.antares-dashboard a.stats-card:hover {
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.antares-dashboard .stats-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background-color: rgba(249, 115, 22, 0.15);
+    color: var(--antares-orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.antares-dashboard .stats-info h6 {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--antares-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.antares-dashboard .stats-info span {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-strong);
+}
+
+/* ========== CATEGORÍAS RÁPIDAS ========== */
+.antares-dashboard .category-pills {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.antares-dashboard .pill-btn {
+    background: var(--surface-bg);
+    border: 1px solid var(--antares-border);
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--antares-text);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.antares-dashboard .pill-btn:hover,
+.antares-dashboard .pill-btn.active {
+    background-color: var(--antares-orange);
+    color: #ffffff;
+    border-color: var(--antares-orange);
+}
+
+/* ========== BOTÓN CREAR CURSO ========== */
+.antares-dashboard .btn-add-course {
+    background-color: var(--antares-orange);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.antares-dashboard .btn-add-course:hover {
+    background-color: var(--antares-orange-dark);
+    color: #ffffff;
+}
+
+/* ========== TARJETAS DE CURSOS (GRID) ========== */
+.antares-dashboard .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.antares-dashboard .course-card {
+    background: var(--surface-bg);
+    border: 1px solid var(--antares-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.antares-dashboard .course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+}
+
+.antares-dashboard .course-banner {
+    height: 160px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.antares-dashboard .category-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    text-transform: uppercase;
+}
+
+.antares-dashboard .course-body {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.antares-dashboard .course-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-strong);
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+}
+
+.antares-dashboard .course-title:hover {
+    color: var(--antares-orange);
+}
+
+.antares-dashboard .course-meta {
+    font-size: 0.8rem;
+    color: var(--antares-muted);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.antares-dashboard .course-footer {
+    padding-top: 1rem;
+    border-top: 1px dashed var(--antares-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+.antares-dashboard .course-price {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--antares-orange);
+}
+
+.antares-dashboard .action-links a {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 0.6rem;
+}
+
+.antares-dashboard .btn-action-edit { color: var(--antares-blue); }
+.antares-dashboard .btn-action-edit:hover { text-decoration: underline; }
+
+.antares-dashboard .btn-action-delete { color: #ef4444; }
+.antares-dashboard .btn-action-delete:hover { text-decoration: underline; }
+
+.antares-dashboard .cs-empty {
+    grid-column: 1 / -1;
+    border: 1px solid var(--antares-border);
+    border-radius: 10px;
+    background: var(--surface-bg);
+    color: var(--antares-muted);
+    padding: 2.5rem;
+    text-align: center;
+    font-weight: 600;
+}

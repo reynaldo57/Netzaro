@@ -1,256 +1,158 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Clases del Curso: {{ product.name }}{% endblock title %}
+
+{% block extra_css %}
+<link href="{% static 'css/product_detail.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
+<div class="antares-product-detail">
+    <div class="container-xl">
 
-  <header>
-      <h1>Clases del curso: {{ product.name }}</h1>
-      <p>Descarga tus clases</p>
-</header>
-<style>
-    :root {
-        --color-dominante: #ffffff;    /* 60% - Blanco (Limpieza absoluta) */
-        --color-primario: #b91c1c;      /* 30% - Rojo Sangre (Poder y acción) */
-        --color-secundario: #1d3557;    /* 10% - Azul Marino (Confianza y detalle) */
-        --gris-borde: #e2e8f0;
-        --gris-fondo: #f8fafc;         /* Color neutro para suavizar fondos */
-        --texto-negro: #000000;
-    }
-    
-    /* ========== HEADER REFINADO (SIN CAMBIOS) ========== */
-    header {
-        background: var(--color-primario) !important;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-bottom: 5px solid var(--color-secundario);
-        margin-bottom: 1rem;
-        height: 100px !important;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        padding: 1rem 0 !important;
-    }
+        <!-- HEADER DEL CURSO -->
+        <div class="course-header-banner">
+            <div>
+                <h1 class="course-header-title">Clases del Curso: {{ product.name }}</h1>
+                <div class="course-header-subtitle">
+                    <i class="fa-solid fa-circle-down text-info"></i> Accede a las lecciones en línea o descarga el material de apoyo.
+                </div>
+            </div>
 
-    header h1 {
-        color: white !important;
-        font-weight: bold !important;
-        text-transform: uppercase;
-        margin-top: 1rem;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        letter-spacing: -0.5px;
-    }
-    header p {
-        color: white !important;
-        margin-top: 1px;
-    }
+            <div class="action-header-btns">
+                {% if request.user.is_authenticated %}
+                <form method="POST" action="{% url 'toggle_wishlist' product.id %}">
+                    {% csrf_token %}
+                    {% if in_wishlist %}
+                    <button type="submit" class="btn-action-outline">
+                        <i class="fa-solid fa-heart-crack"></i> Quitar de la lista
+                    </button>
+                    {% else %}
+                    <button type="submit" class="btn-action-outline">
+                        <i class="fa-regular fa-heart"></i> Guardar para después
+                    </button>
+                    {% endif %}
+                </form>
 
-
-.full-wrapper {
-    width: 100%;
-    padding: 2rem;
-}
-
-.page-title {
-    text-align: center;
-    font-size: 2.5rem;
-    color: #1c1c1e;
-    margin-bottom: 2rem;
-}
-
-.levels-wrapper {
-    display: flex;
-    gap: 2rem;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.level-column {
-    flex: 1;
-    min-width: 300px;
-    background-color: #ffffff;
-    padding: 1rem;
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-}
-
-.level-title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    padding-left: 0.5rem;
-    border-left: 5px solid #8e44ad;
-}
-
-.level-title.basic {
-    border-color: #2980b9;
-}
-
-.level-title.intermediate {
-    border-color: #f39c12;
-}
-
-.level-title.advanced {
-    border-color: #27ae60;
-}
-
-.class-card {
-    background-color: #f9f9fb;
-    border-radius: 12px;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s ease;
-}
-
-.class-card:hover {
-    transform: translateY(-4px);
-}
-
-.class-image {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 0.8rem;
-}
-
-.class-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.class-description {
-    flex-grow: 1;
-    font-size: 0.95rem;
-    color: #555;
-    margin-bottom: 0.8rem;
-}
-
-.download-button {
-    align-self: flex-start;
-    padding: 0.5rem 1rem;
-    background-color: #8e44ad;
-    color: white;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: background-color 0.3s ease;
-}
-
-.download-button:hover {
-    background-color: #732d91;
-}
-
-.no-classes {
-    font-style: italic;
-    color: #888;
-}
-
-</style>
-<div class="full-wrapper">
-    
-{% if request.user.is_authenticated %}
-<form method="POST" action="{% url 'toggle_wishlist' product.id %}">
-  {% csrf_token %}
-  {% if in_wishlist %}
-    <button type="submit" class="btn btn-outline-secondary">
-      <i class="fas fa-heart-broken"></i> Quitar de la lista de deseos
-    </button>
-  {% else %}
-    <button type="submit" class="btn btn-outline-danger">
-      <i class="fas fa-heart"></i> Guardar para después
-    </button>
-  {% endif %}
-</form>
-{% endif %}
-
-{% if request.user.is_authenticated %}
-  <a href="{% url 'continuar_curso' product.id %}" class="btn btn-primary mb-3">▶ Continuar donde lo dejaste</a>
-{% endif %}
-    <div class="levels-wrapper">
-        <!-- Básico -->
-        <div class="level-column">
-            <h3 class="level-title basic">clases gratis</h3>
-            {% if clases_gratis %}
-                {% for clase in clases_gratis %}
-                    <div class="class-card">
-                        <img src="{{ clase.bannerClase.url }}" alt="Banner básico" class="class-image">
-                        <h4 class="class-title">{{ clase.titleClase }}</h4>
-                        <p class="class-description">{{ clase.descriptionClase }}</p>
-                        <a href="{% url 'ver_clase' clase.id %}" class="download-button">Ver clase</a>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p class="no-classes">"No hay clases gratuitas aún.</p>
-            {% endif %}
-        </div>
-
-
-        <div class="level-column">
-    <h3 class="level-title advanced">Versión de pago</h3>
-    {% if clases_pago %}
-        {% for clase in clases_pago %}
-            <div class="class-card">
-                <img src="{{ clase.bannerClase.url }}" alt="Banner pago" class="class-image">
-                <h4 class="class-title">{{ clase.titleClase }}</h4>
-                <p class="class-description">{{ clase.descriptionClase }}</p>
-
-                {% if clase.es_preview %}
-                    <a href="{% url 'ver_clase' clase.id %}" class="download-button">Vista previa</a>
-                {% elif user.is_authenticated and clase.id|stringformat:"s" in clases_pagadas %}
-                    <a href="{% url 'ver_clase' clase.id %}" class="download-button">Ver clase</a>
+                <a href="{% url 'continuar_curso' product.id %}" class="btn-action-primary">
+                    <i class="fa-solid fa-play"></i> Continuar donde lo dejaste
+                </a>
                 {% endif %}
             </div>
-        {% endfor %}
+        </div>
 
-        {% if not user.is_authenticated %}
-            <a href="{% url 'login' %}" class="download-button">Inicia sesión para comprar</a>
-        {% elif not acceso_completo_comprado %}
-        <div class="d-flex gap-2 flex-wrap">
-            <form method="POST" action="{% url 'comprar_curso_izipay' product.id %}">
-                {% csrf_token %}
-                <button type="submit" class="download-button">
-                    Pagar con Izipay — ${{ product.precio_acceso_completo }}
-                </button>
-            </form>
-            
-            <form method="POST" action="{% url 'comprar_curso_paypal' product.id %}">
-                {% csrf_token %}
-                <button type="submit" class="download-button">
-                    Pagar con PayPal — ${{ product.precio_acceso_completo }}
-                </button>
-            </form>
+        <!-- GRID DE 3 COLUMNAS -->
+        <div class="row g-4">
+
+            <!-- COLUMNA 1: CLASES GRATIS -->
+            <div class="col-lg-4 col-md-6">
+                <div class="section-column-title">
+                    <span class="indicator-bar bar-sky"></span> Clases Gratis
+                </div>
+
+                {% if clases_gratis %}
+                    {% for clase in clases_gratis %}
+                    <div class="class-card">
+                        <div class="class-card-img-wrapper">
+                            <img src="{{ clase.bannerClase.url }}" alt="{{ clase.titleClase }}">
+                        </div>
+                        <div class="class-card-body">
+                            <h3 class="class-card-title">{{ clase.titleClase }}</h3>
+                            <p class="class-card-desc">{{ clase.descriptionClase }}</p>
+                            <a href="{% url 'ver_clase' clase.id %}" class="btn-ver-clase">
+                                <i class="fa-solid fa-circle-play"></i> Ver clase
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-classes-msg">No hay clases gratuitas aún.</p>
+                {% endif %}
             </div>
-        {% endif %}
-    {% else %}
-        <p class="no-classes">No hay clases de pago aún.</p>
-    {% endif %}
-</div>
-        <!-- Avanzado -->
-        <div class="level-column">
-            <h3 class="level-title advanced">Clases recomendadas</h3>
-            {% if recommended_products %}
-<section class="mt-5">
-  <h4>Estudiantes también vieron</h4>
-  <div class="d-flex flex-wrap gap-3">
-    {% for rec in recommended_products %}
-      <div class="card" style="width: 220px;">
-        <img class="card-img-top" src="{{ rec.image.url }}" alt="{{ rec.name }}">
-        <div class="card-body">
-          <a href="{% url 'product' rec.id %}">{{ rec.name }}</a>
-          <div style="color: green;">${{ rec.price }}</div>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-</section>
-{% endif %}
-        </div>
 
+            <!-- COLUMNA 2: VERSIÓN DE PAGO -->
+            <div class="col-lg-4 col-md-6">
+                <div class="section-column-title">
+                    <span class="indicator-bar bar-green"></span> Versión de Pago
+                </div>
 
+                {% if clases_pago %}
+                    {% for clase in clases_pago %}
+                    <div class="class-card">
+                        <div class="class-card-img-wrapper">
+                            <img src="{{ clase.bannerClase.url }}" alt="{{ clase.titleClase }}">
+                        </div>
+                        <div class="class-card-body">
+                            <h3 class="class-card-title">{{ clase.titleClase }}</h3>
+                            <p class="class-card-desc">{{ clase.descriptionClase }}</p>
+
+                            {% if clase.es_preview %}
+                            <a href="{% url 'ver_clase' clase.id %}" class="btn-ver-clase">
+                                <i class="fa-solid fa-eye"></i> Vista previa
+                            </a>
+                            {% elif user.is_authenticated and clase.id|stringformat:"s" in clases_pagadas %}
+                            <a href="{% url 'ver_clase' clase.id %}" class="btn-ver-clase">
+                                <i class="fa-solid fa-lock-open"></i> Ver clase
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'login' %}" class="btn-action-outline">
+                            <i class="fa-solid fa-right-to-bracket"></i> Inicia sesión para comprar
+                        </a>
+                    {% elif not acceso_completo_comprado %}
+                    <div class="payment-actions">
+                        <form method="POST" action="{% url 'comprar_curso_izipay' product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-pagar btn-pagar-izipay">
+                                <i class="fa-solid fa-credit-card"></i> Pagar con Izipay — ${{ product.precio_acceso_completo }}
+                            </button>
+                        </form>
+
+                        <form method="POST" action="{% url 'comprar_curso_paypal' product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-pagar btn-pagar-paypal">
+                                <i class="fa-brands fa-paypal"></i> Pagar con PayPal — ${{ product.precio_acceso_completo }}
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <p class="no-classes-msg">No hay clases de pago aún.</p>
+                {% endif %}
+            </div>
+
+            <!-- COLUMNA 3: RECOMENDACIONES -->
+            <div class="col-lg-4 col-md-12">
+                <div class="section-column-title">
+                    <span class="indicator-bar bar-purple"></span> Clases Recomendadas
+                </div>
+
+                {% if recommended_products %}
+                <div class="recommend-card">
+                    <span class="recommend-label"><i class="fa-solid fa-users me-1"></i> Estudiantes también vieron</span>
+
+                    {% for rec in recommended_products %}
+                    <div class="mini-course-item">
+                        <img src="{{ rec.image.url }}" class="mini-course-img" alt="{{ rec.name }}">
+                        <div class="mini-course-body">
+                            <a href="{% url 'product' rec.id %}" class="mini-course-title">{{ rec.name }}</a>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="mini-course-price">${{ rec.price }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
 
     </div>
 </div>
-
-
 {% endblock %}
