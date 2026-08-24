@@ -1,0 +1,257 @@
+.antares-checkout-page {
+    --ck-orange: #f97316;
+    --ck-yellow: #eab308;
+    --ck-green: #10b981;
+    --ck-light-blue: #93c5fd;
+    --ck-navy: #0f172a;
+    --ck-text: var(--text-body);
+    --ck-muted: var(--text-muted-soft);
+    --ck-border: var(--border-soft);
+    --ck-input-bg: var(--surface-bg-alt);
+
+    color: var(--ck-text);
+    padding: 2rem 0 3rem 0;
+}
+
+.antares-checkout-page .page-header {
+    margin-bottom: 2rem;
+}
+
+.antares-checkout-page .page-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.antares-checkout-page .page-title i {
+    color: var(--ck-orange);
+}
+
+.antares-checkout-page .page-subtitle {
+    color: var(--ck-muted);
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+}
+
+/* ========== CARDS ========== */
+.antares-checkout-page .panel-card {
+    background-color: var(--surface-bg);
+    border: 1px solid var(--ck-border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.antares-checkout-page .card-section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-strong);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.antares-checkout-page .card-section-title span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.antares-checkout-page .card-section-title i {
+    color: var(--ck-orange);
+}
+
+.antares-checkout-page .link-actualizar {
+    color: var(--ck-light-blue);
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.antares-checkout-page .link-actualizar:hover {
+    text-decoration: underline;
+}
+
+.antares-checkout-page .form-label-custom {
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--ck-light-blue);
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+.antares-checkout-page .form-control {
+    background-color: var(--ck-input-bg);
+    border: 1px solid var(--ck-border);
+    color: var(--text-strong);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-size: 0.88rem;
+}
+
+.antares-checkout-page .form-control:focus {
+    background-color: var(--ck-input-bg);
+    color: var(--text-strong);
+    border-color: var(--ck-orange);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.antares-checkout-page .form-control::placeholder {
+    color: var(--ck-muted);
+}
+
+.antares-checkout-page .error-text {
+    color: #f87171;
+    font-size: 0.78rem;
+    margin: 0.35rem 0 0;
+}
+
+.antares-checkout-page .error-text:empty {
+    display: none;
+}
+
+/* ========== ITEM DEL PEDIDO ========== */
+.antares-checkout-page .cart-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--ck-border);
+}
+
+.antares-checkout-page .cart-item:last-of-type {
+    border-bottom: none;
+}
+
+.antares-checkout-page .cart-item-img {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--ck-border);
+    flex-shrink: 0;
+}
+
+.antares-checkout-page .cart-item-title {
+    font-weight: 700;
+    color: var(--text-strong);
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+.antares-checkout-page .cart-item-qty {
+    color: var(--ck-muted);
+    font-size: 0.78rem;
+}
+
+.antares-checkout-page .cart-item-price {
+    font-weight: 700;
+    color: var(--text-strong);
+    white-space: nowrap;
+}
+
+.antares-checkout-page .cart-item-price del {
+    color: var(--ck-muted);
+    font-weight: 400;
+    margin-right: 0.35rem;
+}
+
+.antares-checkout-page .order-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1rem 0;
+    padding-top: 0.5rem;
+}
+
+.antares-checkout-page .order-total-label {
+    font-weight: 700;
+    color: var(--ck-muted);
+}
+
+.antares-checkout-page .order-total-value {
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--ck-orange);
+}
+
+/* ========== MÉTODOS DE PAGO ========== */
+.antares-checkout-page .payment-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.antares-checkout-page .btn-pay-paypal,
+.antares-checkout-page .btn-pay-izypay {
+    font-weight: 700;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 0.95rem;
+    transition: opacity 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #ffffff;
+}
+
+.antares-checkout-page .btn-pay-paypal {
+    background-color: #0070ba;
+}
+
+.antares-checkout-page .btn-pay-izypay {
+    background: linear-gradient(90deg, var(--ck-orange) 0%, var(--ck-yellow) 100%);
+}
+
+.antares-checkout-page .btn-pay-paypal:hover,
+.antares-checkout-page .btn-pay-izypay:hover {
+    opacity: 0.92;
+    color: #ffffff;
+}
+
+.antares-checkout-page .btn-pay-inline {
+    width: auto;
+    display: inline-flex;
+    padding: 0.65rem 1.5rem;
+}
+
+.antares-checkout-page .btn-pay-inline + .btn-pay-inline {
+    margin-left: 0.5rem;
+}
+
+/* ========== TRUST BADGES ========== */
+.antares-checkout-page .trust-box {
+    background-color: var(--ck-navy);
+    border: 1px solid var(--ck-border);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-top: 1.25rem;
+}
+
+.antares-checkout-page .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.82rem;
+    color: var(--ck-muted);
+    margin-bottom: 0.6rem;
+}
+
+.antares-checkout-page .trust-item:last-child {
+    margin-bottom: 0;
+}
+
+.antares-checkout-page .trust-item i {
+    color: var(--ck-green);
+    font-size: 1rem;
+}

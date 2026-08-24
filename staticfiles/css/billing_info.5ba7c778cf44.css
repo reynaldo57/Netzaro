@@ -1,0 +1,244 @@
+.antares-billing-page {
+    --bi-orange: #f97316;
+    --bi-yellow: #eab308;
+    --bi-sky: #38bdf8;
+    --bi-green: #10b981;
+    --bi-light-blue: #93c5fd;
+    --bi-navy: #0f172a;
+    --bi-text: var(--text-body);
+    --bi-muted: var(--text-muted-soft);
+    --bi-border: var(--border-soft);
+    --bi-input-bg: var(--surface-bg-alt);
+
+    color: var(--bi-text);
+    padding: 2rem 0 3rem 0;
+}
+
+.antares-billing-page .page-header {
+    margin-bottom: 2rem;
+}
+
+.antares-billing-page .page-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.antares-billing-page .page-title i {
+    color: var(--bi-orange);
+}
+
+.antares-billing-page .page-subtitle {
+    color: var(--bi-muted);
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+}
+
+/* ========== CARDS ========== */
+.antares-billing-page .panel-card {
+    background-color: var(--surface-bg);
+    border: 1px solid var(--bi-border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.antares-billing-page .card-section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-strong);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.antares-billing-page .card-section-title i {
+    color: var(--bi-sky);
+}
+
+/* ========== TILES DE INFORMACIÓN DE ENVÍO ========== */
+.antares-billing-page .info-tile {
+    background-color: var(--bi-navy);
+    border: 1px solid var(--bi-border);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    height: 100%;
+}
+
+.antares-billing-page .info-tile-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--bi-light-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.antares-billing-page .info-tile-value {
+    font-size: 0.92rem;
+    color: var(--text-strong);
+    font-weight: 600;
+    margin: 0;
+    word-break: break-word;
+}
+
+/* ========== FORMULARIOS ========== */
+.antares-billing-page .form-label-custom {
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--bi-light-blue);
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+.antares-billing-page .form-control {
+    background-color: var(--bi-input-bg);
+    border: 1px solid var(--bi-border);
+    color: var(--text-strong);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-size: 0.88rem;
+}
+
+.antares-billing-page .form-control:focus {
+    background-color: var(--bi-input-bg);
+    color: var(--text-strong);
+    border-color: var(--bi-orange);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.antares-billing-page .form-control::placeholder {
+    color: var(--bi-muted);
+}
+
+.antares-billing-page .error-text {
+    color: #f87171;
+    font-size: 0.78rem;
+    margin: 0.35rem 0 0;
+}
+
+.antares-billing-page .error-text:empty {
+    display: none;
+}
+
+/* ========== BOTONES ========== */
+.antares-billing-page .btn-confirmar {
+    background: linear-gradient(90deg, var(--bi-orange) 0%, var(--bi-yellow) 100%);
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    padding: 0.85rem 1.5rem;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 0.95rem;
+    transition: opacity 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.antares-billing-page .btn-confirmar:hover {
+    opacity: 0.92;
+    color: #ffffff;
+}
+
+.antares-billing-page .btn-cancelar {
+    background-color: transparent;
+    color: var(--bi-muted);
+    border: 1px solid var(--bi-border);
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.antares-billing-page .btn-cancelar:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-strong);
+}
+
+/* ========== RESUMEN DEL PEDIDO ========== */
+.antares-billing-page .summary-box {
+    background-color: var(--bi-navy);
+    border: 1px solid var(--bi-border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.antares-billing-page .summary-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.2rem;
+}
+
+.antares-billing-page .summary-line-qty {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--bi-muted);
+    margin-bottom: 0.75rem;
+}
+
+.antares-billing-page .badge-course {
+    background-color: rgba(56, 189, 248, 0.15);
+    color: var(--bi-sky);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-right: 0.5rem;
+}
+
+.antares-billing-page .summary-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.antares-billing-page .summary-total-label {
+    font-weight: 700;
+    color: var(--bi-muted);
+}
+
+.antares-billing-page .summary-total-value {
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--bi-orange);
+}
+
+.antares-billing-page .summary-motivation {
+    color: var(--bi-green);
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+/* ========== MÉTODO DE PAGO ========== */
+.antares-billing-page .payment-method-box {
+    background-color: var(--bi-navy);
+    border: 1px solid var(--bi-border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.antares-billing-page .paypal-render-wrapper :is(form) {
+    display: inline-block;
+}

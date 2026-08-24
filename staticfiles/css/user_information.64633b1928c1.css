@@ -1,0 +1,144 @@
+/* ========== PERFIL DE USUARIO (ANTARES) ========== */
+.antares-profile {
+    padding: 2rem 0 1rem;
+}
+
+.antares-profile .profile-card {
+    background: var(--surface-bg);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid var(--antares-border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    margin-bottom: 2.5rem;
+}
+
+.antares-profile .profile-avatar-wrapper {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 3px solid var(--antares-orange);
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: var(--surface-bg);
+}
+
+.antares-profile .profile-avatar-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.antares-profile .profile-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.antares-profile .profile-bio {
+    font-size: 0.85rem;
+    color: var(--antares-muted);
+    margin: 0.4rem 0 0;
+    max-width: 650px;
+}
+
+/* ---------- Estadísticas ---------- */
+.antares-profile .stat-box {
+    background: var(--antares-bg);
+    border: 1px solid var(--antares-border);
+    border-radius: 10px;
+    padding: 0.6rem 1.1rem;
+    text-align: center;
+    min-width: 90px;
+}
+
+.antares-profile .stat-value {
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: var(--text-strong);
+    line-height: 1.2;
+}
+
+.antares-profile .stat-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--antares-muted);
+    text-transform: uppercase;
+}
+
+/* ---------- Botones de acción ---------- */
+.antares-profile .btn-seguir {
+    background: linear-gradient(90deg, var(--antares-orange) 0%, #eab308 100%);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.55rem 1.3rem;
+    border-radius: 8px;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+}
+
+.antares-profile .btn-seguir:hover {
+    opacity: 0.9;
+    color: #ffffff;
+}
+
+.antares-profile .btn-seguir.btn-outline-seguir {
+    background: var(--surface-bg);
+    color: var(--text-strong);
+    border: 1px solid var(--antares-border);
+}
+
+.antares-profile .btn-seguir.btn-outline-seguir:hover {
+    background: var(--antares-bg);
+    opacity: 1;
+    color: var(--text-strong);
+}
+
+/* ---------- Descripción de curso dentro de la tarjeta ---------- */
+.antares-profile .card-desc-original {
+    font-size: 0.78rem;
+    color: var(--antares-muted);
+    margin: 0 0 0.5rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .antares-profile .profile-card {
+        padding: 1.5rem;
+    }
+
+    .antares-profile .profile-card > .d-flex {
+        justify-content: center !important;
+        text-align: center;
+    }
+
+    .antares-profile .profile-bio {
+        max-width: 100%;
+    }
+
+    .antares-profile .stat-box {
+        min-width: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .antares-profile .profile-avatar-wrapper {
+        width: 90px;
+        height: 90px;
+    }
+
+    .antares-profile .profile-title {
+        font-size: 1.25rem;
+    }
+}

@@ -1,0 +1,193 @@
+:root {
+    --au-orange: #f97316;
+    --au-blue: #1d4ed8;
+    --au-blue-hover: #1e40af;
+    --au-navy: #0f172a;
+    --au-text: var(--text-body);
+    --au-muted: var(--text-muted-soft);
+    --au-border: var(--border-soft);
+    --au-bg: var(--page-bg);
+}
+
+/* ========== LAYOUT SPLIT ========== */
+.auth-container {
+    display: flex;
+    min-height: calc(100vh - 60px);
+    flex-wrap: wrap;
+}
+
+/* ========== LADO IZQUIERDO: HERO VISUAL ========== */
+.auth-hero {
+    flex: 1;
+    min-width: 320px;
+    position: relative;
+    background: #020617 url("/static/assets/fondo.10087c716fe5.jpg") center/cover no-repeat;
+    display: flex;
+    align-items: flex-end;
+    padding: 3rem;
+    color: #ffffff;
+}
+
+.auth-hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(2, 6, 23, 0.25) 0%, rgba(2, 6, 23, 0.9) 100%);
+}
+
+.auth-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 480px;
+}
+
+.auth-hero-content h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.8rem;
+    line-height: 1.2;
+    color: #ffffff !important;
+}
+
+.auth-hero-content p {
+    font-size: 0.92rem;
+    color: #94a3b8 !important;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+
+.auth-hero-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-size: 0.82rem;
+    color: #cbd5e1 !important;
+}
+
+.auth-hero-features div {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.auth-hero-features i { color: var(--au-orange) !important; }
+
+/* ========== LADO DERECHO: FORMULARIO ========== */
+.auth-form-section {
+    flex: 1;
+    min-width: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--au-bg) !important;
+    padding: 2rem 1.5rem;
+}
+
+.auth-card {
+    background: var(--surface-bg) !important;
+    border: 1px solid var(--au-border);
+    border-radius: 12px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 1.8rem;
+}
+
+.auth-header h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-strong) !important;
+    margin-bottom: 0.3rem;
+}
+
+.auth-header p {
+    font-size: 0.85rem;
+    color: var(--au-muted) !important;
+    margin: 0;
+}
+
+/* ========== INPUTS CON ÍCONOS ========== */
+.input-icon-group {
+    position: relative;
+    margin-bottom: 1.2rem;
+}
+
+.input-icon-group > i {
+    position: absolute;
+    left: 0.9rem;
+    top: 22px;
+    transform: translateY(-50%);
+    color: var(--au-muted) !important;
+    font-size: 0.9rem;
+}
+
+.input-icon-group .form-control {
+    padding-left: 2.5rem !important;
+    height: 44px;
+    font-size: 0.88rem;
+    border-radius: 8px !important;
+    border: 1px solid var(--au-border) !important;
+    background-color: var(--surface-bg-alt) !important;
+    color: var(--text-strong) !important;
+    width: 100%;
+}
+
+.input-icon-group .form-control:focus {
+    border-color: var(--au-blue) !important;
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+    outline: none;
+}
+
+.input-icon-group .field-help {
+    font-size: 0.72rem;
+    color: var(--au-muted) !important;
+    margin-top: 0.3rem;
+}
+
+.input-icon-group .field-help ul {
+    margin: 0.2rem 0 0;
+    padding-left: 1.1rem;
+}
+
+.input-icon-group .field-error {
+    font-size: 0.75rem;
+    color: #dc2626 !important;
+    margin-top: 0.3rem;
+}
+
+.btn-auth-submit {
+    background-color: var(--au-blue) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    height: 44px;
+    border-radius: 8px;
+    border: none;
+    width: 100%;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.btn-auth-submit:hover { background-color: var(--au-blue-hover) !important; }
+
+.auth-prompt {
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--au-muted) !important;
+    margin-top: 1.5rem;
+}
+
+.auth-prompt a {
+    color: var(--au-blue) !important;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-prompt a:hover { text-decoration: underline; }
+
+@media (max-width: 850px) {
+    .auth-hero { display: none; }
+}

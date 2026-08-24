@@ -1,0 +1,201 @@
+.antares-tarea-page {
+    --at-orange: #f97316;
+    --at-yellow: #eab308;
+    --at-light-blue: #93c5fd;
+    --at-navy: #0f172a;
+    --at-text: var(--text-body);
+    --at-muted: var(--text-muted-soft);
+    --at-border: var(--border-soft);
+    --at-input-bg: var(--surface-bg-alt);
+
+    color: var(--at-text);
+    padding: 2rem 0 3rem 0;
+}
+
+.antares-tarea-page .page-header {
+    margin-bottom: 2rem;
+}
+
+.antares-tarea-page .page-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.antares-tarea-page .page-title i {
+    color: var(--at-orange);
+}
+
+.antares-tarea-page .page-subtitle {
+    color: var(--at-muted);
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+}
+
+/* ========== CARDS ========== */
+.antares-tarea-page .panel-card {
+    background-color: var(--surface-bg);
+    border: 1px solid var(--at-border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.antares-tarea-page .panel-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-strong);
+    margin-bottom: 1rem;
+}
+
+.antares-tarea-page .panel-title i {
+    color: var(--at-orange);
+}
+
+.antares-tarea-page .form-label-custom {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--at-light-blue);
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+.antares-tarea-page .form-label-custom i {
+    color: var(--at-orange);
+}
+
+.antares-tarea-page .form-control {
+    background-color: var(--at-input-bg);
+    border: 1px solid var(--at-border);
+    color: var(--text-strong);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+}
+
+.antares-tarea-page .form-control:focus {
+    background-color: var(--at-input-bg);
+    color: var(--text-strong);
+    border-color: var(--at-orange);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.antares-tarea-page .form-control::placeholder {
+    color: var(--at-muted);
+}
+
+.antares-tarea-page .error-text {
+    color: #f87171;
+    font-size: 0.78rem;
+    margin: 0.35rem 0 0;
+}
+
+.antares-tarea-page .error-text:empty {
+    display: none;
+}
+
+/* ========== BOTONES ========== */
+.antares-tarea-page .btn-agregar-tarea {
+    background: linear-gradient(90deg, var(--at-orange) 0%, var(--at-yellow) 100%);
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: opacity 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.antares-tarea-page .btn-agregar-tarea:hover {
+    opacity: 0.95;
+    color: #ffffff;
+}
+
+.antares-tarea-page .btn-eliminar {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 0.35rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.antares-tarea-page .btn-eliminar:hover {
+    background-color: #ef4444;
+    color: #ffffff;
+}
+
+/* ========== LISTADO DE TAREAS ========== */
+.antares-tarea-page .tarea-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow-y: auto;
+}
+
+.antares-tarea-page .tarea-item {
+    background-color: var(--at-navy);
+    border: 1px solid var(--at-border);
+    border-radius: 10px;
+    padding: 1rem 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    transition: border-color 0.2s;
+}
+
+.antares-tarea-page .tarea-item:hover {
+    border-color: rgba(249, 115, 22, 0.4);
+}
+
+.antares-tarea-page .tarea-titulo {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--text-strong);
+}
+
+.antares-tarea-page .tarea-fecha {
+    font-size: 0.8rem;
+    color: var(--at-muted);
+    display: block;
+    margin-top: 0.2rem;
+}
+
+/* ========== ESTADO VACÍO ========== */
+.antares-tarea-page .empty-state-box {
+    background-color: var(--at-navy);
+    border: 1px dashed var(--at-border);
+    border-radius: 12px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+}
+
+.antares-tarea-page .empty-state-icon {
+    font-size: 2.5rem;
+    color: var(--at-orange);
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+.antares-tarea-page .empty-state-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-strong);
+    margin-bottom: 0.3rem;
+}
+
+.antares-tarea-page .empty-state-desc {
+    font-size: 0.82rem;
+    color: var(--at-muted);
+    margin: 0;
+}

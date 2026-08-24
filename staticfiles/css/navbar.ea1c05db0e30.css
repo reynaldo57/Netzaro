@@ -1,0 +1,300 @@
+
+    /* --- CONFIGURACIÓN BASE --- */
+.nav-principal {
+    background-color: rgba(26, 36, 54, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+    height: 60px; /* Altura fija para alineación */
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.nav-principal.con-sombra {
+    background-color: var(--surface-bg);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+}
+
+.contenedor-nav {
+    max-width: 1200px;
+    
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 60px; /* Altura fija para alineación */
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-strong);
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: -1px;
+}
+
+.nav-logo i {
+    color: var(--naranja);
+    font-size: 1.25rem;
+}
+
+/* --- MENÚ PC (ESCRITORIO) --- */
+.nav-colapso {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaciado entre elementos */
+}
+
+.lista-nav {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 5px; /* Espaciado entre enlaces */
+}
+
+.nav-link-custom {
+    position: relative;
+    color: var(--text-strong);
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+    font-weight: 500;
+    transition: color 0.3s, background-color 0.3s;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.nav-link-custom::after {
+    content: "";
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    bottom: 4px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--gradient-brand);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+}
+
+.nav-link-custom:hover {
+    background-color: rgba(232, 93, 25, 0.08);
+    color: var(--naranja);
+}
+
+.nav-link-custom:hover::after,
+.nav-link-custom.activo::after {
+    transform: scaleX(1);
+}
+
+.nav-link-custom.activo {
+    color: var(--naranja);
+}
+
+.perfil-usuario {
+    text-transform: capitalize;
+}
+
+/* --- DROPDOWNS (MENÚS DESPLEGABLES) --- */
+.item-desplegable {
+    position: relative;
+}
+
+.menu-desplegable {
+    display: none;
+    list-style: none;
+    margin: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--surface-bg-alt);
+    min-width: 180px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.35);
+    border-radius: 4px;
+    padding: 10px 0;
+    z-index: 1100;
+}
+
+.item-desplegable:hover .menu-desplegable,
+.item-desplegable:focus-within .menu-desplegable {
+    display: block;
+}
+
+.menu-desplegable a {
+    color: var(--text-strong);
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+    font-size: 0.9rem;
+}
+
+.menu-desplegable a:hover {
+    background-color: var(--border-soft);
+    color: var(--naranja);
+}
+
+.divisor {
+    border: 0;
+    border-top: 1px solid var(--border-soft);
+    margin: 5px 0;
+}
+
+/* --- BOTÓN CARRITO --- */
+.boton-carrito {
+    background: var(--gradient-brand);
+    border: none;
+    color: #ffffff;
+    padding: 7px 16px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(232, 93, 25, 0.3);
+    transition: all 0.3s ease;
+}
+
+.boton-carrito:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+}
+
+.icono-carrito {
+    font-style: normal;
+}
+
+.contador-badge {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin-left: 8px;
+    font-size: 0.65rem;
+}
+
+/* --- LÓGICA MÓVIL (MAX 992px) --- */
+
+.check-oculto {
+    display: none; /* Checkbox invisible */
+}
+
+/* LA SOLUCIÓN: Oculto por defecto en pantallas grandes */
+.nav-toggle-button {
+    display: none;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 12px;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+}
+
+.icono-hamburguesa {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--text-strong);
+    position: relative;
+    pointer-events: none; /* No intercepta clics */
+}
+
+.icono-hamburguesa::before, .icono-hamburguesa::after {
+    content: "";
+    width: 20px;
+    height: 2px;
+    background: var(--text-strong);
+    position: absolute;
+    left: 0;
+}
+
+.icono-hamburguesa::before { top: -6px; }
+.icono-hamburguesa::after { bottom: -6px; }
+
+/* MEDIA QUERY PARA MÓVIL */
+@media (max-width: 992px) {
+    .nav-toggle-button {
+        display: flex; /* APARECE AQUÍ */
+    }
+
+
+    .nav-colapso {
+        display: flex; /* Siempre en el flujo para poder animar max-height */
+        flex-direction: column;
+        position: absolute;
+        top: 100%; /* Justo debajo del nav */
+        left: 0;
+        width: 100%;
+        background-color: var(--surface-bg);
+        padding: 0 20px;
+        box-shadow: 0 10px 10px rgba(0,0,0,0.3);
+        z-index: 1050;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.35s ease;
+
+    }
+
+    /* ACCIÓN AL MARCAR EL CHECKBOX: se desliza hacia abajo */
+    .check-oculto:checked ~ .nav-colapso {
+        max-height: 600px;
+        opacity: 1;
+        padding: 20px;
+    }
+
+    .lista-nav {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .nav-link-custom {
+        padding: 15px;
+        width: 100%;
+        border-bottom: 1px solid var(--border-soft);
+    }
+
+    .menu-desplegable {
+        position: static;
+        width: 100%;
+        background-color: transparent;
+        box-shadow: none;
+        list-style: none;
+        padding-left: 0; /* Esto asegura que el texto no se mueva a la derecha */
+    }
+
+    .menu-desplegable a {
+        color: var(--text-strong);
+        padding-left: 30px;
+    }
+
+    .form-carrito {
+        margin-top: 20px;
+        width: 100%;
+        justify-content: center;
+        display: flex;
+    }
+
+    .boton-carrito {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+}

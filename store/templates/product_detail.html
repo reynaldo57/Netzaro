@@ -45,6 +45,31 @@
         <!-- GRID DE 3 COLUMNAS -->
         <div class="row g-4">
 
+            <!-- COLUMNA 3: RECOMENDACIONES -->
+            <div class="col-lg-4 col-md-12">
+                <div class="section-column-title">
+                    <span class="indicator-bar bar-purple"></span> Clases Recomendadas
+                </div>
+
+                {% if recommended_products %}
+                <div class="recommend-card">
+                    <span class="recommend-label"><i class="fa-solid fa-users me-1"></i> Estudiantes también vieron</span>
+
+                    {% for rec in recommended_products %}
+                    <div class="mini-course-item">
+                        <img src="{{ rec.image.url }}" class="mini-course-img" alt="{{ rec.name }}">
+                        <div class="mini-course-body">
+                            <a href="{% url 'product' rec.id %}" class="mini-course-title">{{ rec.name }}</a>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="mini-course-price">${{ rec.price }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
             <!-- COLUMNA 1: CLASES GRATIS -->
             <div class="col-lg-4 col-md-6">
                 <div class="section-column-title">
@@ -126,30 +151,7 @@
                 {% endif %}
             </div>
 
-            <!-- COLUMNA 3: RECOMENDACIONES -->
-            <div class="col-lg-4 col-md-12">
-                <div class="section-column-title">
-                    <span class="indicator-bar bar-purple"></span> Clases Recomendadas
-                </div>
-
-                {% if recommended_products %}
-                <div class="recommend-card">
-                    <span class="recommend-label"><i class="fa-solid fa-users me-1"></i> Estudiantes también vieron</span>
-
-                    {% for rec in recommended_products %}
-                    <div class="mini-course-item">
-                        <img src="{{ rec.image.url }}" class="mini-course-img" alt="{{ rec.name }}">
-                        <div class="mini-course-body">
-                            <a href="{% url 'product' rec.id %}" class="mini-course-title">{{ rec.name }}</a>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span class="mini-course-price">${{ rec.price }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
+            
 
         </div>
 
