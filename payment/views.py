@@ -350,16 +350,10 @@ def billing_info(request):
                         #Create order item
                         create_order_item = OrderItem(order_id=order_id, product_id=product_id, user=user, quantity=value, price=price)
                         create_order_item.save()
-            # Delete our cart
-            for key in list(request.session.keys()):
-                if key == "session_key":
-                    #Delete the key
-                    del request.session[key]
 
-            #Delete Cart from Database (old_cart field)
-            current_user = Profile.objects.filter(user__id=request.user.id)
-            #delete shoppin cart in database (old_cart field)
-            current_user.update(old_cart="")
+            # NOTA: el carrito NO se borra aquí. Debe permanecer hasta que el pago
+            # se confirme de verdad (ver payment_success / izipay_result), para que
+            # el contador de "Mis Clases" no baje antes de que el pago esté efectuado.
 
             return render(request, "payment/billing_info.html", {
                 "paypal_form":paypal_form, 
@@ -402,6 +396,8 @@ def billing_info(request):
                         #Create order item
                         create_order_item = OrderItem(order_id=order_id, product_id=product_id, user=user, quantity=value, price=price)
                         create_order_item.save()
+
+            # NOTA: el carrito NO se borra aquí, ver comentario en la rama de usuario autenticado.
 
             #NOt logged In
             #get the billing form
@@ -458,21 +454,18 @@ def checkout(request):
         shipping_form = ShippingForm(request.POST or None)
         return render(request, "payment/checkout.html", {"cart_products":cart_products, "quantities": quantities, "totals": totals, "shipping_form": shipping_form, "coupon": coupon, "lines": lines})
 
-def payment_success(request):
-    #Delete the browse cart
-    #First GET the cart
-    #First Get the cart
-    #Get the cart
-    cart = Cart(request)
-    cart_products = cart.get_prods
-    quantities = cart.get_quants
-    totals = cart.cart_total()
-
-    #Delete our cart
+def _clear_cart(request):
+    """Vacía el carrito de la sesión (y el old_cart guardado) una vez que el pago
+    ya fue confirmado. No debe llamarse antes de que el pago esté efectuado."""
     for key in list(request.session.keys()):
         if key == "session_key":
-            #Delete the key
             del request.session[key]
+    if request.user.is_authenticated:
+        Profile.objects.filter(user__id=request.user.id).update(old_cart="")
+
+def payment_success(request):
+    #El pago con PayPal ya fue confirmado (redirect de retorno tras pago exitoso)
+    _clear_cart(request)
     return render(request, "payment/payment_success.html")
 
 def payment_failed(request):
@@ -563,6 +556,8 @@ def izipay_result(request):
     if answer_json.get("orderStatus") == "PAID":
         order.paid = True
         order.save()
+        #El pago con Izipay ya fue confirmado, recién ahora se vacía el carrito
+        _clear_cart(request)
 
     return render(request, 'izipay_result.html', {'answer': answer_json, 'postData': postData, 'krAnswerData': krAnswerData})
 
