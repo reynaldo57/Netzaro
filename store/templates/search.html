@@ -1,125 +1,174 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Buscar Cursos - ANTARES{% endblock %}
+
 {% block extra_css %}
-<link href="{% static 'css/catalog.css' %}" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="{% static 'js/catalog-tailwind-config.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/catalog-tailwind.css' %}">
 {% endblock %}
 
 {% block content %}
+<div id="catalog-page" class="antialiased">
+    <main class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 py-6">
 
-<div class="antares-catalog">
-
-    <!-- HERO CON BUSCADOR -->
-    <div class="catalog-hero">
-        <h2>Encuentra tu curso ideal</h2>
-        <p>Filtra por categoría, nivel, precio y orden para encontrar exactamente lo que buscas.</p>
-
-        <form method="GET" action="{% url 'search' %}">
-            <div class="hero-search-box">
-                <input type="text" name="q" value="{{ query }}" placeholder="¿Qué quieres aprender hoy?" required>
-                <button type="submit"><i class="fas fa-magnifying-glass me-1"></i> Buscar</button>
+        <!-- HERO CON BUSCADOR -->
+        <section class="relative rounded-2xl overflow-hidden border border-slate-800 shadow-2xl">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200" alt="" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-r from-[#0A0E1A]/95 via-[#0A0E1A]/90 to-[#0A0E1A]/70"></div>
             </div>
+            <div class="relative z-10 p-8 sm:p-12 md:p-14 max-w-3xl space-y-4">
+                <span class="inline-block bg-amber-500/10 border border-amber-500/30 text-amber-400 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider">
+                    Plataforma Educativa
+                </span>
+                <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight tracking-tight text-glow-orange">
+                    Encuentra tu curso ideal
+                </h1>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                    Filtra por categoría, nivel, precio y orden para encontrar exactamente lo que buscas.
+                </p>
 
-            <div class="hero-filter-bar">
-                <select name="category">
-                    <option value="">Todas las categorías</option>
-                    {% for cat in categories %}
-                    <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
-                    {% endfor %}
-                </select>
+                <form method="GET" action="{% url 'search' %}" class="space-y-2.5 pt-2">
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" name="q" value="{{ query }}" placeholder="¿Qué quieres aprender hoy?" required
+                            class="catalog-input flex-1 bg-antares-card border border-slate-700 text-slate-100 text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-amber-500/60">
+                        <button type="submit" class="gradient-orange-btn text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 shrink-0">
+                            <i class="fa-solid fa-magnifying-glass"></i> Buscar
+                        </button>
+                    </div>
 
-                <select name="nivel">
-                    <option value="">Todos los niveles</option>
-                    <option value="Gratis" {% if selected_nivel == "Gratis" %}selected{% endif %}>Versión gratuita</option>
-                    <option value="Pago" {% if selected_nivel == "Pago" %}selected{% endif %}>Versión de pago</option>
-                </select>
+                    <div class="flex flex-wrap gap-2">
+                        <select name="category" class="bg-antares-card border border-slate-700 text-slate-300 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500/60">
+                            <option value="">Todas las categorías</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
 
-                <input type="number" name="price_min" value="{{ price_min }}" placeholder="Precio mín." min="0" step="0.01">
-                <input type="number" name="price_max" value="{{ price_max }}" placeholder="Precio máx." min="0" step="0.01">
+                        <select name="nivel" class="bg-antares-card border border-slate-700 text-slate-300 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500/60">
+                            <option value="">Todos los niveles</option>
+                            <option value="Gratis" {% if selected_nivel == "Gratis" %}selected{% endif %}>Versión gratuita</option>
+                            <option value="Pago" {% if selected_nivel == "Pago" %}selected{% endif %}>Versión de pago</option>
+                        </select>
 
-                <select name="order">
-                    <option value="popularity" {% if selected_order == "popularity" %}selected{% endif %}>Más populares</option>
-                    <option value="relevance" {% if selected_order == "relevance" %}selected{% endif %}>Relevancia</option>
-                    <option value="newest" {% if selected_order == "newest" %}selected{% endif %}>Más nuevos</option>
-                    <option value="price_asc" {% if selected_order == "price_asc" %}selected{% endif %}>Precio: menor a mayor</option>
-                    <option value="price_desc" {% if selected_order == "price_desc" %}selected{% endif %}>Precio: mayor a menor</option>
-                </select>
+                        <input type="number" name="price_min" value="{{ price_min }}" placeholder="Precio mín." min="0" step="0.01"
+                            class="catalog-input w-28 bg-antares-card border border-slate-700 text-slate-300 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500/60">
+                        <input type="number" name="price_max" value="{{ price_max }}" placeholder="Precio máx." min="0" step="0.01"
+                            class="catalog-input w-28 bg-antares-card border border-slate-700 text-slate-300 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500/60">
 
-                <button type="submit"><i class="fas fa-filter me-1"></i> Aplicar filtros</button>
+                        <select name="order" class="bg-antares-card border border-slate-700 text-slate-300 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500/60">
+                            <option value="popularity" {% if selected_order == "popularity" %}selected{% endif %}>Más populares</option>
+                            <option value="relevance" {% if selected_order == "relevance" %}selected{% endif %}>Relevancia</option>
+                            <option value="newest" {% if selected_order == "newest" %}selected{% endif %}>Más nuevos</option>
+                            <option value="price_asc" {% if selected_order == "price_asc" %}selected{% endif %}>Precio: menor a mayor</option>
+                            <option value="price_desc" {% if selected_order == "price_desc" %}selected{% endif %}>Precio: mayor a menor</option>
+                        </select>
+
+                        <button type="submit" class="bg-antares-card hover:bg-antares-cardHover border border-amber-500/30 text-amber-400 font-bold text-xs px-4 py-2 rounded-lg flex items-center gap-2 transition">
+                            <i class="fa-solid fa-filter"></i> Aplicar filtros
+                        </button>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-
-    <div class="main-container">
+        </section>
 
         {% if query %}
-        <h3 class="section-title">Resultados para "{{ query }}"</h3>
-
-        <div class="courses-grid-5col">
-            {% for product in searched %}
-            <div class="original-card">
-                <img src="{{ product.image.url }}" class="card-thumb-original" alt="{{ product.name }}">
-                <div class="card-info-original">
-                    <span class="category-label-original">{{ product.category.name }}</span>
-                    <a href="{% url 'product' product.id %}" class="card-title-original">{{ product.name }}</a>
-                    <div class="card-meta-original">
-                        <span><i class="fa-regular fa-clock me-1" style="color: var(--antares-blue);"></i> {{ product.duration_display }}</span>
-                        <span class="price-tag-original">
-                            {% if product.is_sale and product.sale_price %}${{ product.sale_price }}{% else %}${{ product.price }}{% endif %}
-                        </span>
-                    </div>
-                    <a href="{% url 'product' product.id %}" class="btn-ver-curso-original">Ver Curso</a>
-                </div>
+        <!-- RESULTADOS -->
+        <section class="space-y-6">
+            <div class="text-center space-y-1">
+                <h2 class="text-2xl font-black text-white tracking-tight">Resultados para "{{ query }}"</h2>
+                <div class="w-8 h-1 bg-gradient-to-r from-amber-400 to-rose-500 mx-auto rounded-full"></div>
             </div>
-            {% empty %}
-            <div class="catalog-empty">No se encontraron resultados para tu búsqueda.</div>
-            {% endfor %}
-        </div>
 
-        {% if searched.paginator.num_pages > 1 %}
-        <div class="catalog-pagination">
-            {% if searched.has_previous %}
-            <a href="?q={{ query }}&category={{ selected_category }}&nivel={{ selected_nivel }}&price_min={{ price_min }}&price_max={{ price_max }}&order={{ selected_order }}&page={{ searched.previous_page_number }}">« Anterior</a>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                {% for product in searched %}
+                <article class="bg-antares-card border border-slate-800 hover:border-slate-700 rounded-2xl overflow-hidden flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition duration-200 group">
+                    <div class="p-3">
+                        <div class="relative h-36 w-full rounded-xl overflow-hidden bg-slate-900">
+                            {% if product.is_sale %}<span class="absolute top-2 left-2 z-10 bg-rose-500 text-white font-black text-[9px] uppercase px-2 py-0.5 rounded-md">Oferta</span>{% endif %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
+                        </div>
+                    </div>
+
+                    <div class="px-4 pb-4 space-y-3">
+                        <div>
+                            <span class="text-[10px] font-bold text-amber-400 tracking-wider uppercase">{{ product.category.name }}</span>
+                            <h3 class="font-black text-sm text-white group-hover:text-amber-400 transition line-clamp-2">{{ product.name }}</h3>
+                        </div>
+
+                        <div class="flex items-center justify-between text-xs pt-1">
+                            <span class="text-slate-400 flex items-center gap-1 text-[11px]">
+                                <i class="fa-regular fa-clock text-sky-400"></i> {{ product.duration_display }}
+                            </span>
+                            {% if product.is_sale and product.sale_price %}
+                                <span class="text-sm font-black text-emerald-400">${{ product.sale_price }}</span>
+                            {% else %}
+                                <span class="text-sm font-black text-emerald-400">${{ product.price }}</span>
+                            {% endif %}
+                        </div>
+
+                        <a href="{% url 'product' product.id %}" class="block text-center w-full bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white font-bold text-xs py-2 rounded-xl border border-rose-500/40 transition">
+                            Ver Curso
+                        </a>
+                    </div>
+                </article>
+                {% empty %}
+                <div class="col-span-full text-center text-slate-400 text-sm py-10">No se encontraron resultados para tu búsqueda.</div>
+                {% endfor %}
+            </div>
+
+            {% if searched.paginator.num_pages > 1 %}
+            <div class="flex items-center justify-center gap-4 pt-2 text-xs text-slate-400">
+                {% if searched.has_previous %}
+                <a href="?q={{ query }}&category={{ selected_category }}&nivel={{ selected_nivel }}&price_min={{ price_min }}&price_max={{ price_max }}&order={{ selected_order }}&page={{ searched.previous_page_number }}"
+                    class="bg-antares-card hover:bg-antares-cardHover border border-slate-700 px-4 py-2 rounded-lg font-semibold text-slate-300 transition">« Anterior</a>
+                {% endif %}
+                <span>Página {{ searched.number }} de {{ searched.paginator.num_pages }}</span>
+                {% if searched.has_next %}
+                <a href="?q={{ query }}&category={{ selected_category }}&nivel={{ selected_nivel }}&price_min={{ price_min }}&price_max={{ price_max }}&order={{ selected_order }}&page={{ searched.next_page_number }}"
+                    class="bg-antares-card hover:bg-antares-cardHover border border-slate-700 px-4 py-2 rounded-lg font-semibold text-slate-300 transition">Siguiente »</a>
+                {% endif %}
+            </div>
             {% endif %}
-            <span>Página {{ searched.number }} de {{ searched.paginator.num_pages }}</span>
-            {% if searched.has_next %}
-            <a href="?q={{ query }}&category={{ selected_category }}&nivel={{ selected_nivel }}&price_min={{ price_min }}&price_max={{ price_max }}&order={{ selected_order }}&page={{ searched.next_page_number }}">Siguiente »</a>
-            {% endif %}
-        </div>
-        {% endif %}
+        </section>
         {% endif %}
 
         <!-- POR QUÉ ELEGIRNOS -->
-        <div class="why-choose-section">
-            <h3 class="section-title">¿Por qué elegir ANTARES?</h3>
+        <section class="space-y-6 pb-6">
+            <div class="text-center space-y-1">
+                <h2 class="text-2xl font-black text-white tracking-tight">¿Por qué elegir ANTARES?</h2>
+                <div class="w-8 h-1 bg-gradient-to-r from-amber-400 to-rose-500 mx-auto rounded-full"></div>
+            </div>
 
-            <div class="features-grid">
-                <div class="feature-card-original">
-                    <div class="feature-icon-box">
-                        <i class="fas fa-lightbulb"></i>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                <div class="bg-antares-card border border-slate-800 rounded-2xl p-6 text-center space-y-3">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-lightbulb"></i>
                     </div>
-                    <h5>Aprende de Expertos</h5>
-                    <p>Todos nuestros cursos están dictados por profesionales con experiencia en la industria.</p>
+                    <h3 class="font-black text-sm text-white">Aprende de Expertos</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Todos nuestros cursos están dictados por profesionales con experiencia en la industria.</p>
                 </div>
 
-                <div class="feature-card-original">
-                    <div class="feature-icon-box" style="background-color: #fff7ed; color: var(--antares-orange);">
-                        <i class="fas fa-user-friends"></i>
+                <div class="bg-antares-card border border-slate-800 rounded-2xl p-6 text-center space-y-3">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-user-friends"></i>
                     </div>
-                    <h5>Comunidad Activa</h5>
-                    <p>Conéctate con estudiantes y profesionales de todo el mundo.</p>
+                    <h3 class="font-black text-sm text-white">Comunidad Activa</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Conéctate con estudiantes y profesionales de todo el mundo.</p>
                 </div>
 
-                <div class="feature-card-original">
-                    <div class="feature-icon-box" style="background-color: #f0fdf4; color: #16a34a;">
-                        <i class="fas fa-certificate"></i>
+                <div class="bg-antares-card border border-slate-800 rounded-2xl p-6 text-center space-y-3">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-certificate"></i>
                     </div>
-                    <h5>Certificación</h5>
-                    <p>Recibe un certificado al completar tu curso para potenciar tu perfil profesional.</p>
+                    <h3 class="font-black text-sm text-white">Certificación</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Recibe un certificado al completar tu curso para potenciar tu perfil profesional.</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-    </div>
+    </main>
 </div>
 {% endblock %}

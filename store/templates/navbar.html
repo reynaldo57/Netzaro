@@ -1,7 +1,8 @@
+{% load static %}
 <!-- Navigation-->
 <nav class="nav-principal" id="navbarPrincipal">
     <div  class="contenedor-nav">
-        <a class="nav-logo" href="{% url 'index' %}"><i class="bi bi-mortarboard-fill"></i> ANTARES</a>
+        <a class="nav-logo" href="{% url 'index' %}"><img src="{% static 'assets/antares_logo_navbar.png' %}" alt="ANTARES"></a>
 
         <!-- TRUCO CSS: Checkbox oculto para controlar el menú -->
         <input type="checkbox" id="menu-toggle" class="check-oculto">

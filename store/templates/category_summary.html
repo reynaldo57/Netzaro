@@ -1,102 +1,156 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Catálogo de Cursos - ANTARES{% endblock %}
+
 {% block extra_css %}
-<link href="{% static 'css/catalog.css' %}" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="{% static 'js/catalog-tailwind-config.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/catalog-tailwind.css' %}">
 {% endblock %}
 
 {% block content %}
+<div id="catalog-page" class="antialiased">
+    <main class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 py-6">
 
-<div class="antares-catalog">
-
-    <!-- HERO -->
-    <div class="catalog-hero">
-        <h2>Aprende a tu propio ritmo</h2>
-        <p>Explora cursos impartidos por expertos y fortalece tus conocimientos hoy mismo.</p>
-    </div>
-
-    <div class="main-container">
+        <!-- HERO BANNER -->
+        <section class="relative rounded-2xl overflow-hidden border border-slate-800 shadow-2xl">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200" alt="" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-r from-[#0A0E1A]/95 via-[#0A0E1A]/85 to-transparent"></div>
+            </div>
+            <div class="relative z-10 p-8 sm:p-12 md:p-14 max-w-xl space-y-3">
+                <span class="inline-block bg-amber-500/10 border border-amber-500/30 text-amber-400 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider">
+                    Plataforma Educativa
+                </span>
+                <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight tracking-tight text-glow-orange">
+                    Aprende a tu propio ritmo
+                </h1>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                    Explora cursos impartidos por expertos y fortalece tus conocimientos hoy mismo.
+                </p>
+            </div>
+        </section>
 
         <!-- CATEGORÍAS -->
-        <h3 class="section-title">Categorías</h3>
-        <div class="category-pills">
-            <a href="{% url 'category_summary' %}" class="pill-btn active-orange">
-                <i class="fas fa-border-all"></i> Todos los Cursos
-            </a>
-            {% for category in categories %}
-            <a href="{% url 'category' category %}" class="pill-btn">
-                <i class="fas fa-layer-group"></i> {{ category }}
-            </a>
-            {% endfor %}
-        </div>
+        <section class="space-y-5 text-center">
+            <div class="space-y-1">
+                <h2 class="text-2xl font-black text-white tracking-tight">Categorías</h2>
+                <div class="w-8 h-1 bg-gradient-to-r from-amber-400 to-rose-500 mx-auto rounded-full"></div>
+            </div>
 
-        <!-- CURSOS -->
-        <h3 class="section-title">Todos los Cursos</h3>
+            <div class="flex flex-wrap items-center justify-center gap-3 pt-1">
+                <a href="{% url 'category_summary' %}" class="gradient-orange-btn text-white font-bold text-xs px-5 py-2.5 rounded-full shadow-lg shadow-orange-500/20 flex items-center gap-2">
+                    <i class="fa-solid fa-border-all"></i> Todos los Cursos
+                </a>
+                {% for cat in categories %}
+                <a href="{% url 'category' cat %}" class="bg-antares-card hover:bg-antares-cardHover border border-sky-500/30 text-sky-300 font-semibold text-xs px-5 py-2.5 rounded-full flex items-center gap-2 transition">
+                    <i class="fa-solid fa-layer-group text-sky-400"></i> {{ cat }}
+                </a>
+                {% endfor %}
+            </div>
+        </section>
 
-        <div class="courses-grid-5col">
-            {% for product in products %}
-            <div class="original-card">
-                <img src="{{ product.image.url }}" class="card-thumb-original" alt="{{ product.name }}">
-                <div class="card-info-original">
-                    <span class="category-label-original">{{ product.category.name }}</span>
-                    <a href="{% url 'product' product.id %}" class="card-title-original">{{ product.name }}</a>
-                    <div class="card-meta-original">
-                        <span><i class="fa-regular fa-clock me-1" style="color: var(--antares-blue);"></i> {{ product.duration_display }}</span>
-                        <span class="price-tag-original">
-                            {% if product.is_sale and product.sale_price %}${{ product.sale_price }}{% else %}${{ product.price }}{% endif %}
-                        </span>
+        <!-- TODOS LOS CURSOS -->
+        <section class="space-y-6">
+            <div class="text-center space-y-1">
+                <h2 class="text-2xl font-black text-white tracking-tight">Todos los Cursos</h2>
+                <div class="w-8 h-1 bg-gradient-to-r from-amber-400 to-rose-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                {% for product in products %}
+                <article class="bg-antares-card border border-slate-800 hover:border-slate-700 rounded-2xl overflow-hidden flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition duration-200 group">
+                    <div class="p-3">
+                        <div class="relative h-36 w-full rounded-xl overflow-hidden bg-slate-900">
+                            {% if product.is_sale %}<span class="absolute top-2 left-2 z-10 bg-rose-500 text-white font-black text-[9px] uppercase px-2 py-0.5 rounded-md">Oferta</span>{% endif %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
+                        </div>
                     </div>
-                    <a href="{% url 'product' product.id %}" class="btn-ver-curso-original">Ver Curso</a>
-                </div>
-            </div>
-            {% empty %}
-            <div class="catalog-empty">Todavía no hay cursos publicados.</div>
-            {% endfor %}
-        </div>
 
-        <!-- BANNER PROMOCIONAL -->
-        <div class="promo-banner-horizontal">
-            <div class="d-flex align-items-center gap-3">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=300&q=80" alt="Comunidad">
-                <div class="promo-banner-text">
-                    <h5>Nuevas lecciones disponibles cada semana</h5>
-                    <p>Únete a la comunidad de estudiantes y accede a tutorías en vivo en Antares.</p>
-                </div>
+                    <div class="px-4 pb-4 space-y-3">
+                        <div>
+                            <span class="text-[10px] font-bold text-amber-400 tracking-wider uppercase">{{ product.category.name }}</span>
+                            <h3 class="font-black text-sm text-white group-hover:text-amber-400 transition line-clamp-2">{{ product.name }}</h3>
+                        </div>
+
+                        <div class="flex items-center justify-between text-xs pt-1">
+                            <span class="text-slate-400 flex items-center gap-1 text-[11px]">
+                                <i class="fa-regular fa-clock text-sky-400"></i> {{ product.duration_display }}
+                            </span>
+                            {% if product.is_sale and product.sale_price %}
+                                <span class="text-sm font-black text-emerald-400">${{ product.sale_price }}</span>
+                            {% else %}
+                                <span class="text-sm font-black text-emerald-400">${{ product.price }}</span>
+                            {% endif %}
+                        </div>
+
+                        <a href="{% url 'product' product.id %}" class="block text-center w-full bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white font-bold text-xs py-2 rounded-xl border border-rose-500/40 transition">
+                            Ver Curso
+                        </a>
+                    </div>
+                </article>
+                {% empty %}
+                <div class="col-span-full text-center text-slate-400 text-sm py-10">Todavía no hay cursos publicados.</div>
+                {% endfor %}
             </div>
-            <a href="{% url 'search' %}" class="btn-promo-explore">Explorar Más</a>
-        </div>
+        </section>
+
+        <!-- BANNER INFERIOR -->
+        <section class="gradient-banner-bottom border border-rose-500/30 rounded-2xl p-5 sm:p-6 shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-5 relative z-10">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-rose-400/30 shadow-md">
+                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=200" alt="Comunidad" class="w-full h-full object-cover">
+                    </div>
+                    <div class="space-y-0.5 text-center sm:text-left">
+                        <h3 class="text-base font-black text-white">Nuevas lecciones disponibles cada semana</h3>
+                        <p class="text-xs text-rose-200/80">Únete a la comunidad de estudiantes y accede a tutorías en vivo en Antares.</p>
+                    </div>
+                </div>
+
+                <a href="{% url 'search' %}" class="bg-rose-500 hover:bg-rose-400 text-white font-extrabold text-xs px-6 py-2.5 rounded-xl shadow-lg shadow-rose-500/30 shrink-0 transition">
+                    Explorar Más
+                </a>
+            </div>
+        </section>
 
         <!-- POR QUÉ ELEGIRNOS -->
-        <div class="why-choose-section">
-            <h3 class="section-title">¿Por qué elegir ANTARES?</h3>
+        <section class="space-y-6 pb-6">
+            <div class="text-center space-y-1">
+                <h2 class="text-2xl font-black text-white tracking-tight">¿Por qué elegir ANTARES?</h2>
+                <div class="w-8 h-1 bg-gradient-to-r from-amber-400 to-rose-500 mx-auto rounded-full"></div>
+            </div>
 
-            <div class="features-grid">
-                <div class="feature-card-original">
-                    <div class="feature-icon-box">
-                        <i class="fas fa-certificate"></i>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                <div class="bg-antares-card border border-slate-800 rounded-2xl p-6 text-center space-y-3">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-certificate"></i>
                     </div>
-                    <h5>Calidad Garantizada</h5>
-                    <p>Contenido rigurosamente revisado y estructurado por instructores expertos.</p>
+                    <h3 class="font-black text-sm text-white">Calidad Garantizada</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Contenido rigurosamente revisado y estructurado por instructores expertos.</p>
                 </div>
 
-                <div class="feature-card-original">
-                    <div class="feature-icon-box" style="background-color: #fff7ed; color: var(--antares-orange);">
-                        <i class="fas fa-circle-play"></i>
+                <div class="bg-antares-card border border-slate-800 rounded-2xl p-6 text-center space-y-3">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-circle-play"></i>
                     </div>
-                    <h5>Acceso Inmediato</h5>
-                    <p>Comienza tus lecciones al instante desde cualquier dispositivo y a tu propio ritmo.</p>
+                    <h3 class="font-black text-sm text-white">Acceso Inmediato</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Comienza tus lecciones al instante desde cualquier dispositivo y a tu propio ritmo.</p>
                 </div>
 
-                <div class="feature-card-original">
-                    <div class="feature-icon-box" style="background-color: #f0fdf4; color: #16a34a;">
-                        <i class="fas fa-shield-halved"></i>
+                <div class="bg-antares-card border border-slate-800 rounded-2xl p-6 text-center space-y-3">
+                    <div class="w-12 h-12 mx-auto rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-shield-halved"></i>
                     </div>
-                    <h5>Pago 100% Seguro</h5>
-                    <p>Tus transacciones y datos de compra están protegidos bajo cifrado de alta seguridad.</p>
+                    <h3 class="font-black text-sm text-white">Pago 100% Seguro</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Tus transacciones y datos de compra están protegidos bajo cifrado de alta seguridad.</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-    </div>
+    </main>
 </div>
 {% endblock %}

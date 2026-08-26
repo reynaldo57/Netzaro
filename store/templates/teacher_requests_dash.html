@@ -1,55 +1,233 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Solicitudes de Profesor - ANTARES{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="{% static 'js/catalog-tailwind-config.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/catalog-tailwind.css' %}">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+<style>
+  #teacherRequestsTable_wrapper { padding-top: 4px; }
+
+  .dataTables_length,
+  .dataTables_filter {
+    margin-bottom: 0;
+    color: #94a3b8;
+    font-size: 0.75rem;
+  }
+
+  .dataTables_filter input,
+  .dataTables_length select {
+    background-color: #0B132B;
+    border: 1px solid #1E293B;
+    color: #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    margin-left: 6px;
+  }
+
+  .dataTables_filter input:focus,
+  .dataTables_length select:focus {
+    outline: none;
+    border-color: #FF5722;
+  }
+
+  .dataTables_info {
+    color: #94a3b8;
+    font-size: 0.75rem;
+    padding-top: 0.5rem;
+  }
+
+  table.dataTable tbody tr:hover {
+    background-color: rgba(30, 41, 59, 0.4);
+  }
+
+  .dataTables_paginate {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .dataTables_paginate .paginate_button {
+    padding: 6px 12px !important;
+    border-radius: 0.75rem !important;
+    background-color: #0B132B !important;
+    color: #cbd5e1 !important;
+    border: 1px solid #1E293B !important;
+    font-weight: 600;
+    font-size: 0.75rem;
+    transition: background-color 0.2s;
+  }
+
+  .dataTables_paginate .paginate_button.disabled {
+    color: #475569 !important;
+    cursor: not-allowed;
+  }
+
+  .dataTables_paginate .paginate_button:hover:not(.disabled):not(.current) {
+    background-color: #162244 !important;
+    color: #fff !important;
+    cursor: pointer;
+  }
+
+  .dataTables_paginate .paginate_button.current {
+    background: linear-gradient(135deg, #FFB703 0%, #FF5722 50%, #E63946 100%) !important;
+    color: #fff !important;
+    border: none !important;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container my-4">
-    <h1>Solicitudes de Profesor</h1>
-    <div class="table-responsive">
-    <table class="table table-bordered table-striped align-middle">
-        <thead>
-            <tr>
-                <th>Usuario</th>
-                <th>Nombre completo</th>
-                <th>Profesión</th>
-                <th>Especialidad</th>
-                <th>Experiencia</th>
-                <th>Certificado</th>
-                <th>Sobre él/ella</th>
-                <th>Fecha de solicitud</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for profile in pending_requests %}
-            <tr>
-                <td>{{ profile.user.username }}</td>
-                {% with application=profile.teacher_application %}
-                <td>{{ application.full_name|default:"—" }}</td>
-                <td>{{ application.profession|default:"—" }}</td>
-                <td>{{ application.specialty|default:"—" }}</td>
-                <td>{{ application.experience_years|default:"—" }} años</td>
-                <td>
-                    {% if application.certificate %}
-                    <a href="{{ application.certificate.url }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Ver certificado</a>
-                    {% else %}
-                    —
-                    {% endif %}
-                </td>
-                <td style="max-width: 250px; white-space: pre-wrap;">{{ application.bio|default:"—" }}</td>
-                {% endwith %}
-                <td>{{ profile.teacher_request_date }}</td>
-                <td>
-                    <form method="POST" style="display:inline;">
-                        {% csrf_token %}
-                        <input type="hidden" name="profile_id" value="{{ profile.id }}">
-                        <button type="submit" name="decision" value="approve" class="btn btn-success btn-sm">Aprobar</button>
-                        <button type="submit" name="decision" value="reject" class="btn btn-danger btn-sm">Rechazar</button>
-                    </form>
-                </td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="9">No hay solicitudes pendientes.</td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    </div>
+<div id="catalog-page" class="antialiased">
+    <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+
+        <!-- HEADER CON BANNER -->
+        <div class="bg-antares-card border border-slate-800 rounded-3xl p-6 relative overflow-hidden shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200" alt="" class="absolute inset-0 w-full h-full object-cover opacity-5 pointer-events-none">
+
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl gradient-orange-btn flex items-center justify-center text-white text-xl shadow-lg shadow-orange-500/20 shrink-0">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 font-bold text-[11px] px-3 py-0.5 rounded-full uppercase tracking-wider">
+                            <i class="fa-solid fa-user-graduate"></i> Gestión de Profesores
+                        </span>
+                        <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                            Solicitudes de Profesor
+                        </h1>
+                        <p class="text-xs text-slate-400">
+                            Revisa el perfil de cada candidato y aprueba o rechaza su solicitud para dictar cursos.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 shrink-0">
+                    <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-3 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                            <i class="fa-solid fa-hourglass-half text-base"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase block">Pendientes</span>
+                            <span class="text-base font-black text-white">{{ pending_requests|length }} Solicitudes</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-3 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                            <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase block">Estado</span>
+                            <span class="text-base font-black text-white">Por revisar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TARJETA CONTENEDORA DE LA TABLA -->
+        <div class="bg-antares-card border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl space-y-5">
+
+            <div class="overflow-x-auto rounded-xl border border-slate-800/80">
+                <table id="teacherRequestsTable" class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900/90 text-[11px] font-extrabold uppercase text-slate-400 tracking-wider border-b border-slate-800">
+                            <th class="py-4 px-4">Usuario</th>
+                            <th class="py-4 px-4">Nombre completo</th>
+                            <th class="py-4 px-4">Profesión</th>
+                            <th class="py-4 px-4">Especialidad</th>
+                            <th class="py-4 px-4">Experiencia</th>
+                            <th class="py-4 px-4">Certificado</th>
+                            <th class="py-4 px-4">Sobre él/ella</th>
+                            <th class="py-4 px-4">Fecha de solicitud</th>
+                            <th class="py-4 px-4 text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 text-xs text-slate-300 font-medium">
+                        {% for profile in pending_requests %}
+                        <tr class="hover:bg-slate-900/50 transition duration-150">
+                            <td class="py-3.5 px-4 font-bold text-amber-400">{{ profile.user.username }}</td>
+                            {% with application=profile.teacher_application %}
+                            <td class="py-3.5 px-4 text-slate-200">{{ application.full_name|default:"—" }}</td>
+                            <td class="py-3.5 px-4">
+                                {% if application.profession %}
+                                <span class="bg-sky-500/10 border border-sky-500/30 text-sky-300 text-[11px] px-2.5 py-1 rounded-lg font-bold">{{ application.profession }}</span>
+                                {% else %}
+                                <span class="text-slate-500 italic">—</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-3.5 px-4 text-amber-400 font-semibold">{{ application.specialty|default:"—" }}</td>
+                            <td class="py-3.5 px-4 text-slate-300">{{ application.experience_years|default:"—" }} años</td>
+                            <td class="py-3.5 px-4">
+                                {% if application.certificate %}
+                                <a href="{{ application.certificate.url }}" target="_blank" rel="noopener" class="bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white font-bold text-[11px] px-3 py-1.5 rounded-lg border border-rose-500/40 transition inline-flex items-center gap-1.5">
+                                    <i class="fa-solid fa-certificate text-[10px]"></i> Ver
+                                </a>
+                                {% else %}
+                                <span class="text-slate-500 italic">—</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-3.5 px-4 text-slate-400 max-w-[250px] whitespace-pre-wrap">{{ application.bio|default:"—" }}</td>
+                            {% endwith %}
+                            <td class="py-3.5 px-4 text-slate-400 text-[11px]">{{ profile.teacher_request_date }}</td>
+                            <td class="py-3.5 px-4 text-center">
+                                <form method="POST" class="flex items-center justify-center gap-1.5">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="profile_id" value="{{ profile.id }}">
+                                    <button type="submit" name="decision" value="approve" class="bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-white font-bold text-[11px] px-3 py-1.5 rounded-xl border border-emerald-500/40 transition inline-flex items-center gap-1.5">
+                                        <i class="fa-solid fa-check text-[10px]"></i> Aprobar
+                                    </button>
+                                    <button type="submit" name="decision" value="reject" class="bg-slate-800/80 hover:bg-rose-500 text-slate-300 hover:text-white font-bold text-[11px] px-3 py-1.5 rounded-xl border border-slate-700/60 transition inline-flex items-center gap-1.5">
+                                        <i class="fa-solid fa-xmark text-[10px]"></i> Rechazar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="9" class="text-center text-slate-500 italic py-10">No hay solicitudes pendientes.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </main>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#teacherRequestsTable').DataTable({
+      responsive: true,
+      language: {
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ registros",
+        info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+        paginate: {
+          first: "Primero",
+          last: "Último",
+          next: "Siguiente",
+          previous: "Anterior"
+        },
+        zeroRecords: "No se encontraron resultados",
+        infoEmpty: "No hay registros disponibles",
+        infoFiltered: "(filtrado de _MAX_ registros totales)"
+      }
+    });
+  });
+</script>
 {% endblock %}

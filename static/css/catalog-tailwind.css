@@ -1,0 +1,38 @@
+/* ============================================
+   Estilos complementarios a Tailwind para las páginas
+   de catálogo (category_summary, category, search).
+   Reglas que Tailwind no expresa como utilidades.
+   Misma paleta que index.css (ReyTech).
+   ============================================ */
+
+#catalog-page {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #040914;
+    color: #e2e8f0;
+}
+
+.gradient-orange-btn {
+    background: linear-gradient(135deg, #FFB703 0%, #FF5722 50%, #E63946 100%);
+    transition: all 0.2s ease-in-out;
+}
+
+.gradient-orange-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+}
+
+.gradient-blue-card {
+    background: linear-gradient(135deg, #0B132B 0%, #040914 100%);
+}
+
+.gradient-banner-bottom {
+    background: linear-gradient(135deg, #2B0F1A 0%, #1A1030 50%, #0B132B 100%);
+}
+
+.text-glow-orange {
+    text-shadow: 0 0 20px rgba(255, 183, 3, 0.35);
+}
+
+.catalog-input::placeholder {
+    color: #64748b;
+}

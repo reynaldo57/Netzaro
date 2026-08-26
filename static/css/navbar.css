@@ -1,7 +1,7 @@
 
     /* --- CONFIGURACIÓN BASE --- */
 .nav-principal {
-    background-color: rgba(26, 36, 54, 0.88);
+    background-color: rgba(4, 9, 20, 0.85);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     position: fixed;
@@ -48,6 +48,12 @@
     font-size: 1.25rem;
 }
 
+.nav-logo img {
+    height: 26px;
+    width: auto;
+    object-fit: contain;
+}
+
 /* --- MENÚ PC (ESCRITORIO) --- */
 .nav-colapso {
     display: flex;
@@ -91,7 +97,7 @@
 }
 
 .nav-link-custom:hover {
-    background-color: rgba(232, 93, 25, 0.08);
+    background-color: rgba(255, 183, 3, 0.10);
     color: var(--naranja);
 }
 
@@ -164,13 +170,14 @@
     font-size: 0.7rem;
     display: flex;
     align-items: center;
-    box-shadow: 0 3px 10px rgba(232, 93, 25, 0.3);
+    box-shadow: 0 3px 10px rgba(255, 87, 34, 0.3);
     transition: all 0.3s ease;
 }
 
 .boton-carrito:hover {
     opacity: 0.92;
     transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(255, 87, 34, 0.4);
 }
 
 .icono-carrito {

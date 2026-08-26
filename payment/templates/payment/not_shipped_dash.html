@@ -1,186 +1,203 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block content %}
+{% block title %}Órdenes Pendientes - ANTARES{% endblock %}
 
-<!-- HERO HEADER -->
-<header>
-      <h1>Listado de Órdenes Enviadas</h1>
-      <p>Gestión de pedidos con estilo y funcionalidad</p>
-</header>
+{% block extra_css %}
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="{% static 'js/catalog-tailwind-config.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/catalog-tailwind.css' %}">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
-<!-- CONTENIDO -->
-<div class="container-fluid px-4 py-1">
-  <div class="bg-white rounded p-2">
-    <h4 class="text-center text-danger mb-4">Órdenes Pendientes de Envío</h4>
-
-    <div class="table-responsive">
-      <table id="unshippedTable" class="table table-bordered table-striped table-hover align-middle w-100">
-        <thead class="table-danger text-dark">
-          <tr>
-            <th>Order</th>
-            <th>Curso</th>
-            <th>Precio</th>
-            <th>Email</th>
-            <th>Fecha Pedido</th>
-            <th>Inicio</th>
-            <th>Fin</th>
-            <th>Tema</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in orders %}
-          <tr>
-            <td><a href="{% url 'orders' item.id %}">{{ item.id }}</a></td>
-            <td>
-              {% for p in item.orderitem_set.all %}
-                {{ p.product }}{% if not forloop.last %}, {% endif %}
-              {% endfor %}
-            </td>
-            <td>${{ item.amount_paid }}</td>
-            <td>{{ item.email }}</td>
-            <td>{{ item.date_ordered }}</td>
-            <td>{{ item.tiempo_inicio }}</td>
-            <td>{{ item.tiempo_fin }}</td>
-            <td>{{ item.tema_estudio }}</td>
-            <td>
-              <form method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="shipping_status" value="true">
-                <input type="hidden" name="num" value="{{ item.id }}">
-                <button type="submit" class="btn btn-outline-danger btn-sm">Marcar Enviado</button>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- ESTILOS PERSONALIZADOS -->
 <style>
-  :root {
-        --color-dominante: #ffffff;    /* 60% - Blanco (Limpieza absoluta) */
-        --color-primario: #b91c1c;      /* 30% - Rojo Sangre (Poder y acción) */
-        --color-secundario: #1d3557;    /* 10% - Azul Marino (Confianza y detalle) */
-        --gris-borde: #e2e8f0;
-        --texto-negro: #000000;
-    }
-    /* ========== HEADER REFINADO ========== */
-    header {
-        background: var(--color-primario) !important;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-bottom: 5px solid var(--color-secundario);
-        margin-bottom: 1rem;
-        height: 100px !important;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        padding: 1rem 0 !important;
-    }
-
-    header h1 {
-        color: white !important;
-        font-weight: bold !important;
-        text-transform: uppercase;
-        margin-top: 1rem;
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        letter-spacing: -0.5px;
-    }
-    header p {
-        color: white !important;
-        margin-top: 1px;
-    }
-  .hero-header {
-    background: linear-gradient(rgba(100, 0, 0, 0.6), rgba(100, 0, 0, 0.6)), url('/static/assets/fondo1.jpg') center/cover no-repeat;
-    min-height: 220px;
-    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
-  }
-
-  #unshippedTable_wrapper {
-    padding-top: 10px;
-  }
+  #unshippedTable_wrapper { padding-top: 4px; }
 
   .dataTables_length,
   .dataTables_filter {
-    margin-bottom: 1rem;
+    margin-bottom: 0;
+    color: #94a3b8;
+    font-size: 0.75rem;
   }
 
   .dataTables_filter input,
   .dataTables_length select {
-    border-radius: 6px;
-    padding: 6px 10px;
-    border: 1px solid #ced4da;
+    background-color: #0B132B;
+    border: 1px solid #1E293B;
+    color: #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    margin-left: 6px;
+  }
+
+  .dataTables_filter input:focus,
+  .dataTables_length select:focus {
+    outline: none;
+    border-color: #FF5722;
   }
 
   .dataTables_info {
+    color: #94a3b8;
+    font-size: 0.75rem;
     padding-top: 0.5rem;
-    font-size: 0.9rem;
   }
 
   table.dataTable tbody tr:hover {
-    background-color: #ffe0e0;
+    background-color: rgba(30, 41, 59, 0.4);
   }
 
-  a {
-    color: #c1121f;
-    font-weight: 500;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-
-  /* Paginación elegante */
   .dataTables_paginate {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
     flex-wrap: wrap;
     margin-top: 1rem;
   }
 
   .dataTables_paginate .paginate_button {
-    padding: 8px 14px !important;
-    margin: 3px;
-    border-radius: 8px !important;
-    background-color: #fff0f0 !important;
-    color: #b00020 !important;
-    border: 1px solid #ffc2c2 !important;
-    font-weight: 500;
-    transition: background-color 0.3s;
+    padding: 6px 12px !important;
+    border-radius: 0.75rem !important;
+    background-color: #0B132B !important;
+    color: #cbd5e1 !important;
+    border: 1px solid #1E293B !important;
+    font-weight: 600;
+    font-size: 0.75rem;
+    transition: background-color 0.2s;
   }
 
-  .dataTables_paginate .paginate_button:hover {
-    background-color: #ffd6d6 !important;
-    color: #8b0000 !important;
+  .dataTables_paginate .paginate_button.disabled {
+    color: #475569 !important;
+    cursor: not-allowed;
+  }
+
+  .dataTables_paginate .paginate_button:hover:not(.disabled):not(.current) {
+    background-color: #162244 !important;
+    color: #fff !important;
     cursor: pointer;
   }
 
   .dataTables_paginate .paginate_button.current {
-    background-color: #b00020 !important;
-    color: white !important;
-    font-weight: bold;
-    border: 1px solid #b00020 !important;
-  }
-
-  @media (max-width: 768px) {
-    h1.display-5 {
-      font-size: 1.7rem;
-    }
-
-    .table th,
-    .table td {
-      font-size: 0.85rem;
-    }
+    background: linear-gradient(135deg, #FFB703 0%, #FF5722 50%, #E63946 100%) !important;
+    color: #fff !important;
+    border: none !important;
   }
 </style>
+{% endblock %}
 
-<!-- SCRIPTS -->
+{% block content %}
+<div id="catalog-page" class="antialiased">
+    <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+
+        <!-- HEADER CON BANNER -->
+        <div class="bg-antares-card border border-slate-800 rounded-3xl p-6 relative overflow-hidden shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200" alt="" class="absolute inset-0 w-full h-full object-cover opacity-5 pointer-events-none">
+
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl gradient-orange-btn flex items-center justify-center text-white text-xl shadow-lg shadow-orange-500/20 shrink-0">
+                        <i class="fa-solid fa-box-archive"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 font-bold text-[11px] px-3 py-0.5 rounded-full uppercase tracking-wider">
+                            <i class="fa-solid fa-clock"></i> Gestión de Envíos
+                        </span>
+                        <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                            Órdenes Pendientes
+                        </h1>
+                        <p class="text-xs text-slate-400">
+                            Revisa las solicitudes de estudiantes y confirma los envíos pendientes.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 shrink-0">
+                    <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-3 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                            <i class="fa-solid fa-clock text-base"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase block">Total Pendientes</span>
+                            <span class="text-base font-black text-white">{{ orders|length }} Pedidos</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-3 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                            <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase block">Estado</span>
+                            <span class="text-base font-black text-white">Pendientes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TARJETA CONTENEDORA DE LA TABLA -->
+        <div class="bg-antares-card border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl space-y-5">
+
+            <div class="overflow-x-auto rounded-xl border border-slate-800/80">
+                <table id="unshippedTable" class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900/90 text-[11px] font-extrabold uppercase text-slate-400 tracking-wider border-b border-slate-800">
+                            <th class="py-4 px-4">Order</th>
+                            <th class="py-4 px-4">Curso</th>
+                            <th class="py-4 px-4">Precio</th>
+                            <th class="py-4 px-4">Email Cliente</th>
+                            <th class="py-4 px-4">Fecha Pedido</th>
+                            <th class="py-4 px-4">Horario (Inicio / Fin)</th>
+                            <th class="py-4 px-4">Tema</th>
+                            <th class="py-4 px-4 text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 text-xs text-slate-300 font-medium">
+                        {% for item in orders %}
+                        <tr class="hover:bg-slate-900/50 transition duration-150">
+                            <td class="py-3.5 px-4 font-bold text-amber-400">
+                                <a href="{% url 'orders' item.id %}" class="hover:text-amber-300 transition">#{{ item.id }}</a>
+                            </td>
+                            <td class="py-3.5 px-4">
+                                <div class="flex flex-wrap gap-1">
+                                    {% for p in item.orderitem_set.all %}
+                                    <span class="bg-sky-500/10 border border-sky-500/30 text-sky-300 text-[11px] px-2.5 py-1 rounded-lg font-bold">{{ p.product }}</span>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td class="py-3.5 px-4 font-black text-emerald-400">${{ item.amount_paid }}</td>
+                            <td class="py-3.5 px-4 text-slate-300">{{ item.email }}</td>
+                            <td class="py-3.5 px-4 text-slate-400 text-[11px]">{{ item.date_ordered }}</td>
+                            <td class="py-3.5 px-4 text-[11px]">
+                                {% if item.tiempo_inicio %}
+                                <span class="text-slate-200 font-semibold block">{{ item.tiempo_inicio }}</span>
+                                <span class="text-slate-500 text-[10px]">Fin: {{ item.tiempo_fin }}</span>
+                                {% else %}
+                                <span class="text-slate-500 italic">Sin programar</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-3.5 px-4 text-amber-400 font-semibold">{{ item.tema_estudio|default:"—" }}</td>
+                            <td class="py-3.5 px-4 text-center">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="shipping_status" value="true">
+                                    <input type="hidden" name="num" value="{{ item.id }}">
+                                    <button type="submit" class="gradient-orange-btn hover:opacity-90 text-white font-bold text-[11px] px-3.5 py-1.5 rounded-xl shadow-md transition inline-flex items-center gap-1.5">
+                                        <i class="fa-solid fa-paper-plane text-[10px]"></i> Marcar Enviado
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
@@ -188,7 +205,7 @@
     $('#unshippedTable').DataTable({
       responsive: true,
       language: {
-        search: "🔎 Buscar:",
+        search: "Buscar:",
         lengthMenu: "Mostrar _MENU_ registros",
         info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
         paginate: {
@@ -204,5 +221,4 @@
     });
   });
 </script>
-
 {% endblock %}

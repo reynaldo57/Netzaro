@@ -1,239 +1,307 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}ReyTech - Plataforma de Idiomas{% endblock %}
+
 {% block extra_css %}
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="{% static 'js/tailwind-config.js' %}"></script>
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
 {% endblock %}
 
 {% block content %}
+<div id="reytech-page" class="antialiased flex flex-col min-h-screen">
 
-<div class="top-banner">
-    <span>🔥 <strong>¡Oferta de temporada!</strong> Reserva tu primera clase de prueba hoy mismo.</span>
-    <a href="#cursos" class="btn-sm">Ver Cursos</a>
-</div>
-
-<section class="hero-section">
-    <div class="hero-container">
-        <div class="hero-content">
-            <h1>Domina Nuevos Idiomas con ReyTech</h1>
-            <p class="hero-lead">Aprendizaje personalizado, metodología eficaz y contenido innovador para que hables desde la primera clase.</p>
-
-            <ul class="features-list">
-                <li><i class="fa-solid fa-circle-check"></i> Clases reservables con profesores reales</li>
-                <li><i class="fa-solid fa-circle-check"></i> Certificados verificables al finalizar</li>
-                <li><i class="fa-solid fa-circle-check"></i> Estrategias de aprendizaje probadas</li>
-            </ul>
-
-            <a href="#cursos" class="btn-cta">
-                Explorar Cursos <i class="fa-solid fa-arrow-right"></i>
+    <!-- BANNER SUPERIOR DE OFERTA -->
+    <div class="bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 text-slate-950 font-bold text-xs py-2 px-4 shadow-md">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <span class="flex items-center gap-2">
+                <i class="fa-solid fa-fire text-amber-200 animate-bounce"></i>
+                <span><strong>¡Oferta de temporada!</strong> Reserva tu primera clase de prueba hoy mismo.</span>
+            </span>
+            <a href="#cursos" class="bg-slate-950 text-amber-400 hover:bg-slate-900 text-[11px] font-extrabold px-3 py-1 rounded-full transition shrink-0 ml-2">
+                Ver Cursos
             </a>
         </div>
-
-        <div class="hero-form-card">
-            <h3>Reserva una Clase de Prueba</h3>
-            <p class="form-subtitle">Completa el formulario y te contactaremos en minutos</p>
-            <form action="#" method="POST">
-                <div class="form-group">
-                    <label for="name">Nombre y Apellido</label>
-                    <input type="text" id="name" name="name" placeholder="Ej. Reynaldo Silva" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Correo electrónico</label>
-                    <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Mensaje</label>
-                    <textarea id="message" name="message" rows="3" placeholder="¿Cuál es tu objetivo de aprendizaje?" required></textarea>
-                </div>
-                <button type="submit" class="btn-submit">Enviar</button>
-            </form>
-        </div>
-    </div>
-</section>
-
-<!-- TODO: reemplazar por datos reales del backend cuando existan (ej. total de alumnos, profesores) -->
-<section class="stats-section">
-    <div class="stats-container">
-        <div class="stat-item">
-            <h2>{{ products|length }}</h2>
-            <p>Cursos Disponibles</p>
-        </div>
-        <div class="stat-item">
-            <h2>10+</h2>
-            <p>Idiomas</p>
-        </div>
-        <div class="stat-item">
-            <h2>100%</h2>
-            <p>Clases en Vivo</p>
-        </div>
-        <div class="stat-item">
-            <h2>24/7</h2>
-            <p>Soporte</p>
-        </div>
-    </div>
-</section>
-
-<section id="categorias" class="section-container">
-    <div class="section-header">
-        <h2 class="section-title">¿Qué aprenderás hoy?</h2>
-        <p class="section-subtitle">Elige el idioma que impulsará tu carrera</p>
     </div>
 
-    <div class="categories-grid">
-        <a href="{% url 'category' 'Inglés' %}" class="category-card"><i class="fa-solid fa-language"></i> Inglés</a>
-        <a href="{% url 'category' 'Español' %}" class="category-card"><i class="fa-solid fa-comments"></i> Español</a>
-        <a href="{% url 'category' 'Portugués' %}" class="category-card"><i class="fa-solid fa-earth-americas"></i> Portugués</a>
-        <a href="{% url 'category' 'Italiano' %}" class="category-card"><i class="fa-solid fa-pizza-slice"></i> Italiano</a>
-        <a href="{% url 'category' 'Francés' %}" class="category-card"><i class="fa-solid fa-wine-glass"></i> Francés</a>
-        <a href="{% url 'category' 'coreano' %}" class="category-card"><i class="fa-solid fa-sun"></i> Coreano</a>
-        <a href="{% url 'category' 'Japonés' %}" class="category-card"><i class="fa-solid fa-torii-gate"></i> Japonés</a>
-        <a href="{% url 'category' 'Chino' %}" class="category-card"><i class="fa-solid fa-dragon"></i> Chino</a>
-        <a href="{% url 'category' 'Alemán' %}" class="category-card"><i class="fa-solid fa-beer-mug-empty"></i> Alemán</a>
-        <a href="{% url 'category' 'Ruso' %}" class="category-card"><i class="fa-solid fa-snowflake"></i> Ruso</a>
-    </div>
-</section>
+    <!-- MAIN CONTAINER PARA MANTENER ALINEACIÓN PERFECTA DE 1280PX EN TODAS LAS SECCIONES -->
+    <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 py-8">
 
-<section id="cursos" class="section-container">
-    <div class="section-header">
-        <h2 class="section-title">Cursos Populares</h2>
-        <p class="section-subtitle">Inscripciones abiertas para el nuevo ciclo</p>
-    </div>
+        <!-- SECCIÓN 1: HERO + WIDGET DE CURSOS -->
+        <section class="bg-antares-card/40 border border-slate-800/80 rounded-3xl p-6 lg:p-10 shadow-2xl">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
-    <div class="courses-grid">
-        {% for product in products %}
-            <article class="course-card">
-                <div class="course-thumb-container">
-                    {% if product.is_sale %}<span class="badge-tag">Oferta</span>{% endif %}
-                    <img class="course-thumb" src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
-                </div>
-                <div class="course-body">
-                    <a href="{% url 'product' product.id %}" class="course-title">{{ product.name }}</a>
-                    <a class="course-instructor" href="{% url 'user_information' product.user.username %}">
-                        <i class="fa-solid fa-user-tie"></i> {{ product.user.username }}
-                    </a>
-
-                    {% if product.rating_count %}
-                    <div class="course-rating">
-                        <span class="rating-num">{{ product.average_rating|floatformat:1 }}</span>
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= product.average_rating_rounded %}★{% else %}☆{% endif %}
-                        {% endfor %}
-                        <span class="rating-count">({{ product.rating_count }})</span>
+                <!-- Columna Izquierda: Información Principal -->
+                <div class="lg:col-span-7 space-y-5">
+                    <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 font-bold text-xs px-3 py-1 rounded-full">
+                        <i class="fa-solid fa-graduation-cap"></i> Plataforma Interactiva de Idiomas
                     </div>
-                    {% endif %}
+                    <h1 class="text-2xl sm:text-3xl xl:text-4xl font-black text-white leading-tight tracking-tight">
+                        Domina Nuevos Idiomas con <span class="gradient-text">ReyTech</span>
+                    </h1>
+                    <p class="text-slate-400 text-sm sm:text-base max-w-xl">
+                        Aprendizaje personalizado, metodología eficaz y contenido innovador para que hables desde la primera clase.
+                    </p>
 
-                    <div class="course-footer">
-                        <div class="course-price">
-                            {% if product.is_sale and product.sale_price %}
-                                <span class="price-old">${{ product.price }}</span>
-                                <span class="price-current">${{ product.sale_price }}</span>
-                            {% else %}
-                                <span class="price-current">${{ product.price }}</span>
-                            {% endif %}
+                    <ul class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs font-semibold text-slate-300 pt-1">
+                        <li class="flex items-center gap-2 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800">
+                            <i class="fa-solid fa-circle-check text-emerald-400"></i> Clases en vivo
+                        </li>
+                        <li class="flex items-center gap-2 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800">
+                            <i class="fa-solid fa-circle-check text-sky-400"></i> Certificados
+                        </li>
+                        <li class="flex items-center gap-2 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800">
+                            <i class="fa-solid fa-circle-check text-rose-400"></i> Tutores Reales
+                        </li>
+                    </ul>
+
+                    <div class="flex items-center gap-4 pt-2">
+                        <a href="#cursos" class="btn-gradient text-slate-950 font-extrabold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-lg shadow-orange-500/20 flex items-center gap-2">
+                            Explorar Cursos <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#categorias" class="bg-antares-card hover:bg-antares-hover text-slate-200 border border-slate-700 font-bold text-xs sm:text-sm px-5 py-3 rounded-xl transition">
+                            Reservar Prueba
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Widget Destacados -->
+                <div class="lg:col-span-5">
+                    <div class="bg-antares-card border border-slate-800 rounded-2xl p-4 shadow-xl">
+                        <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2.5">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
+                                <i class="fa-solid fa-bolt text-amber-500"></i> Cursos Destacados
+                            </h3>
+                            <span class="text-[10px] bg-sky-950 text-sky-400 border border-sky-800/60 font-bold px-2 py-0.5 rounded-full">
+                                {{ products|length }} Disponibles
+                            </span>
                         </div>
-                        <a class="btn-reserve" href="{% url 'product' product.id %}">Reservar</a>
+
+                        <!-- Lista Scrolleable -->
+                        <div class="space-y-2.5 max-h-[290px] overflow-y-auto pr-1 minicards-scroll">
+                            {% for product in products|slice:":4" %}
+                            <div class="bg-slate-900/80 hover:bg-antares-hover border border-slate-800 rounded-xl p-2.5 flex items-center gap-3 transition">
+                                <div class="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-800">
+                                    {% if product.is_sale %}<span class="absolute top-0.5 left-0.5 bg-rose-500 text-white font-extrabold text-[8px] px-1 rounded">OFF</span>{% endif %}
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-xs font-bold text-white truncate">{{ product.name }}</h4>
+                                    <p class="text-[11px] text-slate-400 truncate mt-0.5">Prof. {{ product.user.username }}</p>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        {% if product.is_sale and product.sale_price %}
+                                            <span class="text-xs font-black text-emerald-400">${{ product.sale_price }} USD</span>
+                                        {% else %}
+                                            <span class="text-xs font-black text-emerald-400">${{ product.price }} USD</span>
+                                        {% endif %}
+                                        {% if product.rating_count %}<span class="text-[10px] text-amber-400 font-bold">★ {{ product.average_rating|floatformat:1 }}</span>{% endif %}
+                                    </div>
+                                </div>
+                                <a href="{% url 'product' product.id %}" class="bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-300 font-bold text-[11px] px-3 py-1.5 rounded-lg border border-slate-700 transition">Ver</a>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
-            </article>
-        {% endfor %}
-    </div>
-</section>
 
-<section class="benefits-section">
-    <div class="section-header">
-        <h2 class="section-title">¿Por qué estudiar en ReyTech?</h2>
-        <p class="section-subtitle">Diseñado para que hables y apliques conocimientos desde el primer día</p>
-    </div>
-
-    <div class="benefits-grid">
-        <div class="benefit-card">
-            <div class="benefit-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
-            <h3>Tutoría Personalizada</h3>
-            <p>Recibe corrección de pronunciación, tareas y retroalimentación directa de tu profesor.</p>
-        </div>
-        <div class="benefit-card">
-            <div class="benefit-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
-            <h3>Flexibilidad Horaria</h3>
-            <p>Reserva tus clases en el horario que mejor se adapte a tu rutina.</p>
-        </div>
-        <div class="benefit-card">
-            <div class="benefit-icon"><i class="fa-solid fa-award"></i></div>
-            <h3>Certificación Verificable</h3>
-            <p>Al finalizar tu curso obtienes un certificado que puedes validar desde la plataforma.</p>
-        </div>
-        <div class="benefit-card">
-            <div class="benefit-icon"><i class="fa-solid fa-users-rectangle"></i></div>
-            <h3>Comunidad de Alumnos</h3>
-            <p>Conecta con otros estudiantes y profesores de distintos idiomas y niveles.</p>
-        </div>
-    </div>
-</section>
-
-<section class="section-container">
-    <div class="section-header">
-        <h2 class="section-title">Preguntas Frecuentes</h2>
-    </div>
-
-    <div class="faq-container">
-        <details class="faq-item">
-            <summary>¿Cómo se dictan las clases?</summary>
-            <p>Cada profesor coordina la modalidad de la clase reservada directamente contigo tras confirmar la reserva.</p>
-        </details>
-        <details class="faq-item">
-            <summary>¿Cómo reservo una clase?</summary>
-            <p>Elige un curso del catálogo, revisa el perfil del profesor y confirma tu reserva desde el botón "Reservar".</p>
-        </details>
-        <details class="faq-item">
-            <summary>¿Cómo obtengo mi certificado?</summary>
-            <p>Al completar un curso, tu certificado queda disponible y puede validarse desde la sección de verificación de certificados.</p>
-        </details>
-    </div>
-</section>
-
-<footer class="site-footer">
-    <div class="footer-container">
-        <div class="footer-col">
-            <a href="{% url 'index' %}" class="footer-brand">ReyTech</a>
-            <p>Plataforma de aprendizaje de idiomas con profesores reales y clases reservables.</p>
-            <div class="social-links">
-                <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
             </div>
+        </section>
+
+        <!-- SECCIÓN 2: CATEGORÍAS RÁPIDAS (CHIPS) -->
+        <section id="categorias" class="space-y-3">
+            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-amber-400"></span> ¿Qué idioma quieres aprender?
+            </h2>
+
+            <div class="flex flex-wrap gap-2.5">
+                <a href="{% url 'category' 'Inglés' %}" class="bg-sky-950/60 hover:bg-sky-900 text-sky-300 border border-sky-800/60 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition">
+                    <i class="fa-solid fa-language text-sky-400"></i> Inglés
+                </a>
+                <a href="{% url 'category' 'Español' %}" class="bg-amber-950/60 hover:bg-amber-900 text-amber-300 border border-amber-800/60 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition">
+                    <i class="fa-solid fa-comments text-amber-400"></i> Español
+                </a>
+                <a href="{% url 'category' 'Portugués' %}" class="bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/60 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition">
+                    <i class="fa-solid fa-earth-americas text-emerald-400"></i> Portugués
+                </a>
+                <a href="{% url 'category' 'Italiano' %}" class="bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-800/60 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition">
+                    <i class="fa-solid fa-pizza-slice text-rose-400"></i> Italiano
+                </a>
+                <a href="{% url 'category' 'Francés' %}" class="bg-indigo-950/60 hover:bg-indigo-900 text-indigo-300 border border-indigo-800/60 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition">
+                    <i class="fa-solid fa-wine-glass text-indigo-400"></i> Francés
+                </a>
+                <a href="{% url 'category' 'coreano' %}" class="bg-purple-950/60 hover:bg-purple-900 text-purple-300 border border-purple-800/60 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition">
+                    <i class="fa-solid fa-sun text-purple-400"></i> Coreano
+                </a>
+                <a href="{% url 'category' 'Japonés' %}" class="bg-fuchsia-950/60 hover:bg-fuchsia-900 text-fuchsia-300 border border-fuchsia-800/50 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition">
+                    <i class="fa-solid fa-torii-gate text-fuchsia-400"></i> Japonés
+                </a>
+                <a href="{% url 'category' 'Chino' %}" class="bg-cyan-950/60 hover:bg-cyan-900 text-cyan-300 border border-cyan-800/60 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition">
+                    <i class="fa-solid fa-dragon text-cyan-400"></i> Chino
+                </a>
+                <a href="{% url 'category' 'Alemán' %}" class="bg-teal-950/60 hover:bg-teal-900 text-teal-300 border border-teal-800/60 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition">
+                    <i class="fa-solid fa-beer-mug-empty text-teal-400"></i> Alemán
+                </a>
+                <a href="{% url 'category' 'Ruso' %}" class="bg-slate-800/60 hover:bg-slate-700 text-slate-300 border border-slate-700/60 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition">
+                    <i class="fa-solid fa-snowflake text-slate-400"></i> Ruso
+                </a>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: CATÁLOGO DE CURSOS -->
+        <section id="cursos" class="space-y-4 pt-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-extrabold text-white">Catálogo de Cursos</h2>
+                <span class="text-xs text-slate-400">Mostrando todos los cursos</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="grid-cursos">
+                {% for product in products %}
+                <article class="bg-antares-card border border-slate-800 hover:border-slate-700 rounded-xl overflow-hidden flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition duration-200">
+                    <div class="relative h-28 w-full bg-slate-900 overflow-hidden">
+                        {% if product.is_sale %}<span class="absolute top-1.5 left-1.5 z-10 bg-rose-500 text-white font-black text-[9px] uppercase px-1.5 py-0.5 rounded-md">Oferta</span>{% endif %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover" loading="lazy">
+                    </div>
+                    <div class="p-3 flex-1 flex flex-col justify-between space-y-2">
+                        <div>
+                            <a href="{% url 'product' product.id %}" class="font-bold text-xs text-slate-100 hover:text-amber-400 transition line-clamp-2 block leading-snug">{{ product.name }}</a>
+                            <a href="{% url 'user_information' product.user.username %}" class="text-[11px] text-slate-400 mt-1 hover:text-amber-400 transition flex items-center gap-1 truncate">
+                                <i class="fa-solid fa-user-tie text-[9px]"></i> {{ product.user.username }}
+                            </a>
+                        </div>
+                        {% if product.rating_count %}
+                        <div class="flex items-center gap-1 text-[10px]">
+                            <span class="font-bold text-amber-400">{{ product.average_rating|floatformat:1 }}</span>
+                            <span class="text-amber-400">★</span>
+                            <span class="text-slate-500">({{ product.rating_count }})</span>
+                        </div>
+                        {% endif %}
+                        <div class="pt-2 border-t border-slate-800 flex items-center justify-between gap-1">
+                            <div>
+                                {% if product.is_sale and product.sale_price %}
+                                    <span class="text-[10px] text-slate-500 line-through block leading-none">${{ product.price }}</span>
+                                    <span class="text-sm font-black text-emerald-400">${{ product.sale_price }}</span>
+                                {% else %}
+                                    <span class="text-sm font-black text-emerald-400">${{ product.price }}</span>
+                                {% endif %}
+                            </div>
+                            <a href="{% url 'product' product.id %}" class="bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white border border-rose-500/40 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition">
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: PREGUNTAS FRECUENTES -->
+        <section id="faq" class="py-6 space-y-8">
+            <div class="text-center space-y-2">
+                <h2 class="text-3xl font-black text-white tracking-tight">Preguntas Frecuentes</h2>
+                <div class="w-12 h-1 bg-gradient-to-r from-amber-400 to-rose-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="max-w-3xl mx-auto space-y-4">
+
+                <details class="group bg-antares-card border border-slate-800 rounded-xl overflow-hidden transition">
+                    <summary class="flex items-center justify-between p-4 cursor-pointer font-bold text-sm text-slate-200 select-none group-hover:text-white">
+                        <span>¿Cómo se dictan las clases?</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform duration-200"></i>
+                    </summary>
+                    <div class="px-4 pb-4 text-xs text-slate-400 leading-relaxed border-t border-slate-800/50 pt-3">
+                        Cada profesor coordina la modalidad de la clase reservada directamente contigo tras confirmar la reserva.
+                    </div>
+                </details>
+
+                <details class="group bg-antares-card border border-slate-800 rounded-xl overflow-hidden transition">
+                    <summary class="flex items-center justify-between p-4 cursor-pointer font-bold text-sm text-slate-200 select-none group-hover:text-white">
+                        <span>¿Cómo reservo una clase?</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform duration-200"></i>
+                    </summary>
+                    <div class="px-4 pb-4 text-xs text-slate-400 leading-relaxed border-t border-slate-800/50 pt-3">
+                        Elige un curso del catálogo, revisa el perfil del profesor y confirma tu reserva desde el botón "Reservar".
+                    </div>
+                </details>
+
+                <details class="group bg-antares-card border border-slate-800 rounded-xl overflow-hidden transition">
+                    <summary class="flex items-center justify-between p-4 cursor-pointer font-bold text-sm text-slate-200 select-none group-hover:text-white">
+                        <span>¿Cómo obtengo mi certificado?</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform duration-200"></i>
+                    </summary>
+                    <div class="px-4 pb-4 text-xs text-slate-400 leading-relaxed border-t border-slate-800/50 pt-3">
+                        Al completar un curso, tu certificado queda disponible y puede validarse desde la sección de verificación de certificados.
+                    </div>
+                </details>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER (4 COLUMNAS) -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 mt-auto pt-12 pb-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10 text-xs">
+
+            <div class="space-y-4">
+                <a href="{% url 'index' %}" class="text-xl font-extrabold text-white tracking-tight block">ReyTech</a>
+                <p class="text-slate-400 leading-relaxed">
+                    Plataforma de aprendizaje de idiomas con profesores reales y clases reservables.
+                </p>
+                <div class="flex items-center gap-3 pt-1">
+                    <a href="#" class="w-8 h-8 rounded-full bg-slate-900 border border-slate-800 hover:border-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition">
+                        <i class="fa-brands fa-facebook-f text-xs"></i>
+                    </a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-slate-900 border border-slate-800 hover:border-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition">
+                        <i class="fa-brands fa-instagram text-xs"></i>
+                    </a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-slate-900 border border-slate-800 hover:border-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition">
+                        <i class="fa-brands fa-youtube text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="font-bold text-white uppercase tracking-wider">Idiomas</h4>
+                <ul class="space-y-2 text-slate-400">
+                    <li><a href="{% url 'category' 'Inglés' %}" class="hover:text-amber-400 transition">Inglés</a></li>
+                    <li><a href="{% url 'category' 'Español' %}" class="hover:text-amber-400 transition">Español</a></li>
+                    <li><a href="{% url 'category' 'Alemán' %}" class="hover:text-amber-400 transition">Alemán</a></li>
+                    <li><a href="{% url 'category' 'coreano' %}" class="hover:text-amber-400 transition">Coreano</a></li>
+                </ul>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="font-bold text-white uppercase tracking-wider">Plataforma</h4>
+                <ul class="space-y-2 text-slate-400">
+                    <li><a href="{% url 'category_summary' %}" class="hover:text-amber-400 transition">Catálogo de Cursos</a></li>
+                    <li><a href="{% url 'search' %}" class="hover:text-amber-400 transition">Buscar</a></li>
+                    <li><a href="{% url 'about' %}" class="hover:text-amber-400 transition">Nosotros</a></li>
+                    <li><a href="{% url 'request_teacher' %}" class="hover:text-amber-400 transition">Ser Profesor</a></li>
+                </ul>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="font-bold text-white uppercase tracking-wider">Contacto</h4>
+                <ul class="space-y-2.5 text-slate-400">
+                    <li class="flex items-center gap-2">
+                        <i class="fa-regular fa-envelope text-slate-400"></i>
+                        <span>contacto@reytech.com</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-slate-400"></i>
+                        <span>Lima, Perú</span>
+                    </li>
+                </ul>
+            </div>
+
         </div>
 
-        <div class="footer-col">
-            <h4>Idiomas</h4>
-            <ul>
-                <li><a href="{% url 'category' 'Inglés' %}">Inglés</a></li>
-                <li><a href="{% url 'category' 'Español' %}">Español</a></li>
-                <li><a href="{% url 'category' 'Alemán' %}">Alemán</a></li>
-                <li><a href="{% url 'category' 'coreano' %}">Coreano</a></li>
-            </ul>
+        <div class="max-w-7xl mx-auto pt-6 border-t border-slate-900 text-center text-[11px] text-slate-600">
+            <p>&copy; {% now "Y" %} ReyTech. Todos los derechos reservados.</p>
         </div>
+    </footer>
 
-        <div class="footer-col">
-            <h4>Plataforma</h4>
-            <ul>
-                <li><a href="{% url 'category_summary' %}">Catálogo de Cursos</a></li>
-                <li><a href="{% url 'search' %}">Buscar</a></li>
-                <li><a href="{% url 'about' %}">Nosotros</a></li>
-                <li><a href="{% url 'request_teacher' %}">Ser Profesor</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-col">
-            <h4>Contacto</h4>
-            <ul>
-                <li><i class="fa-solid fa-envelope"></i> contacto@reytech.com</li>
-                <li><i class="fa-solid fa-location-dot"></i> Lima, Perú</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="footer-bottom">
-        <p>&copy; {% now "Y" %} ReyTech. Todos los derechos reservados.</p>
-    </div>
-</footer>
-
+</div>
 {% endblock %}
