@@ -36,6 +36,26 @@
     text-transform: capitalize;
 }
 
+.antares-profile .badge-instructor {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: linear-gradient(90deg, var(--antares-orange) 0%, #eab308 100%);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+}
+
+.antares-profile .profile-fullname {
+    font-size: 0.8rem;
+    color: var(--antares-muted);
+    margin: 0.1rem 0 0;
+}
+
 .antares-profile .profile-bio {
     font-size: 0.85rem;
     color: var(--antares-muted);

@@ -26,7 +26,16 @@
             </div>
             {% endfor %}
         {% endif %}
-        
+
+        {% if user.is_authenticated and not user.profile.email_verified %}
+        <div class="alert alert-info alert-dismissible fade show" style="margin-bottom: 0px;" role="alert">
+            <i class="bi bi-envelope-exclamation me-1"></i>
+            Tu correo aún no está verificado.
+            <a href="{% url 'resend_verification' %}">Reenviar correo de verificación</a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
         {% block content %}
         {% endblock %}
 

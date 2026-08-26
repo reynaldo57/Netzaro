@@ -19,6 +19,12 @@ import os
 from django.conf import settings
 from django.http import HttpResponse
 from .forms import ModuloForm, EntregaTareaForm, RevisionEntregaForm, QuizForm, PreguntaForm, OpcionFormSet, TareaForm, CouponForm
+from django.urls import reverse
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from .tokens import email_verification_token
 
 def search(request):
     query = request.GET.get('q', '').strip()
@@ -417,6 +423,26 @@ def logout_user(request):
     messages.success(request, ("You have been logout"))
     return redirect('index')
 
+def send_verification_email(request, user):
+    """Envía (o reenvía) el correo de verificación de email al usuario dado."""
+    token = email_verification_token.make_token(user)
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    verify_url = request.build_absolute_uri(
+        reverse('verify_email', kwargs={'uidb64': uid, 'token': token})
+    )
+    message = render_to_string('verification_email.html', {
+        'user': user,
+        'verify_url': verify_url,
+    })
+    send_mail(
+        "Verifica tu correo en ANTARES",
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        [user.email],
+        fail_silently=False,
+    )
+
+
 def register_user(request):
     form = SignUpForm()
     if request.method == "POST":
@@ -428,13 +454,43 @@ def register_user(request):
             #log in user
             user = authenticate(username=username, password=password)
             login(request, user)
-            messages.success(request, ("UserName Created - please fill out yor User Info Below"))
+            send_verification_email(request, user)
+            messages.success(request, ("Cuenta creada. Te enviamos un correo para verificar tu email - completa también tu información de usuario."))
             return redirect('update_info')
         else:
             messages.success(request, ("There was an error, try again.!"))
             return redirect('register')
     else:
         return render(request, 'register.html', {'form': form})
+
+
+def verify_email(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and email_verification_token.check_token(user, token):
+        profile = user.profile
+        profile.email_verified = True
+        profile.save()
+        messages.success(request, "Tu correo ha sido verificado correctamente.")
+    else:
+        messages.error(request, "El enlace de verificación no es válido o ya expiró.")
+    return redirect('index')
+
+
+@login_required(login_url='login')
+def resend_verification_email(request):
+    profile = request.user.profile
+    if profile.email_verified:
+        messages.success(request, "Tu correo ya está verificado.")
+    else:
+        send_verification_email(request, request.user)
+        messages.success(request, "Te enviamos un nuevo correo de verificación.")
+    return redirect('index')
+
 
 # Create your views here.
 def view_user_information(request, username):
@@ -444,16 +500,16 @@ def view_user_information(request, username):
 
 
     if request.user.is_authenticated:
-        
+
         if request.user.id == account.id:
             return redirect("update_user")
 
-        
+
 
     context = {
         "account": account,
         "product_user": product_user,
-        "profile": profile 
+        "profile": profile
     }
     return render(request, "user_information.html", context)
 

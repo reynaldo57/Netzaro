@@ -19,44 +19,39 @@
                     <img src="{{ account.profile.get_profile_picture }}" alt="Foto de perfil de {{ account.username }}">
                 </div>
                 <div>
-                    <h1 class="profile-title">{{ account.username }}</h1>
+                    <h1 class="profile-title">
+                        {{ account.username }}
+                        {% if profile.is_instructor %}
+                        <span class="badge-instructor"><i class="fa-solid fa-chalkboard-user me-1"></i> Instructor</span>
+                        {% endif %}
+                    </h1>
+                    {% if account.first_name or account.last_name %}
+                    <p class="profile-fullname">{{ account.first_name }} {{ account.last_name }}</p>
+                    {% endif %}
                     <p class="profile-bio">{{ profile.about_me|default:"Este usuario aún no ha escrito nada." }}</p>
                 </div>
             </div>
 
-            <!-- Estadísticas y acción -->
+            <!-- Estadísticas -->
             <div class="d-flex align-items-center gap-3 flex-wrap">
                 <div class="stat-box">
-                    <div class="stat-value">{{ account.user_blogs.count }}</div>
-                    <div class="stat-label">Posts</div>
+                    <div class="stat-value">{{ product_user|length }}</div>
+                    <div class="stat-label">Cursos</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">{{ account.user_followers.count }}</div>
-                    <div class="stat-label">Seguidores</div>
+                    <div class="stat-value">{{ profile.total_students }}</div>
+                    <div class="stat-label">Estudiantes</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">{{ account.user_follows.count }}</div>
-                    <div class="stat-label">Siguiendo</div>
+                    <div class="stat-value">
+                        {% if profile.rating_count %}
+                            <i class="fa-solid fa-star"></i> {{ profile.average_rating|floatformat:1 }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </div>
+                    <div class="stat-label">Calificación{% if profile.rating_count %} ({{ profile.rating_count }}){% endif %}</div>
                 </div>
-
-                {% if following %}
-                    <a href="{% url 'follow_or_unfollow_user' account.id %}" class="btn-seguir">
-                        <i class="fa-solid fa-user-xmark me-2"></i> Dejar de seguir
-                    </a>
-                    {% if muted %}
-                        <a href="#" class="btn-seguir btn-outline-seguir">
-                            <i class="fa-solid fa-volume-high me-2"></i> Activar sonido
-                        </a>
-                    {% else %}
-                        <a href="#" class="btn-seguir btn-outline-seguir">
-                            <i class="fa-solid fa-volume-xmark me-2"></i> Silenciar
-                        </a>
-                    {% endif %}
-                {% else %}
-                    <a href="#" class="btn-seguir">
-                        <i class="fa-solid fa-user-plus me-2"></i> Seguir
-                    </a>
-                {% endif %}
             </div>
 
         </div>

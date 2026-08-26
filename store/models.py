@@ -37,6 +37,8 @@ class Profile(models.Model):
     )
     teacher_request_date = models.DateTimeField(null=True, blank=True)
 
+    email_verified = models.BooleanField(default=False)
+
 
     def get_profile_picture(self):
         try:
@@ -47,8 +49,29 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-    
-    
+
+    def is_instructor(self):
+        return self.teacher_request_status == 'approved'
+
+    def total_courses(self):
+        return self.user.product_set.count()
+
+    def total_students(self):
+        from payment.models import OrderItem
+        return OrderItem.objects.filter(
+            product__user=self.user, order__paid=True
+        ).values('user').distinct().count()
+
+    def average_rating(self):
+        from django.db.models import Avg
+        return Comment.objects.filter(
+            product__user=self.user, rating__isnull=False
+        ).aggregate(avg=Avg('rating'))['avg'] or 0
+
+    def rating_count(self):
+        return Comment.objects.filter(product__user=self.user, rating__isnull=False).count()
+
+
 #Create a user Profile by default when user singup
 def create_profile(sender, instance, created, **kwargs):
     if created:
