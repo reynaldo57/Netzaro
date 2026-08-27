@@ -159,10 +159,14 @@ PLATFORM_COMMISSION_PERCENT = 10
 # En producción, basta con definir EMAIL_HOST_USER / EMAIL_HOST_PASSWORD como
 # variables de entorno: el backend SMTP se activa solo al detectarlas.
 # (EMAIL_BACKEND se puede seguir fijando a mano si se necesita otro backend.)
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = os.environ.get(
+    'EMAIL_BACKEND',
+    'django.core.mail.backends.smtp.EmailBackend' if os.environ.get('EMAIL_HOST_USER')
+    else 'django.core.mail.backends.console.EmailBackend'
+)
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'ANTARES <antaresciencia57@gmail.com>')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'ANTARES <no-reply@antares.local>')
