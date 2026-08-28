@@ -25,6 +25,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .tokens import email_verification_token
+from .emails import send_teacher_decision_email
 
 def search(request):
     query = request.GET.get('q', '').strip()
@@ -194,11 +195,10 @@ def teacher_requests_dash(request):
 
     if request.method == "POST":
         profile = get_object_or_404(Profile, id=request.POST.get('profile_id'))
-        if request.POST.get('decision') == 'approve':
-            profile.teacher_request_status = 'approved'
-        else:
-            profile.teacher_request_status = 'rejected'
+        approved = request.POST.get('decision') == 'approve'
+        profile.teacher_request_status = 'approved' if approved else 'rejected'
         profile.save()
+        send_teacher_decision_email(profile.user, approved=approved)
         messages.success(request, "Solicitud actualizada")
         return redirect('teacher_requests_dash')
 

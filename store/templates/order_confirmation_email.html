@@ -1,0 +1,18 @@
+Hola {{ order.full_name|default:"" }},
+
+¡Gracias por tu compra en ANTARES! Tu pago fue confirmado y ya tienes acceso a:
+{% for item in items %}
+ - {{ item.product.name }}  (${{ item.price }}){% empty %}
+ - (sin detalle de items){% endfor %}
+
+Total pagado: ${{ order.amount_paid }}
+Orden #{{ order.id }}{% if order.invoice %}
+Referencia: {{ order.invoice }}{% endif %}
+{% if site_url %}
+Entra a tus cursos aquí: {{ site_url }}/payment/my_courses
+{% else %}
+Entra a "Mis cursos" desde tu cuenta para empezar.
+{% endif %}
+Si no reconoces esta compra, responde a este correo.
+
+— El equipo de ANTARES

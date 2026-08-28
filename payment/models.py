@@ -82,14 +82,28 @@ def set_shipped_date_on_update(sender,instance, **kawargs):
 
 @receiver(pre_save, sender=Order)
 def grant_course_access_on_payment(sender, instance, **kwargs):
+    # Marca en la instancia si esta orden acaba de pasar a pagada, para que el
+    # post_save (que ya no tiene acceso al estado anterior) pueda notificar.
+    instance._just_paid = False
     if not instance.pk:
         return
     previous = sender._default_manager.filter(pk=instance.pk).first()
-    just_paid = previous and not previous.paid and instance.paid
+    just_paid = bool(previous and not previous.paid and instance.paid)
+    instance._just_paid = just_paid
     if just_paid and instance.user:
         for item in instance.orderitem_set.select_related('product'):
             item.product.grant_access(instance.user)
-            
+
+
+@receiver(post_save, sender=Order)
+def send_order_confirmation_on_payment(sender, instance, created, **kwargs):
+    """Cuando una orden pasa a paid=True (PayPal, Izipay o IPN), envía el correo
+    de confirmación de compra. El envío nunca interrumpe el flujo de pago."""
+    if getattr(instance, '_just_paid', False):
+        instance._just_paid = False
+        from .emails import send_order_confirmation_email
+        send_order_confirmation_email(instance)
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)

@@ -1,0 +1,15 @@
+Hola {{ user.first_name|default:user.username }},
+{% if approved %}
+¡Buenas noticias! Tu solicitud para ser profesor en ANTARES fue APROBADA.
+
+Ya puedes crear y publicar tus cursos desde el panel de instructor.
+{% if site_url %}Empieza aquí: {{ site_url }}/instructor_dashboard{% endif %}
+{% else %}
+Hemos revisado tu solicitud para ser profesor en ANTARES y por ahora no fue aprobada.
+
+Puedes volver a postular más adelante completando mejor tu información y experiencia.
+{% if site_url %}Revisa tu cuenta aquí: {{ site_url }}/update_user{% endif %}
+{% endif %}
+Si tienes dudas, responde a este correo.
+
+— El equipo de ANTARES

@@ -170,3 +170,7 @@ EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'ANTARES <no-reply@antares.local>')
+
+# URL pública del sitio, usada para armar enlaces en correos que se envían
+# fuera del ciclo de una petición (señales, tareas) y no tienen 'request'.
+SITE_URL = os.environ.get('SITE_URL', 'https://netzaro.onrender.com')
